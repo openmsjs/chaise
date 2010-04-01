@@ -5,7 +5,7 @@ var toCouchQueryString = function(queryMap) {
     }
     return query.join("&");
 }
-var jsonRequest = msjs.require("msjs.jsonrequest");
+var couchRequest = msjs.require("chaise.couch.request");
 
 
 //url includes database name
@@ -15,23 +15,23 @@ var db = msjs.publish(function(url) {
 
 // db level
 db.prototype.getInfo = function() {
-    return jsonRequest.get(this.url).result;
+    return couchRequest.get(this.url);
 };
 
 db.prototype.create = function() {
-    return jsonRequest.put(this.url).result;
+    return couchRequest.put(this.url);
 };
 
 db.prototype.remove = function() {
-    return jsonRequest.del(this.url).result;
+    return couchRequest.del(this.url);
 };
 
 db.prototype.getChanges = function() {
-    return jsonRequest.get(this.url + "/_changes").result;
+    return couchRequest.get(this.url + "/_changes");
 };
 
 db.prototype.compact = function() {
-    return jsonRequest.post(this.url + "/_compact").result;
+    return couchRequest.post(this.url + "/_compact");
 };
 
 // Documents
@@ -44,28 +44,28 @@ db.prototype.compact = function() {
 // skip=<number of rows to skip>
 db.prototype.getAllDocuments = function(queryMap) {
     var queryString = toCouchQueryString(queryMap);
-    return jsonRequest.get(this.url + "/_all_docs?" + queryString).result;
+    return couchRequest.get(this.url + "/_all_docs?" + queryString);
 };
 
 db.prototype.updateBulkDocuments = function(docList) {
     var content = msjs.toJSON({docs: docList});
-    return jsonRequest.post(this.url + "/_bulk_docs", content).result;
+    return couchRequest.post(this.url + "/_bulk_docs", content);
 };
 
 db.prototype.getDocument = function(docId) {
-    return jsonRequest.get(this.url + "/" + escape(docId)).result;
+    return couchRequest.get(this.url + "/" + escape(docId));
 };
 
 db.prototype.createDocument = function(doc) {
-    return jsonRequest.post(this.url, msjs.toJSON(doc)).result;
+    return couchRequest.post(this.url, msjs.toJSON(doc));
 };
 
 db.prototype.updateDocument = function(docId, doc) {
-    return jsonRequest.post(this.url + "/" + escape(docId), msjs.toJSON(doc)).result;
+    return couchRequest.post(this.url + "/" + escape(docId), msjs.toJSON(doc));
 };
 
 db.prototype.removeDocument = function(docId, doc) {
-    return jsonRequest.post(this.url + "/" + escape(docId), msjs.toJSON(doc)).result;
+    return couchRequest.post(this.url + "/" + escape(docId), msjs.toJSON(doc));
 };
 
 // Views
@@ -78,9 +78,9 @@ db.prototype.getDesignDocuments = function() {
 };
 
 db.prototype.getView = function(design, view) {
-    return jsonRequest.get(this.url + "/_design/" + escape(design) + "/_view/" + escape(view)).result;
+    return couchRequest.get(this.url + "/_design/" + escape(design) + "/_view/" + escape(view));
 };
 
 db.prototype.cleanupViews = function() {
-    return jsonRequest.del(this.url + "/_view_cleanup").result;
+    return couchRequest.del(this.url + "/_view_cleanup");
 };

@@ -1,32 +1,32 @@
-var jsonRequest = msjs.require("msjs.jsonrequest");
+var couchRequest = msjs.require("chaise.couch.request");
 var server = msjs.publish(function(host) {
     this.url = "http://" + host;
 });
 
 // server level
 server.prototype.getInfo = function() {
-    return jsonRequest.get(this.url + "/").result;
+    return couchRequest.get(this.url + "/");
 };
 
 server.prototype.getConfiguration = function() {
-    return jsonRequest.get(this.url + "/_config").result;
+    return couchRequest.get(this.url + "/_config");
 };
 
 server.prototype.getStats = function() {
-    return jsonRequest.get(this.url + "/_stats").result;
+    return couchRequest.get(this.url + "/_stats");
 };
 
 server.prototype.getActiveTasks = function() {
-    return jsonRequest.get(this.url + "/_active_tasks").result;
+    return couchRequest.get(this.url + "/_active_tasks");
 };
 
 server.prototype.getDatabaseList = function() {
-    return jsonRequest.get(this.url + "/_all_dbs").result;
+    return couchRequest.get(this.url + "/_all_dbs");
 };
 
 server.prototype.replicate = function(source, target) {
     var content = msjs.toJSON({source: source, target: target});
-    return jsonRequest.post(this.url + "/_replicate", content).result;
+    return couchRequest.post(this.url + "/_replicate", content);
 };
 
 

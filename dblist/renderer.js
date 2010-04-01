@@ -10,7 +10,6 @@ var el = msjs.publish($(<table>
     <tbody/>
 </table>));
 
-var picker = msjs.require("chaise.dblist.picker");
 var renderer = msjs(function(msj) {
     var tbody = el.find("tbody");
     tbody.children().remove();
@@ -26,6 +25,7 @@ var renderer = msjs(function(msj) {
 });
 renderer.push("chaise.dblist.list", "list");
 
+var picker = msjs.require("chaise.dblist.picker");
 var handleClick = function() {
     picker.update($(this).data("info"));
 }
