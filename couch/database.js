@@ -35,6 +35,13 @@ db.prototype.compact = function() {
 };
 
 // Documents
+// query map keys: 
+// startkey=<json> 
+// endkey=<json> 
+// include_docs=[true|false]
+// descending=[true|false]
+// limit=<number>
+// skip=<number of rows to skip>
 db.prototype.getAllDocuments = function(queryMap) {
     var queryString = toCouchQueryString(queryMap);
     return jsonRequest.get(this.url + "/_all_docs?" + queryString).result;

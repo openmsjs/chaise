@@ -10,6 +10,26 @@ var el = msjs.publish($(<table>
     <tbody/>
 </table>));
 
+var picker = msjs.require("chaise.dblist.picker");
+var renderer = msjs(function(msj) {
+    var tbody = el.find("tbody");
+    tbody.children().remove();
+    $.each(msj.list, function(i, info) {
+        $("<tr>" +
+          "<td class=\"name\">" + info.db_name + "</td>" +
+          "<td>" + info.disk_size + "</td>" +
+          "<td>" + info.doc_count + "</td>" +
+          "<td>" + info.update_seq + "</td>" +
+          "</tr>").appendTo(tbody).data("info", info);
+    });
+    tbody.find("tr").click(handleClick);
+});
+renderer.push("chaise.dblist.list", "list");
+
+var handleClick = function() {
+    picker.update($(this).data("info"));
+}
+
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId, {

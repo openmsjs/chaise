@@ -1,6 +1,6 @@
 $(<div id="chaise"/>)
-    .append(msjs.require("chaise.host.element"))
-    .append(msjs.require("chaise.database.element"))
+    .append(msjs.require("chaise.hostlist.renderer"))
+    .append(msjs.require("chaise.dblist.renderer"))
+    .append(msjs.require("chaise.doclist.renderer"))
+    .append(msjs.require("chaise.document.renderer"))
     .appendTo("body");
-
-msjs.require("chaise.database.picker");
