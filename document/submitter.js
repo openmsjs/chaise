@@ -1,1 +1,1 @@
-var submitter = msjs.publish(msjs());
+msjs.publish(msjs());

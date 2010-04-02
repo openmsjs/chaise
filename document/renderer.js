@@ -6,13 +6,21 @@ var form = msjs.publish($(<form>
     <textarea class="editable" readonly="true" tabindex="-1" autocomplete="off"/>
 </form>));
 
+var isSuccess = msjs.require("chaise.couch.issuccess");
 var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
 var renderer = msjs(function(msj) {
-    if (msj.doc != (void 0)) {
-        msj.doc ? textarea.text(toPrettyJSON(msj.doc)) : textarea.text("");
+    var doc = msj.doc;
+    if (doc != (void 0)) {
+        if (doc && msj.updated && isSuccess(msj.updated)) {
+            doc._rev = msj.updated.result.rev;
+        }
+        doc ? textarea[0].value = toPrettyJSON(doc) : textarea.text("");
     }
 });
-renderer.push("chaise.document.info", "doc");
+renderer.pull("chaise.document.info", "doc");
+renderer.pull("chaise.document.updater", "updated");
+renderer.depends("chaise.document.info");
+renderer.depends("chaise.document.updater");
 
 var textarea = form.find("textarea");
 form.find("a").click(function(){
