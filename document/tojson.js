@@ -30,7 +30,7 @@ var toJSON = msjs.publish(function(value, indent) {
             for (var k in value) {
                 var v = toJSON(value[k], newIndent);
                 if (v) {
-                    partial.push('"' + jsonEscape(k) + '"' + ':' + v);
+                    partial.push('"' + jsonEscape(k) + '"' + ': ' + v);
                 }
             }
             return partial.length === 0 ? '{}' : '{\n' + newIndent + partial.join(',\n' + newIndent) + '\n' + indent + '}';
