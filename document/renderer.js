@@ -3,13 +3,13 @@ var form = msjs.publish($(<form>
     <input type="submit" value="save"/>
     <input type="reset" value="cancel"/>
     <span/>
-    <textarea class="editable" readonly="true" tabindex="-1"/>
+    <textarea class="editable" readonly="true" tabindex="-1" autocomplete="off"/>
 </form>));
 
-var toJSON = msjs.require("chaise.document.tojson");
+var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
 var renderer = msjs(function(msj) {
     if (msj.doc != (void 0)) {
-        msj.doc ? textarea.text(toJSON(msj.doc)) : textarea.text("");
+        msj.doc ? textarea.text(toPrettyJSON(msj.doc)) : textarea.text("");
     }
 });
 renderer.push("chaise.document.info", "doc");
@@ -34,14 +34,20 @@ var reset = function() {
 form.bind("reset", reset);
 form.submit(function(){
     try {
-        var doc = toJSON(eval("(" + textarea[0].value + ")"));
+        var doc = eval("(" + textarea[0].value + ")");
         submitter.update(doc);
-        textarea[0].value = doc;
+        textarea[0].value = toPrettyJSON(doc);
         reset();
     } catch (e) {
         status.text("bad json");
     }
     return false;
+});
+textarea.keypress(function(event) {
+    if (event.shiftKey && event.keyCode == "13") {
+        form.submit();      
+        return false;
+    }
 });
 
 var dom = msjs.require("msjs.dom");

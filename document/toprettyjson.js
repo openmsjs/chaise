@@ -1,4 +1,4 @@
-var toJSON = msjs.publish(function(value, indent) { 
+var toPrettyJSON = msjs.publish(function(value, indent) { 
     if (!indent) indent = "";
     var newIndent = indent + "    ";
 
@@ -21,14 +21,14 @@ var toJSON = msjs.publish(function(value, indent) {
                 !(value.propertyIsEnumerable('length'))) {
 
                 for (var i = 0; i < value.length; i++) {
-                    partial[i] = (toJSON(value[i], indent) || 'null');
+                    partial[i] = (toPrettyJSON(value[i], indent) || 'null');
                 }
 
                 return partial.length === 0 ? '[]' : '[\n' + newIndent + partial.join(',\n' + newIndent) + '\n'+indent + ']';
             }
 
             for (var k in value) {
-                var v = toJSON(value[k], newIndent);
+                var v = toPrettyJSON(value[k], newIndent);
                 if (v) {
                     partial.push('"' + jsonEscape(k) + '"' + ': ' + v);
                 }
@@ -46,8 +46,8 @@ var jsonMeta = {
         '"' : '\\"',
         '\\': '\\\\'
 };
-var jsonEscapeable = /[-"\\\x00-\x1f\x7f-\x9f]/g;
 var jsonEscape = function (string) {
+    var jsonEscapeable = /[-"\\\x00-\x1f\x7f-\x9f]/g;
     return jsonEscapeable.test(string)
         ? string.replace(jsonEscapeable, function (a) {
             var c = jsonMeta[a];

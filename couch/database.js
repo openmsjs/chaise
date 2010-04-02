@@ -7,7 +7,6 @@ var toCouchQueryString = function(queryMap) {
 }
 var couchRequest = msjs.require("chaise.couch.request");
 
-
 //url includes database name
 var db = msjs.publish(function(url) {
     this.url = url;
@@ -56,16 +55,18 @@ db.prototype.getDocument = function(docId) {
     return couchRequest.get(this.url + "/" + escape(docId));
 };
 
-db.prototype.createDocument = function(doc) {
-    return couchRequest.post(this.url, msjs.toJSON(doc));
+db.prototype.writeDocument = function(doc) {
+    return doc._id
+        ? couchRequest.put(this.url + "/" + escape(doc._id), msjs.toJSON(doc))
+        : couchRequest.post(this.url, msjs.toJSON(doc));
 };
 
-db.prototype.updateDocument = function(docId, doc) {
-    return couchRequest.post(this.url + "/" + escape(docId), msjs.toJSON(doc));
+db.prototype.removeDocument = function(doc) {
+    return this.removeDocumentById(doc._id, doc._rev);
 };
 
-db.prototype.removeDocument = function(docId, doc) {
-    return couchRequest.post(this.url + "/" + escape(docId), msjs.toJSON(doc));
+db.prototype.removeDocumentById = function(docId, rev) {
+    return couchRequest.del(this.url + "/" + escape(docId) + "?rev=" + rev);
 };
 
 // Views
