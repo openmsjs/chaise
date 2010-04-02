@@ -7,12 +7,50 @@ var el = msjs.publish($(<table>
             <th>update seq</th>
         </tr>
     </thead>
-    <tbody/>
+    <tbody>
+        <tr>
+            <td>
+                <div class="create">
+                    <a href="#">new</a>
+                    <form>
+                        <input name="db" autocomplete="off"/>
+                        <input type="submit" value="create"/>
+                        <input type="reset" value="cancel"/>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </tbody>
 </table>));
+
+var form = el.find("form");
+var dbInput = form.find("input[name='db']"); 
+el.find("a").click(function() {
+    el.addClass("creating");
+    dbInput.focus();
+    return false;                       
+});
+var reset = function() {
+    el.removeClass("creating");
+    dbInput[0].value = "";
+    return false;
+};
+form.bind("reset", reset);
+var submitter = msjs.require("chaise.dblist.submitter");
+form.submit(function() {
+    submitter.update(dbInput[0].value);
+    return reset();                
+});
+dbInput.keypress(function(event) {
+    // escape
+    if (event.keyCode == "27") {
+        form[0].reset();
+    }
+});
 
 var renderer = msjs(function(msj) {
     var tbody = el.find("tbody");
-    tbody.children().remove();
+    tbody.children("tr:not(:first)").remove();
     $.each(msj.list, function(i, info) {
         $("<tr>" +
           "<td class=\"name\">" + info.db_name + "</td>" +
@@ -21,7 +59,7 @@ var renderer = msjs(function(msj) {
           "<td>" + info.update_seq + "</td>" +
           "</tr>").appendTo(tbody).data("info", info);
     });
-    tbody.find("tr").click(handleClick);
+    tbody.find("tr:not(:first)").click(handleClick);
 });
 renderer.push("chaise.dblist.list", "list");
 
@@ -48,4 +86,22 @@ dom.addCss(cssId + " th," +
 dom.addCss(cssId + " th:first-child," + 
            cssId + " td:first-child", {
     textAlign: "left"
+});
+
+dom.addCss(cssId + " .create form," +
+           cssId + ".creating .create a", {
+    display: "none"
+});
+dom.addCss(cssId + ".creating .create form", {
+    position: "absolute"               
+});
+dom.addCss(cssId + ".creating .create form," +
+           cssId + " .create a", {
+    display: "block"
+});
+dom.addCss(cssId + " .create", {
+    height: "20px"
+});
+dom.addCss(cssId + " .create", {
+    height: "20px"
 });
