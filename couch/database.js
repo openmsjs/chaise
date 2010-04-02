@@ -6,6 +6,7 @@ var toCouchQueryString = function(queryMap) {
     return query.join("&");
 }
 var couchRequest = msjs.require("chaise.couch.request");
+var isSuccess = msjs.require("chaise.couch.issuccess");
 
 //url includes database name
 var db = msjs.publish(function(url) {
@@ -55,10 +56,15 @@ db.prototype.getDocument = function(docId) {
     return couchRequest.get(this.url + "/" + escape(docId));
 };
 
+// will update doc with rev
 db.prototype.writeDocument = function(doc) {
-    return doc._id
+    var response = doc._id
         ? couchRequest.put(this.url + "/" + escape(doc._id), msjs.toJSON(doc))
         : couchRequest.post(this.url, msjs.toJSON(doc));
+    if (isSuccess(response)) {
+        doc._rev = response.result.rev;
+    }
+    return response;
 };
 
 db.prototype.removeDocument = function(doc) {
