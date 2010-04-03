@@ -21,10 +21,10 @@ var renderer = msjs(function(msj) {
     var tbody = el.find("tbody");
     tbody.children().remove();
     if (msj.list.rows.length) {
-        el.removeClass("no-result");
+        el.removeClass("no-results");
         status.text("").css("color", "");
     } else {
-        el.addClass("no-result");
+        el.addClass("no-results");
         status.text("no documents").css("color", "teal");
     }
     $.each(msj.list.rows, function(i, doc) {
@@ -55,7 +55,7 @@ dom.addCss(cssId + " table", {
     border: "1px solid #A7A7A7",
     borderSpacing: "0"
 });
-dom.addCss(cssId + ".no-result table", {
+dom.addCss(cssId + ".no-results table", {
     display: "none"
 });
 dom.addCss(cssId + " thead", {

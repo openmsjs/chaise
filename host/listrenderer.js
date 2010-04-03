@@ -48,10 +48,10 @@ var renderer = msjs(function(msj) {
     tbody.children().remove();
 
     if (msj.list.length) {
-        el.removeClass("no-result");
+        el.removeClass("no-results");
         status.text("").css("color", "");
     } else {
-        el.addClass("no-result");
+        el.addClass("no-results");
         status.text("no hosts").css("color", "teal");
     }
 
@@ -81,7 +81,7 @@ dom.addCss(cssId + " th," +
            cssId + " td", {
     padding: "2px 10px"
 });
-dom.addCss(cssId + ".no-result table", {
+dom.addCss(cssId + ".no-results table", {
     display: "none"
 });
 
