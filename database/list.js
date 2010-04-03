@@ -14,7 +14,7 @@ var list = msjs.publish(msjs(function(msj) {
     }
     return list;
 }));
-list.pull("chaise.hostlist.picker", "host");
-list.depends("chaise.hostlist.picker");
-list.depends("chaise.dblist.creator");
+list.pull("chaise.host.picker", "host");
+list.depends("chaise.host.picker");
+list.depends("chaise.database.creator");
 list.packMe = false;

@@ -15,7 +15,7 @@ var el = msjs.publish($(<table>
     </tbody>
 </table>));
 
-var picker = msjs.require("chaise.doclist.picker");
+var picker = msjs.require("chaise.document.picker");
 var renderer = msjs(function(msj) {
     var tbody = el.find("tbody");
     tbody.children("tr:not(:first)").remove();
@@ -29,7 +29,7 @@ var renderer = msjs(function(msj) {
     });
     tbody.find("tr:not(:first)").click(handleClick);
 });
-renderer.push("chaise.doclist.list", "list");
+renderer.push("chaise.document.list", "list");
 
 el.find("a.new-document").click(function(){
     picker.update({doc: {}});

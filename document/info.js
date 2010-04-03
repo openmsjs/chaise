@@ -6,8 +6,8 @@ var list = msjs.publish(msjs(function(msj) {
     }
     return doc;
 }));
-list.pull("chaise.doclist.picker", "docInfo");
-list.depends("chaise.doclist.picker");
-list.depends("chaise.dblist.picker");
-list.depends("chaise.hostlist.picker");
+list.pull("chaise.document.picker", "docInfo");
+list.depends("chaise.document.picker");
+list.depends("chaise.database.picker");
+list.depends("chaise.host.picker");
 list.push("chaise.document.updater", "updated");

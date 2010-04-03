@@ -1,4 +1,4 @@
-var picker = msjs.require("chaise.hostlist.picker");
+var picker = msjs.require("chaise.host.picker");
 var el = msjs.publish($(<table>
     <thead>
         <tr><th>host</th></tr>
@@ -17,7 +17,7 @@ var renderer = msjs(function(msj) {
     });
     tbody.find("tr").click(handleClick);
 });
-renderer.push("chaise.hostlist.list", "list");
+renderer.push("chaise.host.list", "list");
 
 var handleClick = function() {
     picker.update($(this).data("host"));

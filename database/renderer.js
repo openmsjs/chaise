@@ -36,7 +36,7 @@ var reset = function() {
     return false;
 };
 form.bind("reset", reset);
-var submitter = msjs.require("chaise.dblist.submitter");
+var submitter = msjs.require("chaise.database.submitter");
 form.submit(function() {
     submitter.update(dbInput[0].value);
     return reset();                
@@ -61,9 +61,9 @@ var renderer = msjs(function(msj) {
     });
     tbody.find("tr:not(:first)").click(handleClick);
 });
-renderer.push("chaise.dblist.list", "list");
+renderer.push("chaise.database.list", "list");
 
-var picker = msjs.require("chaise.dblist.picker");
+var picker = msjs.require("chaise.database.picker");
 var handleClick = function() {
     picker.update($(this).data("info"));
 }
