@@ -29,7 +29,11 @@ server.prototype.replicate = function(source, target) {
     return couchRequest.post(this.url + "/_replicate", content);
 };
 
+server.prototype.getUuids = function(count) {
+    if (isNaN(count) || count <= 0) count = 1;
+    return couchRequest.get(this.url + "/_uuids?count=" + count);
+};
 
 server.prototype.getDatabase = function(dbName) {
-    return new (msjs.require("chaise.couch.database"))(this.url + "/" + escape(dbName));
-}
+    return new (msjs.require("chaise.couch.database"))(dbName, this);
+};

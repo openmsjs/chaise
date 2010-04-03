@@ -9,8 +9,9 @@ var couchRequest = msjs.require("chaise.couch.request");
 var isSuccess = msjs.require("chaise.couch.issuccess");
 
 //url includes database name
-var db = msjs.publish(function(url) {
-    this.url = url;
+var db = msjs.publish(function(dbName, server) {
+    this.url = server.url + "/" + escape(dbName);
+    this.server = server;
 });
 
 // db level
@@ -56,12 +57,13 @@ db.prototype.getDocument = function(docId) {
     return couchRequest.get(this.url + "/" + escape(docId));
 };
 
+
 // will update doc with rev
 db.prototype.writeDocument = function(doc) {
-    var response = doc._id
-        ? couchRequest.put(this.url + "/" + escape(doc._id), msjs.toJSON(doc))
-        : couchRequest.post(this.url, msjs.toJSON(doc));
+    if (!doc._id) doc._id = this.server.getUuids().result.uuids[0];
+    var response = couchRequest.put(this.url + "/" + escape(doc._id), msjs.toJSON(doc));
     if (isSuccess(response)) {
+        doc._id = response.result.id;
         doc._rev = response.result.rev;
     }
     return response;
