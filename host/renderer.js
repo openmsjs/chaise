@@ -4,7 +4,7 @@ var el = msjs.publish($(<div>
         <a href="#">add host</a>
         <form>
             <input name="host" autocomplete="off"/>
-            <input type="submit" value="open"/>
+            <input type="submit" value="add host"/>
             <input type="reset" value="cancel"/>
         </form>
         <span/>

@@ -3,7 +3,7 @@ var el = msjs.publish($(<div>
         <a href="#">create database</a>
         <form>
             <input name="db" autocomplete="off"/>
-            <input type="submit" value="create"/>
+            <input type="submit" value="create database"/>
             <input type="reset" value="cancel"/>
         </form>
     </div>
