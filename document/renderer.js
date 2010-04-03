@@ -81,7 +81,9 @@ dom.addCss(cssId + ".editing", {
 dom.addCss(cssId + " pre", {
     border: "1px solid #CACACA",
     margin: "0px",
-    outline: "none"
+    outline: "none",
+    whiteSpace: "pre-wrap",       /* css-3 */
+    overflowX: "auto"
 });
 dom.addCss(cssId + ".editing a", {
     display: "none"
