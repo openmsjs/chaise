@@ -3,15 +3,15 @@ var form = msjs.publish($(<form>
     <input type="submit" value="save"/>
     <input type="reset" value="cancel"/>
     <span/>
-    <textarea class="editable" readonly="true" tabindex="-1" autocomplete="off"/>
+    <pre/>
 </form>));
 
-var textarea = form.find("textarea");
+var textarea = form.find("pre");
 var isSuccess = msjs.require("chaise.couch.issuccess");
 var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
 var startEdit = function() {
-    textarea.removeAttr("readonly");
-    textarea.removeAttr("tabindex");
+    textarea.data("rollback", textarea.text());
+    textarea.attr("contenteditable", "true");
     textarea.focus();
     form.addClass("editing");
 }
@@ -23,7 +23,7 @@ var renderer = msjs(function(msj) {
             doc._rev = msj.updated.result.rev;
         }
         if (doc) {
-            textarea[0].value = toPrettyJSON(doc);
+            textarea.text(toPrettyJSON(doc));
             if (!doc._id) startEdit();                
         } else { 
             textarea.text("");
@@ -42,29 +42,35 @@ form.find("a").click(function(){
 var submitter = msjs.require("chaise.document.submitter");
 var updater = msjs.require("chaise.document.updater");
 var status = form.find("span");
-var reset = function() {
+var stopEdit = function() {
+    textarea.removeAttr("contenteditable");
     status.text("");
     form.removeClass("editing");
-    textarea.attr("readonly", "true");
-    textarea.attr("tabindex", "-1");
+};
+var reset = function() {
+    textarea.text(textarea.data("rollback"));
+    stopEdit();    
 };
 form.bind("reset", reset);
 form.submit(function(){
     try {
-        var doc = eval("(" + textarea[0].value + ")");
+        var doc = eval("(" + textarea.text() + ")");
         submitter.update(doc);
-        textarea[0].value = toPrettyJSON(doc);
-        reset();
+        textarea.text(toPrettyJSON(doc));
+        stopEdit();
     } catch (e) {
         status.text("bad json");
     }
     return false;
 });
 textarea.keypress(function(event) {
-    if (event.shiftKey && event.keyCode == "13") {
+    if (event.keyCode == "27") {
+        form[0].reset();
+        return false;
+    } else if (event.shiftKey && event.keyCode == "13") {
         form.submit();      
         return false;
-    }
+    } 
 });
 
 var dom = msjs.require("msjs.dom");
@@ -72,10 +78,10 @@ var cssId = dom.getCssId(form[0]);
 dom.addCss(cssId + ".editing", {
     display: "block"
 });
-dom.addCss(cssId + " textarea", {
-    width: "100%",
-    height: "300px",
-    border: "1px solid #CACACA"
+dom.addCss(cssId + " pre", {
+    border: "1px solid #CACACA",
+    margin: "0px",
+    outline: "none"
 });
 dom.addCss(cssId + ".editing a", {
     display: "none"
