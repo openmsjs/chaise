@@ -6,15 +6,28 @@ var form = msjs.publish($(<form>
     <textarea class="editable" readonly="true" tabindex="-1" autocomplete="off"/>
 </form>));
 
+var textarea = form.find("textarea");
 var isSuccess = msjs.require("chaise.couch.issuccess");
 var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
+var startEdit = function() {
+    textarea.removeAttr("readonly");
+    textarea.removeAttr("tabindex");
+    textarea.focus();
+    form.addClass("editing");
+}
 var renderer = msjs(function(msj) {
     var doc = msj.doc;
     if (doc != (void 0)) {
         if (doc && msj.updated && isSuccess(msj.updated)) {
+            doc._id = msj.updated.result.id;
             doc._rev = msj.updated.result.rev;
         }
-        doc ? textarea[0].value = toPrettyJSON(doc) : textarea.text("");
+        if (doc) {
+            textarea[0].value = toPrettyJSON(doc);
+            if (!doc._id) startEdit();                
+        } else { 
+            textarea.text("");
+        }
     }
 });
 renderer.pull("chaise.document.info", "doc");
@@ -22,12 +35,8 @@ renderer.pull("chaise.document.updater", "updated");
 renderer.depends("chaise.document.info");
 renderer.depends("chaise.document.updater");
 
-var textarea = form.find("textarea");
 form.find("a").click(function(){
-    textarea.removeAttr("readonly");
-    textarea.removeAttr("tabindex");
-    textarea.focus();
-    form.addClass("editing");
+    startEdit();
     return false;
 });
 var submitter = msjs.require("chaise.document.submitter");

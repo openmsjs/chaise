@@ -6,13 +6,19 @@ var el = msjs.publish($(<table>
             <th>value</th>
         </tr>
     </thead>
-    <tbody/>
+    <tbody>
+        <tr>
+            <td>
+                <a class="new-document" href="#">new document</a>
+            </td>
+        </tr>
+    </tbody>
 </table>));
 
 var picker = msjs.require("chaise.doclist.picker");
 var renderer = msjs(function(msj) {
     var tbody = el.find("tbody");
-    tbody.children().remove();
+    tbody.children("tr:not(:first)").remove();
 
     $.each(msj.list.rows, function(i, doc) {
         $("<tr>" +
@@ -21,9 +27,15 @@ var renderer = msjs(function(msj) {
           "<td>" + msjs.toJSON(doc.value) + "</td>" +
           "</tr>").appendTo(tbody).data("doc", doc);
     });
-    tbody.find("tr").click(handleClick);
+    tbody.find("tr:not(:first)").click(handleClick);
 });
 renderer.push("chaise.doclist.list", "list");
+
+el.find("a.new-document").click(function(){
+    picker.update({doc: {}});
+    return false;
+});
+
 
 var handleClick = function() {
     picker.update($(this).data("doc"));
