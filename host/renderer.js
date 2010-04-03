@@ -1,7 +1,7 @@
 var picker = msjs.require("chaise.host.picker");
 var el = msjs.publish($(<div>
     <div class="create">
-        <a href="#">open host file</a>
+        <a href="#">add host</a>
         <form>
             <input name="host" autocomplete="off"/>
             <input type="submit" value="open"/>
