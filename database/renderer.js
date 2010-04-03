@@ -7,31 +7,29 @@ var el = msjs.publish($(<div>
             <input type="reset" value="cancel"/>
         </form>
     </div>
-    <div class="table">
-        <table>
-            <thead>
-                <tr>
-                    <th>name</th>
-                    <th>size</th>
-                    <th>document count</th>
-                    <th>update seq</th>
-                </tr>
-            </thead>
-            <tbody/>
-        </table>
-    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>name</th>
+                <th>size</th>
+                <th>document count</th>
+                <th>update seq</th>
+            </tr>
+        </thead>
+        <tbody/>
+    </table>
     <div class="status"/>
 </div>));
 
 var form = el.find("form");
 var dbInput = form.find("input[name='db']"); 
 el.find("a").click(function() {
-    el.addClass("creating");
+    el.addClass("adding");
     dbInput.focus();
     return false;                       
 });
 var reset = function() {
-    el.removeClass("creating");
+    el.removeClass("adding");
     dbInput[0].value = "";
     return false;
 };
@@ -102,13 +100,13 @@ dom.addCss(cssId + " th:first-child," +
 });
 
 dom.addCss(cssId + " .create form," +
-           cssId + ".creating .create a", {
+           cssId + ".adding .create a", {
     display: "none"
 });
-dom.addCss(cssId + ".creating .create form", {
+dom.addCss(cssId + ".adding .create form", {
     position: "absolute"               
 });
-dom.addCss(cssId + ".creating .create form," +
+dom.addCss(cssId + ".adding  .create form," +
            cssId + " .create a", {
     display: "block"
 });
