@@ -1,5 +1,9 @@
 var cookies = msjs.publish({});
 cookies.get = function(name) {
+    if (!document.cookie) {
+        msjs.log("no document cookie - running on server?");
+        return;
+    }
 	var nameEQ = name + "=";
 	var ca = document.cookie.split(";");
 	for(var i=0; i < ca.length; i++) {
@@ -23,7 +27,6 @@ cookies.set = function(name, value, seconds) {
     }
 
 	document.cookie = name+"="+value+expires+"; path=/;";
-msjs.log(document.cookie);
 
     // Clear cookies for those browser we set with no domain
     if (value == "") document.cookie = name+"="+value+expires+"; path=/;";

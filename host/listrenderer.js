@@ -1,7 +1,6 @@
-var picker = msjs.require("chaise.host.picker");
 var el = msjs.publish($(<div>
     <div class="create">
-        <a href="#">add host</a>
+        <a href="#" class="add">add host</a>
         <form>
             <input name="host" autocomplete="off"/>
             <input type="submit" value="add host"/>
@@ -32,7 +31,7 @@ var reset = function() {
 form.bind("reset", reset);
 var submitter = msjs.require("chaise.host.submitter");
 form.submit(function() {
-    submitter.update(hostInput[0].value);
+    submitter.update({type: "add", host: hostInput[0].value});
     return reset();                
 });
 hostInput.keypress(function(event) {
@@ -43,6 +42,7 @@ hostInput.keypress(function(event) {
 });
 
 var status = el.find("span");
+var picker = msjs.require("chaise.host.picker");
 var renderer = msjs(function(msj) {
     var tbody = el.find("tbody");
     tbody.children().remove();
@@ -56,29 +56,36 @@ var renderer = msjs(function(msj) {
     }
 
     $.each(msj.list, function(i, host) {
-        $("<tr><td>" + host + "</td></tr>")
-            .appendTo(tbody)
-            .data("host", host);
+        var cell = $("<tr><td></td></tr>").appendTo(tbody).find("td");
+        $("<a href=\"\">" + host + "</a>")
+            .appendTo(cell)
+            .click(function() {
+                picker.update(host);
+                return false;
+            });
+        $("<a href=\"#\" class=\"control\">delete</a>")
+            .appendTo(cell)
+            .click(function() {
+                submitter.update({type: "remove", host: host});
+                return false;
+            });
     });
-    tbody.find("tr").click(handleClick);
 });
 renderer.push("chaise.host.list", "list");
-
-var handleClick = function() {
-    picker.update($(this).data("host"));
-};
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId + " table", {
     border: "1px solid #A7A7A7",
-    borderSpacing: "0"
+    borderSpacing: "0",
+    width: "100%"
 });
 dom.addCss(cssId + " thead", {
     backgroundColor: "#DADADA"
 });
 dom.addCss(cssId + " th," +
            cssId + " td", {
+    textAlign: "left",
     padding: "2px 10px"
 });
 dom.addCss(cssId + ".no-results table", {
@@ -91,9 +98,12 @@ dom.addCss(cssId + " .create form", {
 dom.addCss(cssId + ".adding .create form", {
     display: "block"
 });
-dom.addCss(cssId + " a", {
+dom.addCss(cssId + " a.add", {
     display: "block"
 });
-dom.addCss(cssId + ".adding a", {
+dom.addCss(cssId + ".adding a.add", {
     display: "none"
+});
+dom.addCss(cssId + " a.control", {
+    marginLeft: "5px"
 });
