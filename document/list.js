@@ -4,7 +4,7 @@ var emptyMsj = {offset: 0, rows: []};
 var list = msjs.publish(msjs(function(msj) {
     if (msj.dbInfo) {
         var couch = new couchServer(msj.host).getDatabase(msj.dbInfo.db_name);
-        var response = couch.getAllDocuments({skip: 0, limit: 30, include_docs: true});
+        var response = couch.getAllDocuments({skip: 0, limit: 30});
         if (isSuccess(response)) return response.result;
     }
     return emptyMsj;
