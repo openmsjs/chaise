@@ -74,10 +74,8 @@ dom.addCss(cssId + ".editing", {
 });
 dom.addCss(cssId + " textarea", {
     width: "100%",
-    height: "300px"
-});
-dom.addCss(cssId + " textarea:active", {
-    "outline": "0"
+    height: "300px",
+    border: "1px solid #CACACA"
 });
 dom.addCss(cssId + ".editing a", {
     display: "none"
