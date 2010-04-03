@@ -1,27 +1,27 @@
-var el = msjs.publish($(<table>
-    <thead>
-        <tr>
-            <th>name</th>
-            <th>size</th>
-            <th>document count</th>
-            <th>update seq</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <div class="create">
-                    <a href="#">new</a>
-                    <form>
-                        <input name="db" autocomplete="off"/>
-                        <input type="submit" value="create"/>
-                        <input type="reset" value="cancel"/>
-                    </form>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>));
+var el = msjs.publish($(<div>
+    <div class="create">
+        <a href="#">create database</a>
+        <form>
+            <input name="db" autocomplete="off"/>
+            <input type="submit" value="create"/>
+            <input type="reset" value="cancel"/>
+        </form>
+    </div>
+    <div class="table">
+        <table>
+            <thead>
+                <tr>
+                    <th>name</th>
+                    <th>size</th>
+                    <th>document count</th>
+                    <th>update seq</th>
+                </tr>
+            </thead>
+            <tbody/>
+        </table>
+    </div>
+    <div class="status"/>
+</div>));
 
 var form = el.find("form");
 var dbInput = form.find("input[name='db']"); 
@@ -48,9 +48,17 @@ dbInput.keypress(function(event) {
     }
 });
 
+var status = el.find(".status");
 var renderer = msjs(function(msj) {
     var tbody = el.find("tbody");
-    tbody.children("tr:not(:first)").remove();
+    tbody.children().remove();
+    if (msj.list.length) {
+        el.removeClass("no-result");
+        status.text("").css("color", "");
+    } else {
+        el.addClass("no-result");
+        status.text("no documents").css("color", "teal");
+    }
     $.each(msj.list, function(i, info) {
         $("<tr>" +
           "<td class=\"name\">" + info.db_name + "</td>" +
@@ -59,7 +67,7 @@ var renderer = msjs(function(msj) {
           "<td>" + info.update_seq + "</td>" +
           "</tr>").appendTo(tbody).data("info", info);
     });
-    tbody.find("tr:not(:first)").click(handleClick);
+    tbody.find("tr").click(handleClick);
 });
 renderer.push("chaise.database.list", "list");
 
@@ -68,12 +76,17 @@ var handleClick = function() {
     picker.update($(this).data("info"));
 }
 
+
+
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
-dom.addCss(cssId, {
+dom.addCss(cssId + " table", {
     width: "100%",
     border: "1px solid #A7A7A7",
     borderSpacing: "0"
+});
+dom.addCss(cssId + ".no-result table", {
+    display: "none"
 });
 dom.addCss(cssId + " thead", {
     backgroundColor: "#DADADA"
@@ -100,7 +113,8 @@ dom.addCss(cssId + ".creating .create form," +
     display: "block"
 });
 dom.addCss(cssId + " .create", {
-    height: "20px"
+    height: "20px",
+    overflow: "hidden"
 });
 dom.addCss(cssId + " .create", {
     height: "20px"

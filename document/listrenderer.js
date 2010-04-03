@@ -1,33 +1,40 @@
-var el = msjs.publish($(<table>
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>key</th>
-            <th>value</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <a class="new-document" href="#">new document</a>
-            </td>
-        </tr>
-    </tbody>
-</table>));
+var el = msjs.publish($(<div>
+    <div>
+        <a class="new-document" href="#">new document</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>key</th>
+                <th>value</th>
+            </tr>
+        </thead>
+        <tbody/>
+    </table>
+    <div class="status"/>
+</div>));
 
+var status = el.find(".status");
 var picker = msjs.require("chaise.document.picker");
 var renderer = msjs(function(msj) {
     var tbody = el.find("tbody");
-    tbody.children("tr:not(:first)").remove();
-
+    tbody.children().remove();
+    if (msj.list.rows.length) {
+        el.removeClass("no-result");
+        status.text("").css("color", "");
+    } else {
+        el.addClass("no-result");
+        status.text("no documents").css("color", "teal");
+    }
     $.each(msj.list.rows, function(i, doc) {
         $("<tr>" +
-          "<td>" + (i+msj.list.offset) + "</td>" +
+          "<td>" + (i+msj.list.offset+1) + "</td>" +
           "<td>" + doc.key + "</td>" +
           "<td>" + msjs.toJSON(doc.value) + "</td>" +
           "</tr>").appendTo(tbody).data("doc", doc);
     });
-    tbody.find("tr:not(:first)").click(handleClick);
+    tbody.find("tr").click(handleClick);
 });
 renderer.push("chaise.document.list", "list");
 
@@ -43,10 +50,13 @@ var handleClick = function() {
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
-dom.addCss(cssId, {
+dom.addCss(cssId + " table", {
     width: "100%",
     border: "1px solid #A7A7A7",
     borderSpacing: "0"
+});
+dom.addCss(cssId + ".no-result table", {
+    display: "none"
 });
 dom.addCss(cssId + " thead", {
     backgroundColor: "#DADADA"
