@@ -11,8 +11,8 @@ var el = msjs.publish($(<div>
 var status = el.find("span");
 var picker = msjs.require("chaise.host.list.picker");
 var remover = msjs.require("chaise.host.remove.submitter");
+var tbody = el.find("tbody");
 var renderer = msjs(function(msj) {
-    var tbody = el.find("tbody");
     tbody.children().remove();
 
     if (msj.list.length) {
@@ -24,8 +24,9 @@ var renderer = msjs(function(msj) {
     }
 
     $.each(msj.list, function(i, host) {
-        var cell = $("<tr><td></td></tr>").appendTo(tbody).find("td");
-        $("<a href=\"\">" + host + "</a>")
+        var row = $("<tr><td></td></tr>").data("host", host).appendTo(tbody);
+        var cell = row.find("td");
+        $("<a href=\"#\">" + host + "</a>")
             .appendTo(cell)
             .click(function() {
                 picker.update(host);
@@ -38,8 +39,22 @@ var renderer = msjs(function(msj) {
                 return false;
             });
     });
+
+    return true;
 });
 renderer.push("chaise.host.list.lister", "list");
+
+var selector = msjs(function(msj) {
+    tbody.find(".selected").removeClass("selected");
+    $.each(tbody.children(), function(i, row) {
+        if (msj.picked == $(row).data("host")) {
+            $(row).addClass("selected");
+            return false;
+        }
+    });
+});
+selector.push(picker, "picked");
+selector.depends(renderer);
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
@@ -61,4 +76,7 @@ dom.addCss(cssId + ".no-results table", {
 });
 dom.addCss(cssId + " a.control", {
     marginLeft: "5px"
+});
+dom.addCss(cssId + " .selected", {
+    backgroundColor: "#EFEFC2"
 });

@@ -13,11 +13,11 @@ var el = msjs.publish($(<div>
     <div class="status"/>
 </div>));
 
+var tbody = el.find("tbody");
 var status = el.find(".status");
 var picker = msjs.require("chaise.database.list.picker");
 var remover = msjs.require("chaise.database.remove.submitter");
 var renderer = msjs(function(msj) {
-    var tbody = el.find("tbody");
     tbody.children().remove();
     if (msj.list.length) {
         el.removeClass("no-results");
@@ -32,7 +32,7 @@ var renderer = msjs(function(msj) {
           "<td>" + info.disk_size + "</td>" +
           "<td>" + info.doc_count + "</td>" +
           "<td>" + info.update_seq + "</td>" +
-          "</tr>").appendTo(tbody);
+          "</tr>").appendTo(tbody).data("database", info.db_name);
 
         var cell = row.find("td:first-child");
         $("<a href=\"\">" + info.db_name + "</a>")
@@ -51,6 +51,17 @@ var renderer = msjs(function(msj) {
 });
 renderer.push("chaise.database.list.lister", "list");
 
+var selector = msjs(function(msj) {
+    tbody.find(".selected").removeClass("selected");
+    $.each(tbody.children(), function(i, row) {
+        if (msj.picked == $(row).data("database")) {
+            $(row).addClass("selected");
+            return false;
+        }
+    });
+});
+selector.push(picker, "picked");
+selector.depends(renderer);
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
@@ -76,4 +87,7 @@ dom.addCss(cssId + " th:first-child," +
 });
 dom.addCss(cssId + " a.control", {
     marginLeft: "5px"
+});
+dom.addCss(cssId + " .selected", {
+    backgroundColor: "#EFEFC2"
 });

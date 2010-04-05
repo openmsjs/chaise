@@ -11,7 +11,7 @@ var getHosts = function() {
     }
     return hosts;
 };
-var list = msjs.publish(msjs(function() {
+var list = msjs.publish(msjs(function(msj) {
     var hosts = getHosts();
     if (msj.add) {
         hosts.push(msj.add);

@@ -19,7 +19,6 @@ var startEdit = function() {
 }
 var renderer = msjs(function(msj) {
     var doc = msj.info;
-msjs.log('doc', doc)
     if (doc != (void 0)) {
         if (doc && msj.updated && isSuccess(msj.updated)) {
             doc._id = msj.updated.result.id;
