@@ -1,12 +1,4 @@
 var el = msjs.publish($(<div>
-    <div class="create">
-        <a href="#">create database</a>
-        <form>
-            <input name="db" autocomplete="off"/>
-            <input type="submit" value="create database"/>
-            <input type="reset" value="cancel"/>
-        </form>
-    </div>
     <table>
         <thead>
             <tr>
@@ -20,31 +12,6 @@ var el = msjs.publish($(<div>
     </table>
     <div class="status"/>
 </div>));
-
-var form = el.find("form");
-var dbInput = form.find("input[name='db']"); 
-el.find("a").click(function() {
-    el.addClass("adding");
-    dbInput.focus();
-    return false;                       
-});
-var reset = function() {
-    el.removeClass("adding");
-    dbInput[0].value = "";
-    return false;
-};
-form.bind("reset", reset);
-var submitter = msjs.require("chaise.database.submitter");
-form.submit(function() {
-    submitter.update(dbInput[0].value);
-    return reset();                
-});
-dbInput.keypress(function(event) {
-    // escape
-    if (event.keyCode == "27") {
-        form[0].reset();
-    }
-});
 
 var status = el.find(".status");
 var renderer = msjs(function(msj) {
@@ -75,7 +42,6 @@ var handleClick = function() {
 }
 
 
-
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId + " table", {
@@ -97,23 +63,4 @@ dom.addCss(cssId + " th," +
 dom.addCss(cssId + " th:first-child," + 
            cssId + " td:first-child", {
     textAlign: "left"
-});
-
-dom.addCss(cssId + " .create form," +
-           cssId + ".adding .create a", {
-    display: "none"
-});
-dom.addCss(cssId + ".adding .create form", {
-    position: "absolute"               
-});
-dom.addCss(cssId + ".adding  .create form," +
-           cssId + " .create a", {
-    display: "block"
-});
-dom.addCss(cssId + " .create", {
-    height: "20px",
-    overflow: "hidden"
-});
-dom.addCss(cssId + " .create", {
-    height: "20px"
 });
