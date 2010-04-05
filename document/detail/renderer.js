@@ -9,8 +9,8 @@ var form = msjs.publish($(<form>
 var textarea = form.find("pre");
 var isSuccess = msjs.require("chaise.couch.issuccess");
 var toPrettyJSON = msjs.require("chaise.document.detail.toprettyjson");
-var startEdit = function() {
-    textarea.data("rollback", textarea.text());
+var startEdit = function(rollback) {
+    textarea.data("rollback", rollback);
     textarea.attr("contenteditable", "true");
     setTimeout(function() { 
         textarea.focus();
@@ -26,7 +26,7 @@ var renderer = msjs(function(msj) {
         }
         if (doc) {
             textarea.text(toPrettyJSON(doc));
-            if (!doc._id) startEdit();                
+            if (!doc._id) startEdit("");
         } else { 
             textarea.text("");
         }
@@ -35,7 +35,7 @@ var renderer = msjs(function(msj) {
 renderer.push("chaise.document.detail.info", "info");
 
 form.find("a").click(function(){
-    startEdit();
+    startEdit(textarea.text());
     return false;
 });
 var submitter = msjs.require("chaise.document.detail.submitter");
