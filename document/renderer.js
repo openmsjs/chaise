@@ -12,7 +12,9 @@ var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
 var startEdit = function() {
     textarea.data("rollback", textarea.text());
     textarea.attr("contenteditable", "true");
-    textarea.focus();
+    setTimeout(function() { 
+        textarea.focus();
+    }, 500);
     form.addClass("editing");
 }
 var renderer = msjs(function(msj) {
@@ -46,6 +48,7 @@ var stopEdit = function() {
     textarea.removeAttr("contenteditable");
     status.text("");
     form.removeClass("editing");
+    textarea.blur();
 };
 var reset = function() {
     textarea.text(textarea.data("rollback"));
