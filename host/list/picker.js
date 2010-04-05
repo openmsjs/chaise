@@ -2,4 +2,4 @@ var picker = msjs.publish(msjs(function(msj){
     // load the first host by default
     return msj.list[0];
 }));
-picker.push("chaise.host.list", "list");
+picker.push("chaise.host.list.lister", "list");

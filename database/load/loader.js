@@ -13,7 +13,7 @@ var loader = msjs.publish(msjs(function(msj) {
         return dbNames;
     })();
 
-    var reset = false;
+    var reset = false; // only allow reload for now
     var couch = new (msjs.require("chaise.couch.server"))(msj.host);
     jQuery.each(dbNames, function(i, dbName) {
         var db = couch.getDatabase(dbName);
@@ -49,4 +49,4 @@ var loader = msjs.publish(msjs(function(msj) {
 }));
 loader.packMe = false;
 loader.push("chaise.database.load.submitter", "packageName");
-loader.pull("chaise.host.picker", "host");
+loader.pull("chaise.host.list.picker", "host");

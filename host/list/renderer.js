@@ -9,7 +9,8 @@ var el = msjs.publish($(<div>
 </div>));
 
 var status = el.find("span");
-var picker = msjs.require("chaise.host.picker");
+var picker = msjs.require("chaise.host.list.picker");
+var remover = msjs.require("chaise.host.remove.submitter");
 var renderer = msjs(function(msj) {
     var tbody = el.find("tbody");
     tbody.children().remove();
@@ -33,12 +34,12 @@ var renderer = msjs(function(msj) {
         $("<a href=\"#\" class=\"control\">delete</a>")
             .appendTo(cell)
             .click(function() {
-                submitter.update({type: "remove", host: host});
+                remover.update(host);
                 return false;
             });
     });
 });
-renderer.push("chaise.host.list", "list");
+renderer.push("chaise.host.list.lister", "list");
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);

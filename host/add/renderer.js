@@ -20,9 +20,9 @@ var reset = function() {
     return false;
 };
 form.bind("reset", reset);
-var submitter = msjs.require("chaise.host.submitter");
+var adder = msjs.require("chaise.host.add.submitter");
 form.submit(function() {
-    submitter.update({type: "add", host: hostInput[0].value});
+    adder.update(hostInput[0].value);
     return reset();                
 });
 hostInput.keypress(function(event) {

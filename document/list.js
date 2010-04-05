@@ -11,6 +11,6 @@ var list = msjs.publish(msjs(function(msj) {
 }));
 list.pull("chaise.database.list.picker", "dbInfo");
 list.depends("chaise.database.list.picker");
-list.pull("chaise.host.picker", "host");
+list.pull("chaise.host.list.picker", "host");
 list.depends("chaise.document.updater"); // refetch when document is updated
 list.packMe = false;

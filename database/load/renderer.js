@@ -1,8 +1,8 @@
 var el = msjs.publish($(<div>
-    <a href="#" class="add">load file</a>
+    <a href="#" class="add">initialize</a>
     <form>
         <input name="package" autocomplete="off"/>
-        <input type="submit" value="load file"/>
+        <input type="submit" value="initialize"/>
         <input type="reset" value="cancel"/>
     </form>
 </div>));

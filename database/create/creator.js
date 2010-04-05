@@ -4,4 +4,4 @@ var creator = msjs.publish(msjs(function(msj) {
 }));
 creator.packMe = false;
 creator.push("chaise.database.create.submitter", "dbName");
-creator.pull("chaise.host.picker", "host");
+creator.pull("chaise.host.list.picker", "host");
