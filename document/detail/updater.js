@@ -3,6 +3,6 @@ var updater = msjs.publish(msjs(function(msj){
     return couch.getDatabase(msj.dbInfo.db_name).writeDocument(msj.doc);
 }));
 updater.packMe = false;
-updater.push("chaise.document.submitter", "doc");
+updater.push("chaise.document.detail.submitter", "doc");
 updater.pull("chaise.database.list.picker", "dbInfo");
 updater.pull("chaise.host.list.picker", "host");

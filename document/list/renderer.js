@@ -13,7 +13,7 @@ var el = msjs.publish($(<div>
 </div>));
 
 var status = el.find(".status");
-var picker = msjs.require("chaise.document.picker");
+var picker = msjs.require("chaise.document.list.picker");
 var renderer = msjs(function(msj) {
     var tbody = el.find("tbody");
     tbody.children().remove();
@@ -29,13 +29,12 @@ var renderer = msjs(function(msj) {
           "<td>" + (i+msj.list.offset+1) + "</td>" +
           "<td>" + doc.key + "</td>" +
           "<td>" + msjs.toJSON(doc.value) + "</td>" +
-          "</tr>").appendTo(tbody);
-    });
-    tbody.find("tr").click(function() {
-        picker.update(doc);
+          "</tr>").appendTo(tbody).click(function() {
+            picker.update(doc);
+        });
     });
 });
-renderer.push("chaise.document.list", "list");
+renderer.push("chaise.document.list.lister", "list");
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);

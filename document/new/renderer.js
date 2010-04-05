@@ -1,6 +1,6 @@
 var el = msjs.publish($(<a href="#">new document</a>));
-var picker = msjs.require("chaise.document.picker");
+var picker = msjs.require("chaise.document.list.picker");
 el.click(function() {
-    picker.update({doc: {}});
+    picker.update({});
     return false;
 });

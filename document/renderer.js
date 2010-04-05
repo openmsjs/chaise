@@ -1,4 +1,4 @@
 var el = msjs.publish($(<div/>));
-el.append(msjs.require("chaise.document.newrenderer"))
-  .append(msjs.require("chaise.document.listrenderer"))
-  .append(msjs.require("chaise.document.detailrenderer"));
+el.append(msjs.require("chaise.document.new.renderer"))
+  .append(msjs.require("chaise.document.list.renderer"))
+  .append(msjs.require("chaise.document.detail.renderer"));

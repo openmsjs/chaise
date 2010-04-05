@@ -8,7 +8,7 @@ var form = msjs.publish($(<form>
 
 var textarea = form.find("pre");
 var isSuccess = msjs.require("chaise.couch.issuccess");
-var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
+var toPrettyJSON = msjs.require("chaise.document.detail.toprettyjson");
 var startEdit = function() {
     textarea.data("rollback", textarea.text());
     textarea.attr("contenteditable", "true");
@@ -18,7 +18,8 @@ var startEdit = function() {
     form.addClass("editing");
 }
 var renderer = msjs(function(msj) {
-    var doc = msj.doc;
+    var doc = msj.info;
+msjs.log('doc', doc)
     if (doc != (void 0)) {
         if (doc && msj.updated && isSuccess(msj.updated)) {
             doc._id = msj.updated.result.id;
@@ -32,17 +33,13 @@ var renderer = msjs(function(msj) {
         }
     }
 });
-renderer.pull("chaise.document.info", "doc");
-renderer.pull("chaise.document.updater", "updated");
-renderer.depends("chaise.document.info");
-renderer.depends("chaise.document.updater");
+renderer.push("chaise.document.detail.info", "info");
 
 form.find("a").click(function(){
     startEdit();
     return false;
 });
-var submitter = msjs.require("chaise.document.submitter");
-var updater = msjs.require("chaise.document.updater");
+var submitter = msjs.require("chaise.document.detail.submitter");
 var status = form.find("span");
 var stopEdit = function() {
     textarea.removeAttr("contenteditable");
