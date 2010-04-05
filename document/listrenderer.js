@@ -1,7 +1,4 @@
 var el = msjs.publish($(<div>
-    <div>
-        <a class="new-document" href="#">new document</a>
-    </div>
     <table>
         <thead>
             <tr>
@@ -32,21 +29,13 @@ var renderer = msjs(function(msj) {
           "<td>" + (i+msj.list.offset+1) + "</td>" +
           "<td>" + doc.key + "</td>" +
           "<td>" + msjs.toJSON(doc.value) + "</td>" +
-          "</tr>").appendTo(tbody).data("doc", doc);
+          "</tr>").appendTo(tbody);
     });
-    tbody.find("tr").click(handleClick);
+    tbody.find("tr").click(function() {
+        picker.update(doc);
+    });
 });
 renderer.push("chaise.document.list", "list");
-
-el.find("a.new-document").click(function(){
-    picker.update({doc: {}});
-    return false;
-});
-
-
-var handleClick = function() {
-    picker.update($(this).data("doc"));
-}
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
