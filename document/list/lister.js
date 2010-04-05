@@ -13,4 +13,5 @@ list.pull("chaise.database.list.picker", "dbName");
 list.depends("chaise.database.list.picker");
 list.pull("chaise.host.list.picker", "host");
 list.depends("chaise.document.detail.updater"); // refetch when document is updated
+list.depends("chaise.document.remove.remover"); // refetch when document is removed
 list.packMe = false;

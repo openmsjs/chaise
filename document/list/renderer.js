@@ -14,6 +14,7 @@ var el = msjs.publish($(<div>
 var tbody = el.find("tbody");
 var status = el.find(".status");
 var picker = msjs.require("chaise.document.list.picker");
+var remover = msjs.require("chaise.document.remove.submitter");
 var renderer = msjs(function(msj) {
     tbody.children().remove();
     if (msj.list.rows.length) {
@@ -38,7 +39,7 @@ var renderer = msjs(function(msj) {
         $("<a href=\"#\" class=\"control\" tabindex=\"-1\">delete</a>")
             .appendTo(cell)
             .click(function() {
-//                remover.update(info.db_name);
+                remover.update({_id: doc.id, _rev: doc.value.rev});
                 return false;
             });
     });
