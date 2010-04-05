@@ -78,11 +78,15 @@ dom.addCss(cssId + ".editing", {
     display: "block"
 });
 dom.addCss(cssId + " pre", {
-    border: "1px solid #CACACA",
+    border: "2px solid #CACACA",
+    padding: "2px",
     margin: "0px",
     outline: "none",
     whiteSpace: "pre-wrap",       /* css-3 */
     overflowX: "auto"
+});
+dom.addCss(cssId + ".editing pre", {
+    borderColor: "#8A8279 #DED6CA #DED6CA #8A8279"
 });
 dom.addCss(cssId + ".editing a", {
     display: "none"
