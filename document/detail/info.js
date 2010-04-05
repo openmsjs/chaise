@@ -2,9 +2,9 @@ var isSuccess = msjs.require("chaise.couch.issuccess");
 var couchServer = msjs.require("chaise.couch.server");
 var list = msjs.publish(msjs(function(msj) {
     if (!msj.host) return;
-    if (!msj.dbInfo) return;
+    if (!msj.dbName) return;
 
-    var db = new couchServer(msj.host).getDatabase(msj.dbInfo.db_name);
+    var db = new couchServer(msj.host).getDatabase(msj.dbName);
     var docId = null;
     if (msj.info) {
         docId = msj.info.id;
@@ -26,5 +26,5 @@ var list = msjs.publish(msjs(function(msj) {
 list.packMe = false;
 list.push("chaise.document.list.picker", "info");
 list.push("chaise.document.detail.updater", "updated");
-list.pull("chaise.database.list.picker", "dbInfo");
+list.pull("chaise.database.list.picker", "dbName");
 list.pull("chaise.host.list.picker", "host");

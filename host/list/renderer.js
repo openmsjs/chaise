@@ -31,7 +31,7 @@ var renderer = msjs(function(msj) {
                 picker.update(host);
                 return false;
             });
-        $("<a href=\"#\" class=\"control\">delete</a>")
+        $("<a href=\"#\" class=\"control\" tabindex=\"-1\">delete</a>")
             .appendTo(cell)
             .click(function() {
                 remover.update(host);

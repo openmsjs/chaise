@@ -14,6 +14,8 @@ var el = msjs.publish($(<div>
 </div>));
 
 var status = el.find(".status");
+var picker = msjs.require("chaise.database.list.picker");
+var remover = msjs.require("chaise.database.remove.submitter");
 var renderer = msjs(function(msj) {
     var tbody = el.find("tbody");
     tbody.children().remove();
@@ -25,21 +27,29 @@ var renderer = msjs(function(msj) {
         status.text("no documents").css("color", "teal");
     }
     $.each(msj.list, function(i, info) {
-        $("<tr>" +
-          "<td class=\"name\">" + info.db_name + "</td>" +
+        var row = $("<tr>" +
+          "<td></td>" +
           "<td>" + info.disk_size + "</td>" +
           "<td>" + info.doc_count + "</td>" +
           "<td>" + info.update_seq + "</td>" +
-          "</tr>").appendTo(tbody).data("info", info);
+          "</tr>").appendTo(tbody);
+
+        var cell = row.find("td:first-child");
+        $("<a href=\"\">" + info.db_name + "</a>")
+            .appendTo(cell)
+            .click(function() {
+                picker.update(info.db_name);
+                return false;
+            });
+        $("<a href=\"#\" class=\"control\" tabindex=\"-1\">delete</a>")
+            .appendTo(cell)
+            .click(function() {
+                remover.update(info.db_name);
+                return false;
+            });
     });
-    tbody.find("tr").click(handleClick);
 });
 renderer.push("chaise.database.list.lister", "list");
-
-var picker = msjs.require("chaise.database.list.picker");
-var handleClick = function() {
-    picker.update($(this).data("info"));
-}
 
 
 var dom = msjs.require("msjs.dom");
@@ -63,4 +73,7 @@ dom.addCss(cssId + " th," +
 dom.addCss(cssId + " th:first-child," + 
            cssId + " td:first-child", {
     textAlign: "left"
+});
+dom.addCss(cssId + " a.control", {
+    marginLeft: "5px"
 });

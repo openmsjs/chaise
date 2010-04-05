@@ -2,14 +2,14 @@ var isSuccess = msjs.require("chaise.couch.issuccess");
 var couchServer = msjs.require("chaise.couch.server");
 var emptyMsj = {offset: 0, rows: []};
 var list = msjs.publish(msjs(function(msj) {
-    if (msj.dbInfo) {
-        var couch = new couchServer(msj.host).getDatabase(msj.dbInfo.db_name);
+    if (msj.dbName) {
+        var couch = new couchServer(msj.host).getDatabase(msj.dbName);
         var response = couch.getAllDocuments({skip: 0, limit: 30});
         if (isSuccess(response)) return response.result;
     }
     return emptyMsj;
 }));
-list.pull("chaise.database.list.picker", "dbInfo");
+list.pull("chaise.database.list.picker", "dbName");
 list.depends("chaise.database.list.picker");
 list.pull("chaise.host.list.picker", "host");
 list.depends("chaise.document.detail.updater"); // refetch when document is updated
