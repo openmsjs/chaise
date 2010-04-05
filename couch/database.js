@@ -61,7 +61,7 @@ db.prototype.getDocument = function(docId) {
 // will update doc with rev
 db.prototype.writeDocument = function(doc) {
     if (!doc._id) doc._id = this.server.getUuids().result.uuids[0];
-    var response = couchRequest.put(this.url + "/" + escape(doc._id), msjs.toJSON(doc));
+    var response = couchRequest.put(this.url + "/" + escape(doc._id), msjs.toJSONWithFunctions(doc, true));
     if (isSuccess(response)) {
         doc._id = response.result.id;
         doc._rev = response.result.rev;

@@ -34,7 +34,7 @@ var renderer = msjs(function(msj) {
     });
     tbody.find("tr").click(handleClick);
 });
-renderer.push("chaise.database.list", "list");
+renderer.push("chaise.database.list.lister", "list");
 
 var picker = msjs.require("chaise.database.list.picker");
 var handleClick = function() {
