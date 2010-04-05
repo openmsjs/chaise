@@ -3,5 +3,5 @@ var creator = msjs.publish(msjs(function(msj) {
     return couch.getDatabase(msj.dbName).create();
 }));
 creator.packMe = false;
-creator.push("chaise.database.submitter", "dbName");
+creator.push("chaise.database.create.submitter", "dbName");
 creator.pull("chaise.host.picker", "host");

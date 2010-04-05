@@ -15,5 +15,5 @@ list.packMe = false;
 list.pull("chaise.document.picker", "docInfo");
 list.depends("chaise.document.picker");
 list.depends("chaise.document.updater");
-list.pull("chaise.database.picker", "dbInfo");
+list.pull("chaise.database.list.picker", "dbInfo");
 list.pull("chaise.host.picker", "host");

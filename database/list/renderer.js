@@ -36,7 +36,7 @@ var renderer = msjs(function(msj) {
 });
 renderer.push("chaise.database.list", "list");
 
-var picker = msjs.require("chaise.database.picker");
+var picker = msjs.require("chaise.database.list.picker");
 var handleClick = function() {
     picker.update($(this).data("info"));
 }

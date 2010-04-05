@@ -9,8 +9,8 @@ var list = msjs.publish(msjs(function(msj) {
     }
     return emptyMsj;
 }));
-list.pull("chaise.database.picker", "dbInfo");
+list.pull("chaise.database.list.picker", "dbInfo");
+list.depends("chaise.database.list.picker");
 list.pull("chaise.host.picker", "host");
-list.depends("chaise.database.picker");
 list.depends("chaise.document.updater"); // refetch when document is updated
 list.packMe = false;
