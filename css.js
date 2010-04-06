@@ -27,6 +27,6 @@ dom.addCss("th,td", {
 dom.addCss("th", {
     color: "white"
 });
-dom.addCss(".selected", {
+dom.addCss("tr.selected", {
     backgroundColor: "#EAEAEA"
 });

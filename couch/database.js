@@ -78,14 +78,6 @@ db.prototype.removeDocumentById = function(docId, rev) {
 };
 
 // Views
-db.prototype.getDesignDocuments = function() {
-    return this.getAllDocuments({
-        startkey: "_design/",
-        endkey: "_design0",
-        include_docs: true
-    });
-};
-
 db.prototype.getView = function(design, view) {
     return couchRequest.get(this.url + "/_design/" + escape(design) + "/_view/" + escape(view));
 };
