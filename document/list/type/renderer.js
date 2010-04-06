@@ -4,28 +4,55 @@ var el = msjs.publish($(<div>
 </div>));
 var picker = msjs.require("chaise.document.list.type.picker");
 var dom = msjs.require("msjs.dom");
-el.click(function(event) {
-    var target = dom.getTargetFromEvent(event);    
-    if (target.nodeName == "A") {
-        picker.update(target.name || $(target).data("view"));
-    }
+el.find("a[name]").click(function() {
+    picker.update(this.name);
     return false;
 });
 
+var shower = msjs(function(msj) {
+    el.css("display", msj.list.rows.length ? "" : "none");
+});
+shower.push("chaise.document.list.lister", "list");
+
+var designDocs = msjs(function(msj) {
+    el.find(".view").remove();
+    $.each(msj.docs, function(i, doc){
+        var designName = doc._id.substring(8);
+        for (var view in doc.views) {
+            $("<a href=\"#\">" + designName + "/" + view + "</a>")
+                .addClass("view")
+                .appendTo(el)
+                .data("doc", doc)
+                .click(function() {
+                    picker.update({doc: doc, view: $(this).text()});
+                    return false;
+                });
+        }
+    });
+});
+designDocs.push("chaise.document.list.type.designdocs", "docs");
+
 var selector = msjs(function(msj) {
     el.find(".selected").removeClass("selected");
+    var selected = null;
     switch (msj.selected) {
         case "all": 
         case "design":
-            el.find("[name='" + msj.selected + "']").addClass("selected");
+            selected = el.find("[name='" + msj.selected + "']");
             break;
         default:
             var views = el.find("a.view");
-            $.each(views.children(), function(view) {
-                msjs.log(view);                      
+            $.each(views, function(i, view) {
+                var doc = $(view).data("doc");
+                if (msj.selected.doc._id == doc._id &&
+                    msj.selected.view == $(view).text()) {
+                    selected = $(view);
+                    return false;
+                }
             });
             break;
     }
+    if (selected) selected.addClass("selected");
 });
 selector.push(picker, "selected");
 

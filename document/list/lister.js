@@ -14,6 +14,10 @@ var list = msjs.publish(msjs(function(msj) {
                                               endkey: "_design0",
                                               skip: 0, limit: 30});
             break;
+        default: // design object
+            msjs.log(msj.type);
+            return;
+            break;
         }
         if (isSuccess(response)) return response.result;
     }
