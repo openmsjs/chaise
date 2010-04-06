@@ -1,5 +1,6 @@
 msjs.require("chaise.css");
 
+$(<title>Chaise</title>).appendTo(document.head);
 msjs.require("chaise.header").appendTo("body");
 var el = $(<div/>)
     .append(msjs.require("chaise.host.renderer"))

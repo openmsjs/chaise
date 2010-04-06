@@ -37,7 +37,7 @@ dom.addCss(cssId + " .logo .main", {
     fontSize: "25px"
 });
 dom.addCss(cssId + " .logo .byline", {
-    color: "red",
+    color: "#FFE59F",
     verticalAlign: "bottom",
     fontSize: "12px"
 });
