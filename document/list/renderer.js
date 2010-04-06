@@ -25,7 +25,7 @@ var renderer = msjs(function(msj) {
         status.text("no documents").css("color", "teal");
     }
     $.each(msj.list.rows, function(i, doc) {
-        var row = $("<tr><td></td><td>" + msjs.toJSON(doc.value.rev) + "</td></tr>")
+        var row = $("<tr><td></td><td>" + doc.value.rev + "</td></tr>")
             .appendTo(tbody)
             .data("docId", doc.key);
 
