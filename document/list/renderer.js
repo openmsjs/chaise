@@ -36,7 +36,7 @@ var renderer = msjs(function(msj) {
                 picker.update(doc);
                 return false;
             });
-        $("<a href=\"#\" class=\"control\" tabindex=\"-1\">delete</a>")
+        $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">delete</a>")
             .appendTo(cell)
             .click(function() {
                 remover.update({_id: doc.id, _rev: doc.value.rev});
@@ -79,7 +79,7 @@ dom.addCss(cssId + " th," +
            cssId + " td", {
     padding: "2px 10px"
 });
-dom.addCss(cssId + " a.control", {
+dom.addCss(cssId + " a.remover", {
     marginLeft: "5px"
 });
 dom.addCss(cssId + " .selected", {

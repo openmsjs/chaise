@@ -32,7 +32,7 @@ var renderer = msjs(function(msj) {
                 picker.update(host);
                 return false;
             });
-        $("<a href=\"#\" class=\"control\" tabindex=\"-1\">delete</a>")
+        $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">delete</a>")
             .appendTo(cell)
             .click(function() {
                 remover.update(host);
@@ -74,7 +74,7 @@ dom.addCss(cssId + " th," +
 dom.addCss(cssId + ".no-results table", {
     display: "none"
 });
-dom.addCss(cssId + " a.control", {
+dom.addCss(cssId + " a.remover", {
     marginLeft: "5px"
 });
 dom.addCss(cssId + " .selected", {
