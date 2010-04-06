@@ -3,7 +3,7 @@ var el = msjs.publish($(<div>
         <thead>
             <tr>
                 <th>key</th>
-                <th>value</th>
+                <th>rev</th>
             </tr>
         </thead>
         <tbody/>
@@ -25,7 +25,7 @@ var renderer = msjs(function(msj) {
         status.text("no documents").css("color", "teal");
     }
     $.each(msj.list.rows, function(i, doc) {
-        var row = $("<tr><td></td><td>" + msjs.toJSON(doc.value) + "</td></tr>")
+        var row = $("<tr><td></td><td>" + msjs.toJSON(doc.value.rev) + "</td></tr>")
             .appendTo(tbody)
             .data("docId", doc.key);
 

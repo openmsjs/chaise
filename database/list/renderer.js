@@ -35,6 +35,11 @@ var renderer = msjs(function(msj) {
           "</tr>").appendTo(tbody).data("database", info.db_name);
 
         var cell = row.find("td:first-child");
+
+        if (msj.picked == info.db_name) {
+            row.addClass("selected");
+        }
+
         $("<a href=\"\">" + info.db_name + "</a>")
             .appendTo(cell)
             .click(function() {
@@ -45,11 +50,15 @@ var renderer = msjs(function(msj) {
             .appendTo(cell)
             .click(function() {
                 remover.update(info.db_name);
+                if (row.hasClass("selected")) {
+                    picker.update(null);
+                }
                 return false;
             });
     });
 });
 renderer.push("chaise.database.list.lister", "list");
+renderer.pull(picker, "picked");
 
 var selector = msjs(function(msj) {
     tbody.find(".selected").removeClass("selected");
@@ -61,7 +70,6 @@ var selector = msjs(function(msj) {
     });
 });
 selector.push(picker, "picked");
-selector.depends(renderer);
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);

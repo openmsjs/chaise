@@ -61,7 +61,7 @@ var reset = function() {
 form.bind("reset", reset);
 form.submit(function(){
     try {
-        var doc = eval("(" + textarea.text() + ")");
+        var doc = eval("(" + textarea.text().split('\n').join(" ") + ")");
         submitter.update(doc);
         textarea.text(toPrettyJSON(doc));
         stopEdit();
