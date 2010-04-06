@@ -1,9 +1,10 @@
 var header = msjs.publish($(<div>
     <div class="logo">
-        <span class="main">Chaise</span><span class="byline"> kick your feet up</span>
+        <a class="main" href="http://github.com/openmsjs/chaise" target="_blank">Chaise</a>
+        <span class="byline"> kick your feet up</span>
     </div>
     <div class="control">
-        <a name="unlock" href="#" title="display host, database and document delete links">unlock</a>
+        <a name="unlock" href="#" title="Display host, database and document delete controls">Unlock</a>
     </div>
 </div>));
 
@@ -25,7 +26,6 @@ var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(header[0]);
 dom.addCss(cssId, {
     backgroundColor: "black",
-    color: "white",
     padding: "10px"
 });
 
@@ -33,9 +33,11 @@ dom.addCss(cssId + " .logo", {
     cssFloat: "left"
 });
 dom.addCss(cssId + " .logo .main", {
+    color: "white",
     fontWeight: "bold",
     fontSize: "25px"
 });
+
 dom.addCss(cssId + " .logo .byline", {
     color: "#FFE59F",
     verticalAlign: "bottom",
@@ -45,11 +47,7 @@ dom.addCss(cssId + " .control", {
     textAlign: "right"
 });
 dom.addCss(cssId + " .control a", {
-    textDecoration: "none",
     color: "white"
-});
-dom.addCss(cssId + " .control a:hover", {
-    textDecoration: "underline"
 });
 dom.addCss("a.remover", {
     display: "none"

@@ -2,7 +2,7 @@ var el = msjs.publish($(<div>
     <span/>
     <table>
         <thead>
-            <tr><th>host</th></tr>
+            <tr><th>Host</th></tr>
         </thead>
         <tbody/>
     </table>
@@ -32,7 +32,7 @@ var renderer = msjs(function(msj) {
                 picker.update(host);
                 return false;
             });
-        $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">delete</a>")
+        $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">Delete</a>")
             .appendTo(cell)
             .click(function() {
                 remover.update(host);
@@ -58,25 +58,9 @@ selector.depends(renderer);
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
-dom.addCss(cssId + " table", {
-    border: "1px solid #A7A7A7",
-    borderSpacing: "0",
-    width: "100%"
-});
-dom.addCss(cssId + " thead", {
-    backgroundColor: "#DADADA"
-});
-dom.addCss(cssId + " th," +
-           cssId + " td", {
-    textAlign: "left",
-    padding: "2px 10px"
-});
 dom.addCss(cssId + ".no-results table", {
     display: "none"
 });
 dom.addCss(cssId + " a.remover", {
     marginLeft: "5px"
-});
-dom.addCss(cssId + " .selected", {
-    backgroundColor: "#EFEFC2"
 });

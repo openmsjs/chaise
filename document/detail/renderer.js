@@ -1,7 +1,7 @@
 var form = msjs.publish($(<form>
-    <a href="#">edit</a>
-    <input type="submit" value="save"/>
-    <input type="reset" value="cancel"/>
+    <a href="#">Edit</a>
+    <input type="submit" value="Save"/>
+    <input type="reset" value="Cancel"/>
     <span/>
     <pre/>
 </form>));

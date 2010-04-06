@@ -2,8 +2,8 @@ var el = msjs.publish($(<div>
     <table>
         <thead>
             <tr>
-                <th>key</th>
-                <th>rev</th>
+                <th>_id</th>
+                <th>_rev</th>
             </tr>
         </thead>
         <tbody/>
@@ -36,7 +36,7 @@ var renderer = msjs(function(msj) {
                 picker.update(doc);
                 return false;
             });
-        $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">delete</a>")
+        $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">Delete</a>")
             .appendTo(cell)
             .click(function() {
                 remover.update({_id: doc.id, _rev: doc.value.rev});
@@ -64,24 +64,9 @@ selector.depends(renderer);
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
-dom.addCss(cssId + " table", {
-    width: "100%",
-    border: "1px solid #A7A7A7",
-    borderSpacing: "0"
-});
 dom.addCss(cssId + ".no-results table", {
     display: "none"
 });
-dom.addCss(cssId + " thead", {
-    backgroundColor: "#DADADA"
-});
-dom.addCss(cssId + " th," +
-           cssId + " td", {
-    padding: "2px 10px"
-});
 dom.addCss(cssId + " a.remover", {
     marginLeft: "5px"
-});
-dom.addCss(cssId + " .selected", {
-    backgroundColor: "#EFEFC2"
 });

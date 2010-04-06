@@ -14,6 +14,6 @@ var dom = msjs.require("msjs.dom");
 dom.addCss(dom.getCssId(createRenderer[0]) + "," +
            dom.getCssId(loadRenderer[0]), {
     display: "inline",
-    marginRight: "5px"
+    marginRight: "10px"
 });
 

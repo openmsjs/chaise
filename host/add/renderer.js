@@ -1,9 +1,9 @@
 var el = msjs.publish($(<div>
-    <a href="#" class="add">add host</a>
+    <a href="#" class="add">Add host</a>
     <form>
         <input name="host" autocomplete="off"/>
-        <input type="submit" value="add host"/>
-        <input type="reset" value="cancel"/>
+        <input type="submit" value="Add host"/>
+        <input type="reset" value="Cancel"/>
     </form>
 </div>));
 

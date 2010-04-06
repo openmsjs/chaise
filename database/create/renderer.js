@@ -1,9 +1,9 @@
 var el = msjs.publish($(<div>
-    <a href="#">create database</a>
+    <a href="#">Create database</a>
     <form>
         <input name="db" autocomplete="off"/>
-        <input type="submit" value="create database"/>
-        <input type="reset" value="cancel"/>
+        <input type="submit" value="Create database"/>
+        <input type="reset" value="Cancel"/>
     </form>
 </div>));
 

@@ -1,9 +1,9 @@
 var el = msjs.publish($(<div>
-    <a href="#" class="add">initialize</a>
+    <a href="#" title="Load file with couchdb views and initial data">Load</a>
     <form>
         <input name="package" autocomplete="off"/>
-        <input type="submit" value="initialize"/>
-        <input type="reset" value="cancel"/>
+        <input type="submit" value="Load"/>
+        <input type="reset" value="Cancel"/>
     </form>
 </div>));
 
