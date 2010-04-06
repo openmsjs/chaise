@@ -6,13 +6,15 @@ var list = msjs.publish(msjs(function(msj) {
 
     var db = new couchServer(msj.host).getDatabase(msj.dbName);
     var docId = null;
-    if (msj.info) {
-        docId = msj.info.id;
+    if (msj.picked) {
+        docId = msj.picked.id;
     } else if (msj.updated) {
         if (isSuccess(msj.updated)) {
             docId = msj.updated.result.id;
         }
         // TODO: send update error to client
+    } else {
+        return;
     }
  
     if (docId) {
@@ -24,7 +26,7 @@ var list = msjs.publish(msjs(function(msj) {
     }
 }));
 list.packMe = false;
-list.push("chaise.document.list.picker", "info");
+list.push("chaise.document.list.picker", "picked");
 list.push("chaise.document.detail.updater", "updated");
 list.pull("chaise.database.list.picker", "dbName");
 list.pull("chaise.host.list.picker", "host");

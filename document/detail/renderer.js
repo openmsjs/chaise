@@ -3,7 +3,7 @@ var form = msjs.publish($(<form>
     <input type="submit" value="save"/>
     <input type="reset" value="cancel"/>
     <span/>
-    <pre spellcheck="false"/>
+    <pre/>
 </form>));
 
 var textarea = form.find("pre");
@@ -16,7 +16,7 @@ var startEdit = function(rollback) {
         textarea.focus();
     }, 500);
     form.addClass("editing");
-}
+};
 var renderer = msjs(function(msj) {
     var doc = msj.info;
     if (doc != (void 0)) {
@@ -34,6 +34,12 @@ var renderer = msjs(function(msj) {
 });
 renderer.push("chaise.document.detail.info", "info");
 
+var shower = msjs(function(msj) {
+    form.css("display", msj.picked ? "" : "none");
+});
+shower.push("chaise.document.list.picker", "picked");
+
+
 form.find("a").click(function(){
     startEdit(textarea.text());
     return false;
@@ -47,7 +53,9 @@ var stopEdit = function() {
     textarea.blur();
 };
 var reset = function() {
-    textarea.text(textarea.data("rollback"));
+    var rollback = textarea.data("rollback");
+    textarea.text(rollback);
+    if (!rollback) form.css("display", "none");
     stopEdit();    
 };
 form.bind("reset", reset);
@@ -74,9 +82,6 @@ textarea.keypress(function(event) {
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(form[0]);
-dom.addCss(cssId + ".editing", {
-    display: "block"
-});
 dom.addCss(cssId + " pre", {
     border: "2px solid #CACACA",
     padding: "2px",
