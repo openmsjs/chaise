@@ -23,19 +23,14 @@ var renderer = msjs(function(msj) {
     }
 
     var isView = msj.type != "all" && msj.type != "design";
-    if (isView) {
-         $("<tr><th>key</th><th>value</th></tr>").appendTo(thead);
-    } else {
-         $("<tr><th>_id</th><th>_rev</th></tr>").appendTo(thead);
-    }
-
+    var reduced = false;
     $.each(msj.list.rows, function(i, doc) {
-        var row = $("<tr><td></td><td>" + (isView ? msjs.toJSON(doc.value) : doc.value.rev) + "</td></tr>")
+        var row = $("<tr><td>" + (isView ? msjs.toJSON(doc.value) : doc.value.rev) + "</td></tr>")
             .appendTo(tbody)
-            .data("docId", doc.key);
+            .data("doc", doc);
 
         if (doc.id) {
-            var cell = row.find("td:first-child");
+            var cell = $("<td/>").insertBefore(row.children()[0]);
             $("<a href=\"#\">" + doc.key + "<a>")
                 .appendTo(cell)
                 .click(function() {
@@ -48,14 +43,25 @@ var renderer = msjs(function(msj) {
                     remover.update({_id: doc.id, _rev: doc.value.rev});
                     return false;
                 });
-        }
-
-        if (isView) {
-            $("<br/><span>id: " + doc.id + "</span>")
-                .appendTo(cell)
-                .css({color: "#8A8A8A"});
+            if (isView) {
+                $("<br/><span>id: " + doc.id + "</span>")
+                    .appendTo(cell)
+                    .css({color: "#8A8A8A"});
+            }
+        } else {
+            reduced = true;
         }
     });
+
+    if (isView) {
+        if (reduced) {
+            $("<tr><th>value</th></tr>").appendTo(thead);
+        } else {
+            $("<tr><th>key</th><th>value</th></tr>").appendTo(thead);
+        }
+    } else {
+        $("<tr><th>_id</th><th>_rev</th></tr>").appendTo(thead);
+    }
 
     return true;
 });
@@ -66,7 +72,9 @@ var selector = msjs(function(msj) {
     tbody.find(".selected").removeClass("selected");
     if (msj.picked) {
         $.each(tbody.children(), function(i, row) {
-            if (msj.picked.id == $(row).data("docId")) {
+            var doc = $(row).data("doc");
+            if (msj.picked.id == doc.id &&
+                msj.picked.key == doc.key) {
                 $(row).addClass("selected");
                 return false;
             }
