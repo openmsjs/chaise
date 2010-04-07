@@ -6,6 +6,8 @@ var list = msjs.publish(msjs(function(msj) {
 
     var couch = new couchServer(msj.host).getDatabase(msj.dbName);
     var options = msj.options;
+    if (options.limit == null) options.limit = 10;
+
     var response;
     switch (msj.type){
     case "all":

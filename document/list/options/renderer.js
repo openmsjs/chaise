@@ -1,7 +1,7 @@
 var el = msjs.publish($(<form>
     <div>
         <label>Skip: <input name="skip" class="number" value="0"/></label>
-        <label>Limit: <input name="limit" class="number" value="30"/></label>
+        <label>Limit: <input name="limit" class="number" value="10"/></label>
         <label><input name="descending" type="checkbox"> Descending</input></label>
     </div>
 
@@ -74,7 +74,7 @@ el.submit(function() {
     var inclusiveEnd = !!$("[name=inclusiveEnd]:checked").val();
     var descending = !!$("[name=descending]:checked").val();
     var skip = Number($("[name=skip]").val()) || 0;
-    var limit = Number($("[name=limit]").val()) || 30;
+    var limit = Number($("[name=limit]").val()) || 10;
     var reduce = !!$("[name=reduce]:checked").val();
     var grouping = $("[name=level]").val();
 
