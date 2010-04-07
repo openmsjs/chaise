@@ -14,6 +14,7 @@ var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId, {
     marginLeft: "auto",
     marginRight: "auto",
+    marginBottom: "50px",
     minWidth: "500px",
     maxWidth: "800px"
 });
