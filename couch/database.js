@@ -109,6 +109,19 @@ db.prototype.getView = function(design, view, queryMap, keys) {
     return keys ? couchRequest.post(url, msjs.toJSON(keys)) : couchRequest.get(url);
 };
 
+// {
+//     "map": "function(doc) {
+//         // map code
+//     }",
+//     "reduce": "function(keys, views, rereduce) {
+//         // reduce code (optional)
+//     }"
+// }
+db.prototype.runTemporaryView = function(design, view) {
+    var url = this.url + "/_temp_view";
+    return keys ? couchRequest.post(url, msjs.toJSON(keys)) : couchRequest.get(url);
+};
+
 db.prototype.cleanupViews = function() {
     return couchRequest.del(this.url + "/_view_cleanup");
 };
