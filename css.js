@@ -4,6 +4,10 @@ dom.addCss("*", {
     padding: "0px"
 });
 
+dom.addCss("body", {
+    overflowY: "scroll"
+});
+
 dom.addCss("a", {
     textDecoration: "none",
     color: "#02007F"
