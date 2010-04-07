@@ -15,8 +15,14 @@ var list = msjs.publish(msjs(function(msj) {
                                               skip: 0, limit: 30});
             break;
         default: // design object
-            msjs.log(msj.type);
-            return;
+            var design = msj.type.design;
+            var view = msj.type.view;
+            var doc = msj.type.doc;
+            var queryMap;
+            if (doc.views[view].reduce) {
+                queryMap = {reduce: false, descending: true};
+            }
+            response = couch.getView(design, view, queryMap);
             break;
         }
         if (isSuccess(response)) return response.result;

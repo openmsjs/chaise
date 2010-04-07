@@ -78,10 +78,41 @@ db.prototype.removeDocumentById = function(docId, rev) {
 };
 
 // Views
-db.prototype.getView = function(design, view) {
-    return couchRequest.get(this.url + "/_design/" + escape(design) + "/_view/" + escape(view));
+db.prototype.getDesignInfo = function(design) {
+    return couchRequest.get(this.url + "/_design/" + escape(design));
+};
+
+
+// queryMap:
+//     key=<json>
+//     startkey=<json>
+//     endkey=<json>
+//     startkey_docid=<docid>
+//     endkey_docid=<docid>
+//     limit=<num>
+//     stale=[ok]
+//     descending=[true|false] (default: false)
+//     skip=<num> (default: 0)
+//     group=[true|false] (default: false)
+//     group_level=<num>
+//     reduce=[true|false] (default: true)
+//     include_docs=[true|false] (default: false)
+//     inclusive_end=[true|false] (default: false)
+// keys (opt):
+//     {"keys": ["key1", "key2", ...]}
+db.prototype.getView = function(design, view, queryMap, keys) {
+    var url = this.url + "/_design/" + escape(design) + "/_view/" + escape(view);
+    if (queryMap) {
+        var queryString = toCouchQueryString(queryMap);
+        if (queryString) url += "?" + queryString;
+    }
+    return keys ? couchRequest.post(url, msjs.toJSON(keys)) : couchRequest.get(url);
 };
 
 db.prototype.cleanupViews = function() {
     return couchRequest.del(this.url + "/_view_cleanup");
+};
+
+db.prototype.compactViews = function(design) {
+    return couchRequest.del(this.url + "/_compact/" + design);
 };

@@ -15,16 +15,21 @@ var shower = msjs(function(msj) {
 shower.push("chaise.document.list.lister", "list");
 
 var designDocs = msjs(function(msj) {
-    el.find(".view").remove();
+    el.find(".design").remove();
     $.each(msj.docs, function(i, doc){
         var designName = doc._id.substring(8);
+        var design = $("<div>" + designName + ": [<span/>]</div>")
+                         .addClass("design")
+                         .appendTo(el);
+        var inner = design.find("span");
+
         for (var view in doc.views) {
-            $("<a href=\"#\">" + designName + "/" + view + "</a>")
+            $("<a href=\"#\">" + view + "</a>")
                 .addClass("view")
-                .appendTo(el)
-                .data("doc", doc)
+                .appendTo(inner)
+                .data("design", designName)
                 .click(function() {
-                    picker.update({doc: doc, view: $(this).text()});
+                    picker.update({design: designName, view: $(this).text(), doc: doc});
                     return false;
                 });
         }
@@ -43,8 +48,8 @@ var selector = msjs(function(msj) {
         default:
             var views = el.find("a.view");
             $.each(views, function(i, view) {
-                var doc = $(view).data("doc");
-                if (msj.selected.doc._id == doc._id &&
+                var design = $(view).data("design");
+                if (msj.selected.design == design &&
                     msj.selected.view == $(view).text()) {
                     selected = $(view);
                     return false;
