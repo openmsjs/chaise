@@ -12,15 +12,15 @@ var el = msjs.publish($(<form>
         </div>
 
         <div class="key">
-            <label>Key: <input name="key"/></label>
+            <label>Key: <input name="key" class="long"/></label>
         </div>
 
         <div class="range">
-            <label><span>Startkey: </span><input name="startkey"/></label><br/>
-            <label><span>Endkey: </span><input name="endkey"/></label>
+            <label><span>Startkey: </span><input name="startkey" class="long"/></label><br/>
+            <label><span>Endkey: </span><input name="endkey" class="long"/></label>
             <label><input name="inclusive_end" type="checkbox"> Inclusive end</input></label><br/>
-            <label><span>Startkey docid:</span><input name="startkey_docid"/></label><br/>
-            <label><span>Endkey docid:</span><input name="endkey_docid"/></label>
+            <label><span>Startkey docid:</span><input name="startkey_docid" class="long"/></label><br/>
+            <label><span>Endkey docid:</span><input name="endkey_docid" class="long"/></label>
         </div>
 
         <div class="reduce">
@@ -63,6 +63,14 @@ el.find("input[name='reduce']").click(function() {
 });
 
 var submitter = msjs.require("chaise.document.list.options.submitter");
+var toJS = function(key) {
+    try {
+        return eval("(" + key + ")");
+    } catch (e) {
+        msjs.log('bad key', key);
+        return;
+    }
+};
 el.submit(function() {
     var values = {};
 
@@ -71,6 +79,13 @@ el.submit(function() {
     var endkey = $("input[name=endkey]").val();
     var startkey_docid = $("input[name=startkey_docid]").val();
     var endkey_docid = $("input[name=endkey_docid]").val();
+
+    if (key) key = toJS(key);
+    if (startkey) startkey = toJS(startkey);
+    if (endkey) key = toJS(endkey);
+    if (startkey_docid) key = toJS(startkey_docid);
+    if (endkey_docid) key = toJS(endkey_docid);
+
     var inclusiveEnd = !!$("[name=inclusiveEnd]:checked").val();
     var descending = !!$("[name=descending]:checked").val();
     var skip = Number($("[name=skip]").val()) || 0;
@@ -130,7 +145,7 @@ var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId, {
     border: "1px solid black",
     padding: "10px",
-    width: "450px",
+    width: "600px",
     margin: "15px auto"
 });
 dom.addCss(cssId + " div", {
@@ -168,4 +183,10 @@ dom.addCss(cssId + " .reduce", {
 });
 dom.addCss(cssId + ".send-reduce .reduce", {
     display: "block"
+});
+dom.addCss(cssId + " input.long", {
+    width: "320px"
+});
+dom.addCss(cssId + " input[name=key].long", {
+    width: "550px"
 });

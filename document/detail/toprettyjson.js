@@ -33,7 +33,7 @@ var toPrettyJSON = msjs.publish(function(value, indent) {
                     partial.push('"' + jsonEscape(k) + '"' + ': ' + v);
                 }
             }
-            return partial.length === 0 ? '{}' : '{\n' + newIndent + partial.join(',\n' + newIndent) + '\n' + indent + '}';
+            return partial.length === 0 ? '{}' : '{\n' + newIndent + partial.join(', \n' + newIndent) + '\n' + indent + '}';
     }
 });
 

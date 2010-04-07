@@ -11,6 +11,7 @@ var tbody = el.find("tbody");
 var status = el.find(".status");
 var picker = msjs.require("chaise.document.list.picker");
 var remover = msjs.require("chaise.document.remove.submitter");
+var toPrettyJSON = msjs.require("chaise.document.detail.toprettyjson");
 var renderer = msjs(function(msj) {
     thead.children().remove();
     tbody.children().remove();
@@ -25,13 +26,13 @@ var renderer = msjs(function(msj) {
     var isView = msj.type != "all" && msj.type != "design";
     var reduced = false;
     $.each(msj.list.rows, function(i, doc) {
-        var row = $("<tr><td>" + (isView ? msjs.toJSON(doc.value) : doc.value.rev) + "</td></tr>")
+        var row = $("<tr><td>" + (isView ? toPrettyJSON(doc.value) : doc.value.rev) + "</td></tr>")
             .appendTo(tbody)
             .data("doc", doc);
 
         if (doc.id) {
             var cell = $("<td/>").insertBefore(row.children()[0]);
-            $("<a href=\"#\">" + doc.key + "<a>")
+            $("<a href=\"#\">" + (isView ? toPrettyJSON(doc.key) : doc.id) + "<a>")
                 .appendTo(cell)
                 .click(function() {
                     picker.update(doc);
