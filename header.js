@@ -4,7 +4,7 @@ var header = msjs.publish($(<div>
         <span class="byline"> kick your feet up</span>
     </div>
     <div class="control">
-        <a name="unlock" href="#" title="Display host, database and document delete controls">Unlock</a>
+        <a name="unlock" href="#" title="Display host, database and document delete controls">Show delete</a>
     </div>
 </div>));
 
@@ -14,10 +14,10 @@ $(header.find("[name='unlock']"))
         var className = "unlocked";
         if (body.hasClass(className)) {
             body.removeClass(className);
-            $(this).text("unlock");
+            $(this).text("Show delete");
         } else {
             body.addClass(className);
-            $(this).text("lock");
+            $(this).text("Hide delete");
         }
     });
 
