@@ -11,7 +11,7 @@ var tbody = el.find("tbody");
 var status = el.find(".status");
 var picker = msjs.require("chaise.document.list.picker");
 var remover = msjs.require("chaise.document.remove.submitter");
-var toPrettyJSON = msjs.require("chaise.document.detail.toprettyjson");
+var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
 var renderer = msjs(function(msj) {
     thead.children().remove();
     tbody.children().remove();

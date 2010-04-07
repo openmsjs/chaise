@@ -8,7 +8,7 @@ var form = msjs.publish($(<form>
 
 var textarea = form.find("pre");
 var isSuccess = msjs.require("chaise.couch.issuccess");
-var toPrettyJSON = msjs.require("chaise.document.detail.toprettyjson");
+var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
 var startEdit = function(rollback) {
     textarea.data("rollback", rollback);
     textarea.attr("contenteditable", "true");
