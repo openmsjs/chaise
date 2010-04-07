@@ -1,61 +1,54 @@
 var el = msjs.publish($(<form>
-    <div>By:
-        <label><input name="type" type="radio" value="key" checked="true"> key</input></label>
-        <label><input name="type" type="radio" value="keyRange"> key range</input></label>
-        <label><input name="type" type="radio" value="idRange"> id range</input></label>
-    </div>
-
-    <div class="key">
-        <label>key: <input name="key"/></label>
-    </div>
-
-    <div class="range">
-        <label><span class="start"/><input name="start"/></label><br/>
-        <label><span class="end"/><input name="end"/></label>
-        <label><input name="inclusive_end" type="checkbox"> inclusive end</input></label>
-    </div>
-
     <div>
-        <label>skip: <input name="skip" class="number" value="0"/></label>
-        <label>limit: <input name="limit" class="number" value="30"/></label>
-        <label><input name="descending" type="checkbox"> descending</input></label>
+        <label>Skip: <input name="skip" class="number" value="0"/></label>
+        <label>Limit: <input name="limit" class="number" value="30"/></label>
+        <label><input name="descending" type="checkbox"> Descending</input></label>
     </div>
 
-    <div class="reduce">
-        <label><input name="reduce" type="checkbox"> reduce</input></label>
-        <label class="grouping">group level:
-            <select name="level">
-              <option>none</option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>exact</option>
-            </select>
-        </label>
+    <div class="view-options">
+        <div>By:
+            <label><input name="type" type="radio" value="key" checked="true"> Key</input></label>
+            <label><input name="type" type="radio" value="range"> Key range</input></label>
+        </div>
+
+        <div class="key">
+            <label>Key: <input name="key"/></label>
+        </div>
+
+        <div class="range">
+            <label><span>Startkey: </span><input name="startkey"/></label><br/>
+            <label><span>Endkey: </span><input name="endkey"/></label>
+            <label><input name="inclusive_end" type="checkbox"> Inclusive end</input></label><br/>
+            <label><span>Startkey docid:</span><input name="startkey_docid"/></label><br/>
+            <label><span>Endkey docid:</span><input name="endkey_docid"/></label>
+        </div>
+
+        <div class="reduce">
+            <label><input name="reduce" type="checkbox"> Reduce</input></label>
+            <label class="grouping">Group level:
+                <select name="level">
+                  <option>none</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option>8</option>
+                  <option>9</option>
+                  <option>exact</option>
+                </select>
+            </label>
+        </div>
     </div>
 
-    <div>
-        <input type="submit" value="go"/>
-        <input type="reset" value="reset"/>
-    </div>
+    <input type="submit" value="Search"/>
+    <input type="reset" value="Reset"/>
 </form>));
 
-var startLabel = el.find(".range span.start");
-var endLabel = el.find(".range span.end");
 el.find("input[name='type']").click(function() {
-    if (this.value == "keyRange") {
-        startLabel.text("start key: ");
-        endLabel.text("end key: ");
-        el.addClass("range-enabled");
-    } else if (this.value == "idRange") {
-        startLabel.text("start id: ");
-        endLabel.text("end id: ");
+    if (this.value == "range") {
         el.addClass("range-enabled");
     } else {
         el.removeClass("range-enabled");
@@ -74,8 +67,10 @@ el.submit(function() {
     var values = {};
 
     var key = $("input[name=key]").val();
-    var start = $("input[name=start]").val();
-    var end = $("input[name=end]").val();
+    var startkey = $("input[name=startkey]").val();
+    var endkey = $("input[name=endkey]").val();
+    var startkey_docid = $("input[name=startkey_docid]").val();
+    var endkey_docid = $("input[name=endkey_docid]").val();
     var inclusiveEnd = !!$("[name=inclusiveEnd]:checked").val();
     var descending = !!$("[name=descending]:checked").val();
     var skip = Number($("[name=skip]").val()) || 0;
@@ -87,14 +82,11 @@ el.submit(function() {
         case "key": 
             if (key) values.key = key;
             break;
-        case "keyRange": 
-            if (start) values.startkey = start;
-            if (end) values.endkey = end;
-            if (inclusiveEnd) values.inclusive_end = true;
-            break;
-        case "idRange":
-            if (start) values.startkey_docid = startkey_docid;
-            if (end) values.endkey_docid = endkey_docid;
+        case "range": 
+            if (startkey) values.startkey = startkey;
+            if (endkey) values.endkey = endkey;
+            if (startkey_docid) values.startkey_docid = startkey_docid;
+            if (endkey_docid) values.endkey_docid = endkey_docid;
             if (inclusiveEnd) values.inclusive_end = true;
             break;
     }
@@ -103,8 +95,8 @@ el.submit(function() {
     if (limit >=0) values.limit = limit;
     if (descending) values.descending = true;
 
-    if (reduce) {
-        values.reduce = true;
+    if (el.hasClass("send-reduce")) {
+        values.reduce = reduce;
         if (grouping == "exact") {
             values.group = true;
         } else if (grouping != "none") {
@@ -117,17 +109,29 @@ el.submit(function() {
     return false;
 });
 
-// var shower = msjs(function(msj) {
-//     el.css("display", msj.picked == "all" || msj.picked == "design" ? "none" : "");
-// });
-// shower.push("chaise.document.list.type.picker", "picked");
+var viewOpts = el.find(".view-options");
+var shower = msjs(function(msj) {
+    var isView = msj.type !== "all" && msj.type != "design";
+    viewOpts.css("display", isView ? "" : "none");
+    el.removeClass("send-reduce");
+    if (isView) {
+        var view = msj.type.view;
+        var doc = msj.type.doc;
+        if (doc.views[view].reduce) {
+            el.addClass("send-reduce");
+        }
+    }
+});
+shower.pull("chaise.document.list.type.picker", "type");
+shower.depends("chaise.document.list.type.picker");
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId, {
     border: "1px solid black",
-    padding: "5px",
-    width: "450px"
+    padding: "10px",
+    width: "450px",
+    margin: "15px auto"
 });
 dom.addCss(cssId + " div", {
     marginBottom: "10px"
@@ -155,5 +159,13 @@ dom.addCss(cssId + " input.number", {
 });
 dom.addCss(cssId + " .range span", {
     cssFloat: "left",
-    width: "65px"
+    textAlign: "right",
+    marginRight: "5px",
+    width: "100px"
+});
+dom.addCss(cssId + " .reduce", {
+    display: "none"
+});
+dom.addCss(cssId + ".send-reduce .reduce", {
+    display: "block"
 });

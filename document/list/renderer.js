@@ -34,19 +34,21 @@ var renderer = msjs(function(msj) {
             .appendTo(tbody)
             .data("docId", doc.key);
 
-        var cell = row.find("td:first-child");
-        $("<a href=\"#\">" + doc.key + "<a>")
-            .appendTo(cell)
-            .click(function() {
-                picker.update(doc);
-                return false;
-            });
-        $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">Delete</a>")
-            .appendTo(cell)
-            .click(function() {
-                remover.update({_id: doc.id, _rev: doc.value.rev});
-                return false;
-            });
+        if (doc.id) {
+            var cell = row.find("td:first-child");
+            $("<a href=\"#\">" + doc.key + "<a>")
+                .appendTo(cell)
+                .click(function() {
+                    picker.update(doc);
+                    return false;
+                });
+            $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">Delete</a>")
+                .appendTo(cell)
+                .click(function() {
+                    remover.update({_id: doc.id, _rev: doc.value.rev});
+                    return false;
+                });
+        }
 
         if (isView) {
             $("<br/><span>id: " + doc.id + "</span>")
