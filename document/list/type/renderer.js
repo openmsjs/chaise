@@ -9,11 +9,6 @@ el.find("a[name]").click(function() {
     return false;
 });
 
-var shower = msjs(function(msj) {
-    el.css("display", msj.list.rows.length ? "" : "none");
-});
-shower.push("chaise.document.list.lister", "list");
-
 var designDocs = msjs(function(msj) {
     el.find(".design").remove();
     $.each(msj.docs, function(i, doc){

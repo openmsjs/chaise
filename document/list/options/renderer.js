@@ -113,24 +113,17 @@ var viewOpts = el.find(".view-options");
 var shower = msjs(function(msj) {
     el.removeClass("send-reduce");
 
-    if (msj.list) {
-        el.css("display", msj.list.rows.length ? "" : "none");
-    }
-
-    if (msj.type) {
-        var isView = msj.type !== "all" && msj.type != "design";
-        viewOpts.css("display", isView ? "" : "none");
-        if (isView) {
-            var view = msj.type.view;
-            var doc = msj.type.doc;
-            if (doc.views[view].reduce) {
-                el.addClass("send-reduce");
-            }
+    var isView = msj.type !== "all" && msj.type != "design";
+    viewOpts.css("display", isView ? "" : "none");
+    if (isView) {
+        var view = msj.type.view;
+        var doc = msj.type.doc;
+        if (doc.views[view].reduce) {
+            el.addClass("send-reduce");
         }
     }
 });
 shower.push("chaise.document.list.type.picker", "type");
-shower.push("chaise.document.list.lister", "list");
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
