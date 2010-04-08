@@ -42,6 +42,8 @@ var renderer = msjs(function(msj) {
 //         doc._rev = msj.updated.result.rev;
 //     }
     if (doc) {
+        doc.map = eval("(" + doc.map + ")");
+        if (doc.reduce) doc.reduce = eval("(" + doc.reduce + ")"); 
         textarea.text(toPrettyJSON(doc));
         el.css("display", "");
     } else { 

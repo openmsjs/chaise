@@ -13,6 +13,9 @@ var toPrettyJSON = msjs.publish(function(value, indent) {
         case 'null':
             return String(value);
 
+        case 'function':
+            return value.toString().split("\n").join("\n" + indent);
+
         case 'object':
             if (!value) return 'null';
 
@@ -38,18 +41,20 @@ var toPrettyJSON = msjs.publish(function(value, indent) {
 });
 
 var jsonMeta = {
-        '\b': '\\b',
-        '\t': '\\t',
-        '\n': '\\n',
-        '\f': '\\f',
-        '\r': '\\r',
-        '"' : '\\"',
-        '\\': '\\\\'
+    '\b': '\\b',
+    '\t': '\\t',
+    '\n': '\\n',
+    '\f': '\\f',
+    '\r': '\\r',
+    '"' : '\\"',
+    '\\': '\\\\'
 };
 var jsonEscape = function (string) {
     var jsonEscapeable = /[-"\\\x00-\x1f\x7f-\x9f]/g;
+msjs.log('jsonEscape', string, jsonEscapeable.test(string));
     return jsonEscapeable.test(string)
         ? string.replace(jsonEscapeable, function (a) {
+msjs.log('here', a)
             var c = jsonMeta[a];
             if (typeof c === 'string') {
                 return c;
