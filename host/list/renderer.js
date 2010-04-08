@@ -25,6 +25,8 @@ var renderer = msjs(function(msj) {
 
     $.each(msj.list, function(i, host) {
         var row = $("<tr><td></td></tr>").data("host", host).appendTo(tbody);
+        if (i % 2 == 0) row.addClass("odd");
+
         var cell = row.find("td");
         $("<a href=\"#\">" + host + "</a>")
             .appendTo(cell)

@@ -34,6 +34,8 @@ var renderer = msjs(function(msj) {
           "<td>" + info.update_seq + "</td>" +
           "</tr>").appendTo(tbody).data("database", info.db_name);
 
+        if (i % 2 == 0) row.addClass("odd");
+
         var cell = row.find("td:first-child");
 
         if (msj.picked == info.db_name) {

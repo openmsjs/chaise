@@ -29,6 +29,7 @@ var renderer = msjs(function(msj) {
         var row = $("<tr><td>" + (isView ? toPrettyJSON(doc.value) : doc.value.rev) + "</td></tr>")
             .appendTo(tbody)
             .data("doc", doc);
+        if (i % 2 == 0) row.addClass("odd");
 
         if (doc.id) {
             var cell = $("<td/>").insertBefore(row.children()[0]);

@@ -34,7 +34,10 @@ dom.addCss("th", {
     color: "white"
 });
 dom.addCss("tr.selected", {
-    backgroundColor: "#EAEAEA"
+    backgroundColor: "#FFE59F !important"
+});
+dom.addCss("tr.odd", {
+    backgroundColor: "#EFEFEF"
 });
 dom.addCss(".button", {
     "-moz-border-radius": "12px",
