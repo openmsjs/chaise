@@ -43,18 +43,19 @@ var list = msjs.publish(msjs(function(msj) {
             cleanGroupingOpts(options);
         }
 
+        if (!options.reduce && options.group_level != null){
+            delete options.group_level;
+        }
+
         response = couch.getView(design, view, options);
         break;
     }
 
     return isSuccess(response) ? response.result : emptyMsj;
 }));
-list.pull("chaise.database.list.picker", "dbName");
-list.depends("chaise.database.list.picker");
-list.pull("chaise.document.list.options.submitter", "options");
-list.depends("chaise.document.list.options.submitter");
-list.pull("chaise.document.list.type.picker", "type");
-list.depends("chaise.document.list.type.picker");
+list.pull(list.depends("chaise.database.list.picker"), "dbName");
+list.pull(list.depends("chaise.document.list.options.submitter"), "options");
+list.pull(list.depends("chaise.document.list.type.picker"), "type");
 list.pull("chaise.host.list.picker", "host");
 list.depends("chaise.document.detail.updater"); // refetch when document is updated
 list.depends("chaise.document.remove.remover"); // refetch when document is removed
