@@ -18,5 +18,5 @@ list.pull("chaise.host.list.picker", "host");
 list.depends("chaise.host.list.picker");
 list.depends("chaise.database.create.creator");
 list.depends("chaise.database.remove.remover");
-list.depends("chaise.database.load.loader");
+list.depends("chaise.database.import.importer");
 list.packMe = false;

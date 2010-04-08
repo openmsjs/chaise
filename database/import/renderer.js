@@ -1,8 +1,8 @@
 var el = msjs.publish($(<div>
-    <a href="#" title="Load file with couchdb views and initial data">Load</a>
+    <a href="#" title="Import file with CouchDB views and data">Import</a>
     <form>
         <input name="package" autocomplete="off"/>
-        <input type="submit" value="Load"/>
+        <input type="submit" value="Import"/>
         <input type="reset" value="Cancel"/>
     </form>
 </div>));
@@ -10,17 +10,17 @@ var el = msjs.publish($(<div>
 var form = el.find("form");
 var packageName = form.find("input[name='package']"); 
 el.find("a").click(function() {
-    el.addClass("loading");
+    el.addClass("importing");
     packageName.focus();
     return false;                       
 });
 var reset = function() {
-    el.removeClass("loading");
+    el.removeClass("importing");
     packageName[0].value = "";
     return false;
 };
 form.bind("reset", reset);
-var submitter = msjs.require("chaise.database.load.submitter");
+var submitter = msjs.require("chaise.database.import.submitter");
 form.submit(function() {
     submitter.update(packageName[0].value);
     return reset();                
@@ -37,9 +37,9 @@ packageName.keypress(function(event) {
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId + " form," +
-           cssId + ".loading a", {
+           cssId + ".importing a", {
     display: "none"
 });
-dom.addCss(cssId + ".loading form", {
+dom.addCss(cssId + ".importing form", {
     display: "block"
 });

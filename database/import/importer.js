@@ -1,5 +1,5 @@
 var isSuccess = msjs.require("chaise.couch.issuccess");
-var loader = msjs.publish(msjs(function(msj) {
+var importer = msjs.publish(msjs(function(msj) {
     var dbParam = "_all"; // do all for now
     var couchData = msjs.require(msj.packageName);
     var dbNames = (function() {
@@ -47,6 +47,6 @@ var loader = msjs.publish(msjs(function(msj) {
 
     return true;
 }));
-loader.packMe = false;
-loader.push("chaise.database.load.submitter", "packageName");
-loader.pull("chaise.host.list.picker", "host");
+importer.packMe = false;
+importer.push("chaise.database.import.submitter", "packageName");
+importer.pull("chaise.host.list.picker", "host");

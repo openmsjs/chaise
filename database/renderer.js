@@ -1,6 +1,6 @@
 var el = msjs.publish($(<div/>));
 var createRenderer = msjs.require("chaise.database.create.renderer");
-var loadRenderer = msjs.require("chaise.database.load.renderer");
+var loadRenderer = msjs.require("chaise.database.import.renderer");
 el.append(createRenderer)
   .append(loadRenderer)
   .append(msjs.require("chaise.database.list.renderer"));
