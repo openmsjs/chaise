@@ -12,7 +12,7 @@ dom.addCss("body", {
 
 dom.addCss("a", {
     textDecoration: "none",
-    color: "#02007F"
+    color: "#3A3A3A"
 });
 dom.addCss("a:hover", {
     textDecoration: "underline"
@@ -43,7 +43,7 @@ dom.addCss(".button", {
     "-moz-border-radius": "12px",
     "-webkit-border-radius": "12px",
     display: "inline",
-    padding:"3px 5px",
+    padding: "3px 5px",
     color: "#3F000E"
 });
 dom.addCss(".button.selected", {

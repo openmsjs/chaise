@@ -20,7 +20,7 @@ var renderer = msjs(function(msj) {
         status.text("").css("color", "");
     } else {
         el.addClass("no-results");
-        status.text("no documents").css("color", "teal");
+        status.text("No documents").css("color", "#FF0000");
     }
 
     var isView = msj.type != "all" && msj.type != "design";

@@ -20,7 +20,7 @@ var renderer = msjs(function(msj) {
         status.text("").css("color", "");
     } else {
         el.addClass("no-results");
-        status.text("no hosts").css("color", "teal");
+        status.text("No hosts").css("color", "#FF0000");
     }
 
     $.each(msj.list, function(i, host) {
