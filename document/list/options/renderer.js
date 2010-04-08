@@ -7,8 +7,8 @@ var el = msjs.publish($(<form>
 
     <div class="view-options">
         <div>By:
-            <label><input name="type" type="radio" value="key" checked="true"> Key</input></label>
-            <label><input name="type" type="radio" value="range"> Key range</input></label>
+            <label><input name="type" type="radio" value="key" checked="true" autocomplete="off"> Key</input></label>
+            <label><input name="type" type="radio" value="range" autocomplete="off"> Key range</input></label>
         </div>
 
         <div class="key">
@@ -18,15 +18,15 @@ var el = msjs.publish($(<form>
         <div class="range">
             <label><span>Startkey: </span><input name="startkey" class="long"/></label><br/>
             <label><span>Endkey: </span><input name="endkey" class="long"/></label>
-            <label><input name="inclusive_end" type="checkbox"> Inclusive end</input></label><br/>
+            <label><input name="inclusive_end" type="checkbox" autocomplete="off"> Inclusive end</input></label><br/>
             <label><span>Startkey docid:</span><input name="startkey_docid" class="long"/></label><br/>
             <label><span>Endkey docid:</span><input name="endkey_docid" class="long"/></label>
         </div>
 
         <div class="reduce">
-            <label><input name="reduce" type="checkbox"> Reduce</input></label>
+            <label><input name="reduce" type="checkbox" autocomplete="off"> Reduce</input></label>
             <label class="grouping">Group level:
-                <select name="level">
+                <select name="level" autocomplete="off">
                   <option>none</option>
                   <option>1</option>
                   <option>2</option>
@@ -106,8 +106,22 @@ el.submit(function() {
             break;
     }
 
-    if (skip >= 0) values.skip = skip;
-    if (limit >=0) values.limit = limit;
+    if (skip < 0) {
+        values.skip = 0;
+        $("[name=skip]").val(0);
+    } else if (0 <= skip) {
+        values.skip = skip;
+    }
+
+    if (limit < 0) {
+        values.limit = 10;
+        $("[name=limit]").val(10);
+    } else if (0 <= limit && limit <= 100) {
+        values.limit = limit;
+    } else if (100 < limit) {
+        values.limit = 100;
+        $("[name=limit]").val(100);
+    }
     if (descending) values.descending = true;
 
     if (el.hasClass("send-reduce")) {

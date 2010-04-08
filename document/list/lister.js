@@ -11,7 +11,14 @@ var list = msjs.publish(msjs(function(msj) {
 
     var couch = new couchServer(msj.host).getDatabase(msj.dbName);
     var options = msj.options;
-    if (options.limit == null) options.limit = 10;
+    if (options.skip < 0) {
+        options.skip = 0;        
+    }
+    if (options.limit == null || options.limit < 0) {
+        options.limit = 10;
+    } else if (100 < options.limit) {
+        options.limit = 100;
+    }
 
     var response;
     switch (msj.type){
