@@ -59,6 +59,7 @@ el.find("a.show").click(function(){
     } else {
         show();
     }
+    return false;
 });
 
 el.find("a.edit").click(function(){
