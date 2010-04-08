@@ -158,10 +158,10 @@ shower.push("chaise.document.list.type.picker", "type");
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId, {
-    border: "1px solid black",
+    border: "1px solid #CACACA",
     padding: "10px",
     width: "600px",
-    margin: "15px auto"
+    margin: "10px 0px 0px 0px"
 });
 dom.addCss(cssId + " div", {
     marginBottom: "10px"

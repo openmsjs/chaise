@@ -6,7 +6,7 @@ dom.addCss("*", {
 
 dom.addCss("body", {
     fontFamily: "\"Lucida Grande\",Tahoma,Verdana,Arial,Sans-Serif",
-    fontSize: "14px",
+    fontSize: "12px",
     overflowY: "scroll"
 });
 
@@ -35,4 +35,20 @@ dom.addCss("th", {
 });
 dom.addCss("tr.selected", {
     backgroundColor: "#EAEAEA"
+});
+dom.addCss(".button", {
+    "-moz-border-radius": "12px",
+    "-webkit-border-radius": "12px",
+    display: "inline",
+    padding:"3px 5px",
+    color: "#3F000E"
+});
+dom.addCss(".button.selected", {
+    fontWeight: "bold",
+    color: "white",
+    backgroundColor: "#3F000E"
+});
+dom.addCss(".button:hover", {
+    color: "white",
+    backgroundColor: "#AF576B"
 });
