@@ -1,6 +1,11 @@
 var isSuccess = msjs.require("chaise.couch.issuccess");
 var couchServer = msjs.require("chaise.couch.server");
 var emptyMsj = {offset: 0, rows: []};
+var cleanGroupingOpts = function(options) {
+    if (options.reduce != null) delete options.reduce;
+    if (options.group != null) delete options.group;
+    if (options.group_level != null) delete options.group_level;
+}
 var list = msjs.publish(msjs(function(msj) {
     if (!msj.dbName) return emptyMsj;
 
@@ -11,9 +16,11 @@ var list = msjs.publish(msjs(function(msj) {
     var response;
     switch (msj.type){
     case "all":
+        cleanGroupingOpts(options);
         response = couch.getAllDocuments(options);
         break;
     case "design":
+        cleanGroupingOpts(options);
         options.startkey = "_design/";
         options.endkey = "_design0";
         response = couch.getAllDocuments(options);
@@ -22,10 +29,13 @@ var list = msjs.publish(msjs(function(msj) {
         var design = msj.type.design;
         var view = msj.type.view;
         var doc = msj.type.doc;
-        // default reduce false if not set
-        if (options.reduce == null && doc.views[view].reduce) {
-            options.reduce = false;
+        if (doc.views[view].reduce) {
+            // default reduce false if not set
+            if (options.reduce == null) options.reduce = false;
+        } else {
+            cleanGroupingOpts(options);
         }
+
         response = couch.getView(design, view, options);
         break;
     }

@@ -129,13 +129,15 @@ var shower = msjs(function(msj) {
     el.removeClass("send-reduce");
 
     var isView = msj.type !== "all" && msj.type != "design";
-    viewOpts.css("display", isView ? "" : "none");
     if (isView) {
+        viewOpts.css("display", "");
         var view = msj.type.view;
         var doc = msj.type.doc;
         if (doc.views[view].reduce) {
             el.addClass("send-reduce");
         }
+    } else {
+        viewOpts.css("display", "none");
     }
 });
 shower.push("chaise.document.list.type.picker", "type");
