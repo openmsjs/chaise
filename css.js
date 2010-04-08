@@ -5,6 +5,8 @@ dom.addCss("*", {
 });
 
 dom.addCss("body", {
+    fontFamily: "\"Lucida Grande\",Tahoma,Verdana,Arial,Sans-Serif",
+    fontSize: "14px",
     overflowY: "scroll"
 });
 

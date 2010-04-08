@@ -44,7 +44,8 @@ dom.addCss(cssId + " .logo .byline", {
     fontSize: "12px"
 });
 dom.addCss(cssId + " .control", {
-    textAlign: "right"
+    textAlign: "right",
+    lineHeight: "2em"
 });
 dom.addCss(cssId + " .control a", {
     color: "white"

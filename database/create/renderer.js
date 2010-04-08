@@ -40,5 +40,5 @@ dom.addCss(cssId + " form," +
     display: "none"
 });
 dom.addCss(cssId + ".adding form", {
-    display: "block"
+    display: "inline"
 });
