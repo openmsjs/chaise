@@ -1,4 +1,4 @@
-var el = msjs.publish($(<div/>));
+var el = msjs.publish($(<div/>).css("display", "none"));
 var createRenderer = msjs.require("chaise.database.create.renderer");
 var loadRenderer = msjs.require("chaise.database.import.renderer");
 el.append(createRenderer)
@@ -6,7 +6,7 @@ el.append(createRenderer)
   .append(msjs.require("chaise.database.list.renderer"));
 
 var shower = msjs(function(msj) {
-    el.css("display", msj.host ? "" : "none");
+    el.css("display", msj.host ? "block" : "none");
 });
 shower.push("chaise.host.list.picker", "host");
 
