@@ -34,7 +34,7 @@ request.del = function(url) {
 request.post = function(url, content, mimeType) {
     var response = {status: -1, result: null, url: url};
     try {
-        response = jsonRequest.get(url, content, mimeType);
+        response = jsonRequest.post(url, content, mimeType);
         response.url = url;
    } catch (e) {
         msjs.log("[warn] couch post: " + handleException(e));
