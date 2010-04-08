@@ -51,10 +51,8 @@ var jsonMeta = {
 };
 var jsonEscape = function (string) {
     var jsonEscapeable = /[-"\\\x00-\x1f\x7f-\x9f]/g;
-msjs.log('jsonEscape', string, jsonEscapeable.test(string));
     return jsonEscapeable.test(string)
         ? string.replace(jsonEscapeable, function (a) {
-msjs.log('here', a)
             var c = jsonMeta[a];
             if (typeof c === 'string') {
                 return c;
