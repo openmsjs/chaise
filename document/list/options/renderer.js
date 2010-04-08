@@ -141,7 +141,6 @@ el.submit(function() {
 var viewOpts = el.find(".view-options");
 var shower = msjs(function(msj) {
     el.removeClass("send-reduce");
-
     var isView = msj.type !== "all" && msj.type != "design";
     if (isView) {
         viewOpts.css("display", "");
