@@ -117,9 +117,8 @@ db.prototype.getView = function(design, view, queryMap, keys) {
 //         // reduce code (optional)
 //     }"
 // }
-db.prototype.runTemporaryView = function(design, view) {
-    var url = this.url + "/_temp_view";
-    return keys ? couchRequest.post(url, msjs.toJSON(keys)) : couchRequest.get(url);
+db.prototype.runTemporaryView = function(view) {
+    return couchRequest.post(this.url + "/_temp_view", msjs.toJSON(view));
 };
 
 db.prototype.cleanupViews = function() {

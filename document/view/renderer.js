@@ -80,15 +80,56 @@ var reset = function() {
     stopEdit();    
 };
 el.bind("reset", reset);
-// var submitter = msjs.require("chaise.document.detail.submitter");
-form.submit(function(){
+var submitter = msjs.require("chaise.document.view.submitter");
+var funcToStr = function(func, type) {
+    if (typeof(func) == "function") {
+        return func.toString();
+    }
+    var testFunc;
     try {
-        var doc = eval("(" + textarea.text().split('\n').join(" ") + ")");
-        //submitter.update(doc);
-        textarea.text(toPrettyJSON(doc));
-        stopEdit();
+        testFunc = eval("(" + func + ")");
+    } catch (e) {}
+
+    if (typeof(testFunc) != "function") {
+        throw "bad function";
+    }
+
+    return func;
+};
+var strToFunc = function(func) {
+    if (typeof(func) == "function") {
+        return func;
+    }
+    try {
+        return eval("(" + func + ")");
+    } catch (e) {}
+
+    throw "bad function";
+}
+form.submit(function(){
+    var doc;
+    try {
+        doc = eval("(" + textarea.text().split('\n').join(" ") + ")");
     } catch (e) {
         status.text("bad json");
+    }
+
+    if (doc.map) {
+        try {
+            var updateDoc = {};
+            updateDoc.map = funcToStr(doc.map, "map");
+            if (doc.reduce) updateDoc.reduce = funcToStr(doc.reduce, "reduce");   
+
+            submitter.update(updateDoc);
+
+            doc.map = strToFunc(doc.map);
+            if (doc.reduce) doc.reduce = strToFunc(doc.reduce);
+            textarea.text(toPrettyJSON(doc));
+        } catch (e) {
+            status.text(e);
+        }
+    } else {
+        status.text("view requires a map function");
     }
     return false;
 });

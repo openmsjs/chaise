@@ -15,7 +15,8 @@ var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
 var renderer = msjs(function(msj) {
     thead.children().remove();
     tbody.children().remove();
-    if (msj.list.rows.length) {
+    var list = msj.list || msj.tempView;
+    if (list.rows.length) {
         el.removeClass("no-results");
         status.text("").css("color", "");
     } else {
@@ -25,7 +26,7 @@ var renderer = msjs(function(msj) {
 
     var isView = msj.type != "all" && msj.type != "design";
     var reduced = false;
-    $.each(msj.list.rows, function(i, doc) {
+    $.each(list.rows, function(i, doc) {
         var row = $("<tr><td>" + (isView ? toPrettyJSON(doc.value) : doc.value.rev) + "</td></tr>")
             .appendTo(tbody)
             .data("doc", doc);
@@ -67,6 +68,7 @@ var renderer = msjs(function(msj) {
 
     return true;
 });
+renderer.push("chaise.document.view.runner", "tempView");
 renderer.push("chaise.document.list.lister", "list");
 renderer.pull("chaise.document.list.type.picker", "type");
 
