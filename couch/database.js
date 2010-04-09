@@ -117,8 +117,13 @@ db.prototype.getView = function(design, view, queryMap, keys) {
 //         // reduce code (optional)
 //     }"
 // }
-db.prototype.runTemporaryView = function(view) {
-    return couchRequest.post(this.url + "/_temp_view", msjs.toJSON(view));
+db.prototype.runTemporaryView = function(view, queryMap) {
+    var url = this.url + "/_temp_view";
+    if (queryMap) {
+        var queryString = toCouchQueryString(queryMap);
+        if (queryString) url += "?" + queryString;
+    }
+    return couchRequest.post(url, msjs.toJSON(view));
 };
 
 db.prototype.cleanupViews = function() {
