@@ -82,8 +82,6 @@ el.submit(function() {
 
     var inclusiveEnd = !!$("[name=inclusiveEnd]:checked").val();
     var descending = !!$("[name=descending]:checked").val();
-    var skip = Number($("[name=skip]").val()) || 0;
-    var limit = Number($("[name=limit]").val()) || 10;
     var reduce = !!$("[name=reduce]:checked").val();
     var grouping = $("[name=level]").val();
 
@@ -99,24 +97,6 @@ el.submit(function() {
             if (inclusiveEnd) values.inclusive_end = true;
             break;
     }
-
-    if (skip < 0) {
-        values.skip = 0;
-        $("[name=skip]").val(0);
-    } else if (0 <= skip) {
-        values.skip = skip;
-    }
-
-    if (limit < 0) {
-        values.limit = 10;
-        $("[name=limit]").val(10);
-    } else if (0 <= limit && limit <= 100) {
-        values.limit = limit;
-    } else if (100 < limit) {
-        values.limit = 100;
-        $("[name=limit]").val(100);
-    }
-    if (descending) values.descending = true;
 
     if (el.hasClass("send-reduce")) {
         values.reduce = reduce;

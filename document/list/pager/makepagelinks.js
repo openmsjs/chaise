@@ -2,14 +2,11 @@ var selector = msjs.require("chaise.document.list.pager.selector");
 msjs.publish(function(el, list, pageSize) {
     el.children().remove();
 
-    var nums = [];
     var lastPage = Math.ceil(list.total_rows/pageSize);
-
     var currentPage = selector.getMsj();
     var startPage = currentPage - 10;
     if (startPage < 1) startPage = 1;
-
-    var endPage = currentPage + 10;
+    var endPage   = currentPage + 10;
     if (lastPage < endPage) endPage = lastPage;
 
     if (startPage == endPage) return;
