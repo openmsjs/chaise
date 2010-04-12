@@ -12,6 +12,8 @@ msjs.publish(function(el, list, pageSize) {
     var endPage = currentPage + 10;
     if (lastPage < endPage) endPage = lastPage;
 
+    if (startPage == endPage) return;
+
     if (currentPage > 1) {
         $("<a href=\"#\">previous</a>")
             .appendTo(el)
@@ -42,5 +44,4 @@ msjs.publish(function(el, list, pageSize) {
                 return false;
             });
     }
-
 });

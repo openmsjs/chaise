@@ -13,6 +13,7 @@ var list = msjs.publish(msjs(function(msj) {
     var options = msj.options;
     options.skip = (msj.page-1) * msj.pageSize;
     options.limit = msj.pageSize;
+    options.descending = msj.descending;
 
     var response;
     switch (msj.type){
@@ -52,6 +53,7 @@ list.pull(list.depends("chaise.document.list.options.submitter"), "options");
 list.pull(list.depends("chaise.document.list.type.picker"), "type");
 list.pull(list.depends("chaise.document.list.pagesize.selector"), "pageSize");
 list.pull(list.depends("chaise.document.list.pager.selector"), "page");
+list.pull(list.depends("chaise.document.list.descending"), "descending");
 list.pull("chaise.host.list.picker", "host");
 list.depends("chaise.document.detail.updater"); // refetch when document is updated
 list.depends("chaise.document.remove.remover"); // refetch when document is removed

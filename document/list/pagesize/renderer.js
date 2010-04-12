@@ -19,6 +19,9 @@ renderer.push(selector, "pageSize");
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
+dom.addCss(cssId, {
+    margin: "10px 0px"
+});
 dom.addCss(cssId + " a", {
     marginRight: "5px"
 });

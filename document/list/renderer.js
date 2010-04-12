@@ -12,6 +12,7 @@ var status = el.find(".status");
 var picker = msjs.require("chaise.document.list.picker");
 var remover = msjs.require("chaise.document.remove.submitter");
 var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
+var descending = msjs.require("chaise.document.list.descending");
 var renderer = msjs(function(msj) {
     thead.children().remove();
     tbody.children().remove();
@@ -32,10 +33,12 @@ var renderer = msjs(function(msj) {
 
         if (doc.key) hasKeys = true;
 
+        var num = i+list.offset+1;
+        if (msj.descending) num = list.total_rows - num + 1;
         if (isView) {
-            if (hasKeys) row.append("<td>" + (i+list.offset+1) + "</td>");
+            if (hasKeys) row.append("<td>" + num + "</td>");
         } else {
-            row.append("<td>" + (i+list.offset+1) + "</td>");
+            row.append("<td>" + num + "</td>");
         }
 
         if (doc.key) {
@@ -65,22 +68,27 @@ var renderer = msjs(function(msj) {
         row.append("<td>" + (isView ? toPrettyJSON(doc.value) : doc.value.rev) + "</td>");
     });
 
-
+    var arrow = msj.descending ? "&darr;" : "&uarr;";
     if (isView) {
         if (hasKeys) {
-            $("<tr><th>#</th><th>key</th><th>value</th></tr>").appendTo(thead);
+            $("<tr><th>#</th><th>key <span class=\"arrow\">" + arrow + "<span></th><th>value</th></tr>").appendTo(thead);
         } else {
             $("<tr><th>value</th></tr>").appendTo(thead);
         }
     } else {
-        $("<tr><th>#</th><th>_id</th><th>_rev</th></tr>").appendTo(thead);
+        $("<tr><th>#</th><th>_id <span class=\"arrow\">" + arrow + "</span></th><th>_rev</th></tr>").appendTo(thead);
     }
+
+    thead.click(function() {
+        descending.update(!msj.descending);
+    });
 
     return true;
 });
 renderer.push("chaise.document.view.runner", "tempView");
 renderer.push("chaise.document.list.lister", "list");
 renderer.pull("chaise.document.list.type.picker", "type");
+renderer.pull(descending, "descending");
 
 var selector = msjs(function(msj) {
     tbody.find(".selected").removeClass("selected");
@@ -105,4 +113,11 @@ dom.addCss(cssId + ".no-results table", {
 });
 dom.addCss(cssId + " a.remover", {
     marginLeft: "5px"
+});
+dom.addCss(cssId + " thead .arrow", {
+    color: "yellow",
+    fontWeight: "bold"
+});
+dom.addCss(cssId + " thead", {
+    cursor: "pointer"
 });
