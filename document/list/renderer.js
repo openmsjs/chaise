@@ -1,13 +1,15 @@
 var el = msjs.publish($(<div>
     <table>
         <thead/>
-        <tbody/>
+        <tbody class="list"/>
+        <tbody class="footer"/>
     </table>
     <div class="status"/>
 </div>));
 
 var thead = el.find("thead");
-var tbody = el.find("tbody");
+var tbody = el.find("tbody.list");
+var footer = el.find("tbody.footer");
 var status = el.find(".status");
 var picker = msjs.require("chaise.document.list.picker");
 var remover = msjs.require("chaise.document.remove.submitter");
@@ -16,6 +18,7 @@ var descending = msjs.require("chaise.document.list.descending");
 var renderer = msjs(function(msj) {
     thead.children().remove();
     tbody.children().remove();
+    footer.children().remove();
     var list = msj.list || msj.tempView;
     if (list.rows.length) {
         el.removeClass("no-results");
@@ -36,9 +39,9 @@ var renderer = msjs(function(msj) {
         var num = i+list.offset+1;
         if (msj.descending) num = list.total_rows - num + 1;
         if (isView) {
-            if (hasKeys) row.append("<td>" + num + "</td>");
+            if (hasKeys) row.append("<td class=\"count\">" + num + "</td>");
         } else {
-            row.append("<td>" + num + "</td>");
+            row.append("<td class=\"count\">" + num + "</td>");
         }
 
         if (doc.key) {
@@ -68,15 +71,16 @@ var renderer = msjs(function(msj) {
         row.append("<td>" + (isView ? toPrettyJSON(doc.value) : doc.value.rev) + "</td>");
     });
 
+    var countHead = "#/" + list.total_rows;
     var arrow = msj.descending ? "&darr;" : "&uarr;";
     if (isView) {
         if (hasKeys) {
-            $("<tr><th>#</th><th>key <span class=\"arrow\">" + arrow + "<span></th><th>value</th></tr>").appendTo(thead);
+            $("<tr><th class=\"count\">" + countHead + "</th><th>key <span class=\"arrow\">" + arrow + "<span></th><th>value</th></tr>").appendTo(thead);
         } else {
             $("<tr><th>value</th></tr>").appendTo(thead);
         }
     } else {
-        $("<tr><th>#</th><th>_id <span class=\"arrow\">" + arrow + "</span></th><th>_rev</th></tr>").appendTo(thead);
+        $("<tr><th class=\"count\">" + countHead + "</th><th>_id <span class=\"arrow\">" + arrow + "</span></th><th>_rev</th></tr>").appendTo(thead);
     }
 
     thead.click(function() {
@@ -120,4 +124,7 @@ dom.addCss(cssId + " thead .arrow", {
 });
 dom.addCss(cssId + " thead", {
     cursor: "pointer"
+});
+dom.addCss(cssId + " .count", {
+    textAlign: "center"
 });
