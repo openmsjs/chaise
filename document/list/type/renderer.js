@@ -8,7 +8,6 @@ var el = msjs.publish($(<div>
         <span>[Views] </span>
     </div>
 </div>));
-//el.append(msjs.require("chaise.document.list.options.renderer"));
 
 var picker = msjs.require("chaise.document.list.type.picker");
 var dom = msjs.require("msjs.dom");
@@ -68,11 +67,10 @@ selector.push(picker, "selected");
 
 var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId, {
-    padding: "10px",
+    padding: "20px 10px",
     margin: "5px 0px",
-    backgroundColor: "#DDDDDD",
-    "-moz-border-radius": "20px",
-    "-webkit-border-radius": "20px"
+    backgroundColor: "#EFEFEF",
+    border: "1px solid #4A4A4A"
 
 })
 dom.addCss(cssId + " .views" , {

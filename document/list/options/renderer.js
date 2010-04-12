@@ -1,5 +1,6 @@
-var el = msjs.publish($(<form>
-    <div class="view-options">
+var el = msjs.publish($(<div>
+    <a href="#">Search views</a>
+    <form>
         <div>By:
             <label><input name="type" type="radio" value="key" checked="true" autocomplete="off"> Key</input></label>
             <label><input name="type" type="radio" value="range" autocomplete="off"> Key range</input></label>
@@ -35,12 +36,12 @@ var el = msjs.publish($(<form>
                 </select>
             </label>
         </div>
-    </div>
 
-    <input type="submit" value="Search"/>
-    <input type="reset" value="Reset"/>
-</form>));
-
+        <input type="submit" value="Search"/>
+        <input type="reset" value="Reset"/>
+    </form>
+</div>));
+var form = el.find("form");
 el.find("input[name='type']").click(function() {
     if (this.value == "range") {
         el.addClass("range-enabled");
@@ -112,19 +113,18 @@ el.submit(function() {
     return false;
 });
 
-var viewOpts = el.find(".view-options");
 var shower = msjs(function(msj) {
     el.removeClass("send-reduce");
     var isView = msj.type !== "all" && msj.type != "design";
     if (isView) {
-        viewOpts.css("display", "");
+        el.css("display", "");
         var view = msj.type.view;
         var doc = msj.type.doc;
         if (doc.views[view].reduce) {
             el.addClass("send-reduce");
         }
     } else {
-        viewOpts.css("display", "none");
+        el.css("display", "none");
     }
 });
 shower.push("chaise.document.list.type.picker", "type");

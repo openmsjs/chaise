@@ -2,14 +2,12 @@ var el = msjs.publish($(<div>
     <table>
         <thead/>
         <tbody class="list"/>
-        <tbody class="footer"/>
     </table>
     <div class="status"/>
 </div>));
 
 var thead = el.find("thead");
 var tbody = el.find("tbody.list");
-var footer = el.find("tbody.footer");
 var status = el.find(".status");
 var picker = msjs.require("chaise.document.list.picker");
 var remover = msjs.require("chaise.document.remove.submitter");
@@ -18,7 +16,6 @@ var descending = msjs.require("chaise.document.list.descending");
 var renderer = msjs(function(msj) {
     thead.children().remove();
     tbody.children().remove();
-    footer.children().remove();
     var list = msj.list || msj.tempView;
     if (list.rows.length) {
         el.removeClass("no-results");
@@ -83,7 +80,7 @@ var renderer = msjs(function(msj) {
         $("<tr><th class=\"count\">" + countHead + "</th><th>_id <span class=\"arrow\">" + arrow + "</span></th><th>_rev</th></tr>").appendTo(thead);
     }
 
-    thead.click(function() {
+    thead.unbind("click").click(function() {
         descending.update(!msj.descending);
     });
 

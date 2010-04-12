@@ -145,24 +145,32 @@ textarea.keypress(function(event) {
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
+dom.addCss(cssId, {
+    margin: "20px 0px"
+});
 dom.addCss(cssId + " pre", {
     border: "2px solid #CACACA",
     padding: "2px",
-    margin: "0px",
     outline: "none",
     whiteSpace: "pre-wrap",       /* css-3 */
     overflowX: "auto",
-    display: "none"
+    display: "none",
+    color: "#6A6A6A"
 });
 dom.addCss(cssId + ".showing pre", {
     display: "block"
 });
 dom.addCss(cssId + ".editing pre", {
     display: "block",
-    borderColor: "#8A8279 #DED6CA #DED6CA #8A8279"
+    borderColor: "#8A8279 #DED6CA #DED6CA #8A8279",
+    color: "black"
 });
-dom.addCss(cssId + ".editing a.edit", {
+dom.addCss(cssId + " a.edit," +
+           cssId + ".showing.editing a.edit", {
     display: "none"
+});
+dom.addCss(cssId + ".showing a.edit", {
+    display: "inline"
 });
 dom.addCss(cssId + " form", {
     display: "inline"
@@ -178,5 +186,13 @@ dom.addCss(cssId + " span", {
     fontWeight: "bold"
 });
 dom.addCss(cssId + " a", {
-    marginRight: "5px"
+    marginRight: "5px",
+    border: "1px solid #CACACA",
+    color: "#6A6A6A",
+    padding: "0px 3px"
+});
+dom.addCss(cssId + " a:hover", {
+    textDecoration: "none",
+    color: "white",
+    backgroundColor: "black"
 });

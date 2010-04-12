@@ -3,11 +3,12 @@ var el = msjs.publish($(<form>
 </form>));
 var selector = msjs.require("chaise.document.list.pager.selector");
 var renderer = msjs(function(msj) {
+    var showCount = 8;
     var lastPage = Math.ceil(msj.list.total_rows/msj.pageSize);
     var currentPage = selector.getMsj();
-    var startPage = currentPage - 10;
+    var startPage = currentPage - showCount;
     if (startPage < 1) startPage = 1;
-    var endPage   = currentPage + 10;
+    var endPage   = currentPage + showCount - 1;
     if (lastPage < endPage) endPage = lastPage;
 
     if (startPage == endPage) {
