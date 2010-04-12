@@ -1,10 +1,4 @@
 var el = msjs.publish($(<form>
-    <div>
-        <label>Skip: <input name="skip" class="number" value="0"/></label>
-        <label>Limit: <input name="limit" class="number" value="10"/></label>
-        <label><input name="descending" type="checkbox"> Descending</input></label>
-    </div>
-
     <div class="view-options">
         <div>By:
             <label><input name="type" type="radio" value="key" checked="true" autocomplete="off"> Key</input></label>

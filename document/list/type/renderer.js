@@ -8,7 +8,7 @@ var el = msjs.publish($(<div>
         <span>[Views] </span>
     </div>
 </div>));
-el.append(msjs.require("chaise.document.list.options.renderer"));
+//el.append(msjs.require("chaise.document.list.options.renderer"));
 
 var picker = msjs.require("chaise.document.list.type.picker");
 var dom = msjs.require("msjs.dom");

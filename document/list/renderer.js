@@ -27,14 +27,19 @@ var renderer = msjs(function(msj) {
     var isView = msj.type != "all" && msj.type != "design";
     var hasKeys = false;
     $.each(list.rows, function(i, doc) {
-        var row = $("<tr><td>" + (isView ? toPrettyJSON(doc.value) : doc.value.rev) + "</td></tr>")
-            .appendTo(tbody)
-            .data("doc", doc);
+        var row = $("<tr/>").appendTo(tbody).data("doc", doc);
         if (i % 2 == 0) row.addClass("odd");
 
+        if (doc.key) hasKeys = true;
+
+        if (isView) {
+            if (hasKeys) row.append("<td>" + (i+list.offset+1) + "</td>");
+        } else {
+            row.append("<td>" + (i+list.offset+1) + "</td>");
+        }
+
         if (doc.key) {
-            hasKeys = true;
-            var cell = $("<td/>").insertBefore(row.children()[0]);
+            var cell = $("<td/>").appendTo(row);
             $("<a href=\"#\">" + (isView ? toPrettyJSON(doc.key) : doc.id) + "<a>")
                 .appendTo(cell)
                 .click(function() {
@@ -56,16 +61,19 @@ var renderer = msjs(function(msj) {
                     .css({color: "#8A8A8A"});
             }
         }
+
+        row.append("<td>" + (isView ? toPrettyJSON(doc.value) : doc.value.rev) + "</td>");
     });
+
 
     if (isView) {
         if (hasKeys) {
-            $("<tr><th>key</th><th>value</th></tr>").appendTo(thead);
+            $("<tr><th>#</th><th>key</th><th>value</th></tr>").appendTo(thead);
         } else {
             $("<tr><th>value</th></tr>").appendTo(thead);
         }
     } else {
-        $("<tr><th>_id</th><th>_rev</th></tr>").appendTo(thead);
+        $("<tr><th>#</th><th>_id</th><th>_rev</th></tr>").appendTo(thead);
     }
 
     return true;

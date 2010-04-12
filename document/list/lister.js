@@ -11,14 +11,8 @@ var list = msjs.publish(msjs(function(msj) {
 
     var couch = new couchServer(msj.host).getDatabase(msj.dbName);
     var options = msj.options;
-    if (options.skip < 0) {
-        options.skip = 0;        
-    }
-    if (options.limit == null || options.limit < 0) {
-        options.limit = 10;
-    } else if (100 < options.limit) {
-        options.limit = 100;
-    }
+    options.skip = (msj.page-1) * msj.pageSize;
+    options.limit = msj.pageSize;
 
     var response;
     switch (msj.type){
@@ -56,6 +50,8 @@ var list = msjs.publish(msjs(function(msj) {
 list.pull(list.depends("chaise.database.list.picker"), "dbName");
 list.pull(list.depends("chaise.document.list.options.submitter"), "options");
 list.pull(list.depends("chaise.document.list.type.picker"), "type");
+list.pull(list.depends("chaise.document.list.pagesize.selector"), "pageSize");
+list.pull(list.depends("chaise.document.list.pager.selector"), "page");
 list.pull("chaise.host.list.picker", "host");
 list.depends("chaise.document.detail.updater"); // refetch when document is updated
 list.depends("chaise.document.remove.remover"); // refetch when document is removed
