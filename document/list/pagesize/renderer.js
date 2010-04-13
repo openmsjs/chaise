@@ -1,9 +1,9 @@
 var el = msjs.publish($(<div>
-    <a class="read-only">
+    <a class="open">
         <span/> (change)
     </a>
     <div class="edit">
-        <span>Rows: </span>
+        <a href="#" class="close">Rows (close): </a>
         <a name="10"  class="button" href="#">10</a>
         <a name="25"  class="button" href="#">25</a>
         <a name="50"  class="button" href="#">50</a>
@@ -12,8 +12,12 @@ var el = msjs.publish($(<div>
 </div>));
 
 var selector = msjs.require("chaise.document.list.pagesize.selector");
-el.find("a.read-only").click(function() {
+el.find("a.open").click(function() {
     el.addClass("editing");
+    return false;
+});
+el.find("a.close").click(function() {
+    el.removeClass("editing");
     return false;
 });
 el.find("a.button").click(function() {
@@ -24,28 +28,28 @@ el.find("a.button").click(function() {
 var renderer = msjs(function(msj) {
     el.find(".selected").removeClass("selected");
     el.find("a[name=" + msj.pageSize + "]").addClass("selected");
-    el.find("a.read-only span").text("Rows: " + msj.pageSize);
+    el.find("a.open span").text("Rows: " + msj.pageSize);
 });
 renderer.push(selector, "pageSize");
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
-dom.addCss(cssId, {
-    display: "inline",
-    margin: "10px 0px"
-});
-dom.addCss(cssId + " a.read-only", {
+// // dom.addCss(cssId, {
+// //     display: "inline",
+// //     margin: "10px 0px"
+// });
+dom.addCss(cssId + " a.open", {
     cursor: "pointer"
 });
-dom.addCss(cssId + " a.read-only span", {
+dom.addCss(cssId + " a.open span", {
     fontWeight: "bold"
 });
 
-dom.addCss(cssId + ".editing .read-only," +
+dom.addCss(cssId + ".editing .open," +
            cssId + " .edit", {
     display: "none"
 });
-dom.addCss(cssId + " .read-only," +
+dom.addCss(cssId + " .open," +
            cssId + ".editing .edit", {
     display: "inline"
 });
