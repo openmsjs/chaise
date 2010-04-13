@@ -33,11 +33,9 @@ var renderer = msjs(function(msj) {
 
         if (doc.key) hasKeys = true;
 
-        var num = i+list.offset+1;
-        if (msj.descending) num = list.total_rows - num + 1;
-        if (isView) {
-            if (hasKeys) row.append("<td class=\"count\">" + num + "</td>");
-        } else {
+        if (!isView) {
+            var num = i+list.offset+1;
+            if (msj.descending) num = list.total_rows - num + 1;
             row.append("<td class=\"count\">" + num + "</td>");
         }
 
@@ -68,16 +66,15 @@ var renderer = msjs(function(msj) {
         row.append("<td>" + (isView ? toPrettyJSON(doc.value) : doc.value.rev) + "</td>");
     });
 
-    var countHead = "#/" + list.total_rows;
     var arrow = msj.descending ? "&darr;" : "&uarr;";
     if (isView) {
         if (hasKeys) {
-            $("<tr><th class=\"count\">" + countHead + "</th><th>key <span class=\"arrow\">" + arrow + "<span></th><th>value</th></tr>").appendTo(thead);
+            $("<tr><th>key <span class=\"arrow\">" + arrow + "<span></th><th>value</th></tr>").appendTo(thead);
         } else {
             $("<tr><th>value</th></tr>").appendTo(thead);
         }
     } else {
-        $("<tr><th class=\"count\">" + countHead + "</th><th>_id <span class=\"arrow\">" + arrow + "</span></th><th>_rev</th></tr>").appendTo(thead);
+        $("<tr><th class=\"count\">#/" + list.total_rows + "</th><th>_id <span class=\"arrow\">" + arrow + "</span></th><th>_rev</th></tr>").appendTo(thead);
     }
 
     thead.unbind("click").click(function() {

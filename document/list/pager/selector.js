@@ -3,3 +3,4 @@ var selector = msjs.publish(msjs(function() {
 }));
 selector.depends("chaise.database.list.picker");
 selector.depends("chaise.document.list.pagesize.selector");
+selector.depends("chaise.document.list.type.picker");

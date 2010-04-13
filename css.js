@@ -55,3 +55,14 @@ dom.addCss(".button:hover", {
     color: "white",
     backgroundColor: "#AF576B"
 });
+
+dom.addCss("a.toggle", {
+    border: "1px solid #CACACA",
+    color: "#6A6A6A",
+    padding: "0px 3px"
+});
+dom.addCss("a.toggle:hover", {
+    backgroundColor: "black",
+    color: "white",
+    textDecoration: "none"
+});

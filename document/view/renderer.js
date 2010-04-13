@@ -1,16 +1,17 @@
 var el = msjs.publish($(<div>
-    <a href="#" class="show">Show code</a>
-    <a href="#" class="edit">Edit code</a>
-    <span/>
-    <form>
+    <a href="#" class="show toggle">Show code</a>
+    <a href="#" class="edit toggle">Edit code</a>
+    <form class="edit-controls">
         <input type="submit" value="Run"/>
         <input type="reset" value="Cancel"/>
     </form>
+    <span/>
     <pre/>
 </div>));
+msjs.require("chaise.document.view.reduce.renderer").insertBefore(el.find("span"));
 
 var showLink = el.find("a.show");
-var form = el.find("form");
+var form = el.find("form.edit-controls");
 var textarea = el.find("pre");
 var isSuccess = msjs.require("chaise.couch.issuccess");
 var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
@@ -160,39 +161,30 @@ dom.addCss(cssId + " pre", {
 dom.addCss(cssId + ".showing pre", {
     display: "block"
 });
-dom.addCss(cssId + ".editing pre", {
+dom.addCss(cssId + " .editing pre", {
     display: "block",
     borderColor: "#8A8279 #DED6CA #DED6CA #8A8279",
     color: "black"
 });
 dom.addCss(cssId + " a.edit," +
-           cssId + ".showing.editing a.edit", {
+           cssId + ".editing.showing a.edit", {
     display: "none"
 });
 dom.addCss(cssId + ".showing a.edit", {
     display: "inline"
 });
-dom.addCss(cssId + " form", {
+dom.addCss(cssId + " form.edit-controls", {
+    display: "none"
+});
+dom.addCss(cssId + ".editing form.edit-controls," +
+           cssId + " input", {
     display: "inline"
 });
-dom.addCss(cssId + " input", {
-    visibility: "hidden"
-});
-dom.addCss(cssId + ".editing input", {
-    visibility: "visible"
-});
 dom.addCss(cssId + " span", {
+    display: "block",
     color: "red",
     fontWeight: "bold"
 });
 dom.addCss(cssId + " a", {
-    marginRight: "5px",
-    border: "1px solid #CACACA",
-    color: "#6A6A6A",
-    padding: "0px 3px"
-});
-dom.addCss(cssId + " a:hover", {
-    textDecoration: "none",
-    color: "white",
-    backgroundColor: "black"
+    marginRight: "5px"
 });

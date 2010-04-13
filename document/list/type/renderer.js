@@ -1,12 +1,7 @@
 var el = msjs.publish($(<div>
-    <div class="documents">
-        <span>[Documents] </span>
-        <a name="all" href="#">All</a>
-        <a name="design" href="#">Design</a>
-    </div>
-    <div class="views">
-        <span>[Views] </span>
-    </div>
+    <a name="all" href="#">All</a>
+    <a name="design" href="#">Design</a>
+    <div class="views"/>
 </div>));
 
 var picker = msjs.require("chaise.document.list.type.picker");
@@ -67,14 +62,14 @@ selector.push(picker, "selected");
 
 var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId, {
-    padding: "20px 10px",
+    padding: "10px 5px",
     margin: "5px 0px",
     backgroundColor: "#EFEFEF",
     border: "1px solid #4A4A4A"
 
 })
 dom.addCss(cssId + " .views" , {
-    marginTop: "10px"
+    display: "inline"
 });
 dom.addCss(cssId + " div.design", {
     display: "inline"

@@ -1,7 +1,7 @@
 var el = msjs.publish($(<div/>)
   .append(msjs.require("chaise.document.create.renderer"))
   .append(msjs.require("chaise.document.list.type.renderer"))
-  .append(msjs.require("chaise.document.list.options.renderer"))
+//  .append(msjs.require("chaise.document.list.options.renderer"))
   .append(msjs.require("chaise.document.view.renderer"))
   .append(msjs.require("chaise.document.list.pagesize.renderer"))
   .append(msjs.require("chaise.document.list.pager.jumperrenderer"))

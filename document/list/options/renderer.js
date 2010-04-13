@@ -1,5 +1,5 @@
 var el = msjs.publish($(<div>
-    <a href="#">Search views</a>
+    <a href="#" class="toggle">Search views</a>
     <form>
         <div>By:
             <label><input name="type" type="radio" value="key" checked="true" autocomplete="off"> Key</input></label>
@@ -18,38 +18,32 @@ var el = msjs.publish($(<div>
             <label><span>Endkey docid:</span><input name="endkey_docid" class="long"/></label>
         </div>
 
-        <div class="reduce">
-            <label><input name="reduce" type="checkbox" autocomplete="off"> Reduce</input></label>
-            <label class="grouping">Group level:
-                <select name="level" autocomplete="off">
-                  <option>none</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                  <option>6</option>
-                  <option>7</option>
-                  <option>8</option>
-                  <option>9</option>
-                  <option>exact</option>
-                </select>
-            </label>
-        </div>
-
         <input type="submit" value="Search"/>
         <input type="reset" value="Reset"/>
     </form>
 </div>));
+
+var searchLink = el.find("a[class=toggle]");
+searchLink.click(function() {
+    if (el.hasClass("searching")) {
+        el.removeClass("searching");
+        searchLink.text("Show search views");
+    } else {
+        el.addClass("searching");
+        searchLink.text("Hide search views");
+    }
+    return false;
+});
+
 var form = el.find("form");
-el.find("input[name='type']").click(function() {
+el.find("input[name=type]").click(function() {
     if (this.value == "range") {
         el.addClass("range-enabled");
     } else {
         el.removeClass("range-enabled");
     }
 });
-el.find("input[name='reduce']").click(function() {
+el.find("input[name=reduce]").click(function() {
     if (this.checked) {
         el.addClass("reduce-enabled");
     } else {
@@ -132,10 +126,16 @@ shower.push("chaise.document.list.type.picker", "type");
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId, {
+    margin: "10px 0px"
+});
+dom.addCss(cssId + " form", {
     border: "1px solid #CACACA",
     padding: "10px",
     width: "600px",
-    margin: "10px 0px 0px 0px"
+    display: "none"
+});
+dom.addCss(cssId + ".searching form", {
+    display: "block"
 });
 dom.addCss(cssId + " div", {
     marginBottom: "10px"
