@@ -1,33 +1,19 @@
 var el = msjs.publish($(<div>
     <a href="#" class="show toggle">Show code</a>
     <a href="#" class="edit toggle">Edit code</a>
-    <form class="edit-controls">
-        <input type="submit" value="Run"/>
-        <input type="reset" value="Cancel"/>
-    </form>
+    <a href="#" class="run toggle">Run code</a>
     <span/>
     <pre/>
 </div>));
 // see end of file (before css) for save renderer insertion before span 
 
 var showLink = el.find("a.show");
-var form = el.find("form.edit-controls");
+var editLink = el.find("a.edit");
+var runLink = el.find("a.run");
 var textarea = el.find("pre");
 var isSuccess = msjs.require("chaise.couch.issuccess");
 var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
-var show = function(){
-    el.addClass("showing");
-    showLink.text("Hide code");    
-};
-var hide = function() {
-    el.removeClass("showing");
-    showLink.text("Show code");
-    if (el.hasClass("editing")) {
-        stopEdit();
-    }
-};
 var startEdit = function(rollback) {
-    show();
     textarea.data("rollback", rollback);
     textarea.attr("contenteditable", "true");
     setTimeout(function() { 
@@ -58,33 +44,41 @@ var renderer = msjs(function(msj) {
 });
 renderer.push("chaise.document.list.type.picker", "type");
 
+editLink.click(function(){
+    if (el.hasClass("editing")) {
+        reset();
+    } else {
+        el.addClass("editing");
+        editLink.text("Cancel edit");
+        startEdit(textarea.text());
+    }
+    return false;
+});
 showLink.click(function(){
     if (el.hasClass("showing")) {
-        hide();
+        el.removeClass("showing");
+        showLink.text("Show code");
+        reset();
     } else {
-        show();
+        el.addClass("showing");
+        showLink.text("Hide code");    
     }
     return false;
 });
 
-el.find("a.edit").click(function(){
-    startEdit(textarea.text());
-    return false;
-});
 var status = el.find("span");
 var stopEdit = function() {
     textarea.removeAttr("contenteditable");
+    textarea.blur();
     status.text("");
     el.removeClass("editing");
-    textarea.blur();
+    editLink.text("Edit code");
 };
 var reset = function() {
     var rollback = textarea.data("rollback");
     textarea.text(rollback);
-    //if (!rollback) el.css("display", "none");
     stopEdit();    
 };
-el.bind("reset", reset);
 var submitter = msjs.require("chaise.document.view.submitter");
 var funcToStr = function(func, type) {
     if (typeof(func) == "function") {
@@ -111,7 +105,7 @@ var strToFunc = function(func) {
 
     throw "bad function";
 }
-form.submit(function(){
+runLink.click(function(){
     var doc;
     try {
         doc = eval("(" + textarea.text().split('\n').join(" ") + ")");
@@ -140,10 +134,10 @@ form.submit(function(){
 });
 textarea.keypress(function(event) {
     if (event.keyCode == "27") {
-        form[0].reset();
+        reset();
         return false;
     } else if (event.shiftKey && event.keyCode == "13") {
-        form.submit();      
+        runLink.click();      
         return false;
     } 
 });
@@ -163,35 +157,29 @@ dom.addCss(cssId + " pre", {
     display: "none",
     color: "#6A6A6A"
 });
+dom.addCss(cssId + " a", {
+    marginRight: "5px"
+});
+dom.addCss(cssId + " a.edit," +
+           cssId + " a.run", {
+    display: "none"
+});
+dom.addCss(cssId + ".showing a.edit," +
+           cssId + ".showing a.run", {
+    display: "inline"
+});
 dom.addCss(cssId + ".showing pre", {
     display: "block"
 });
-dom.addCss(cssId + " .editing pre", {
+dom.addCss(cssId + ".editing pre", {
     display: "block",
     borderColor: "#8A8279 #DED6CA #DED6CA #8A8279",
     color: "black"
-});
-dom.addCss(cssId + " a.edit," +
-           cssId + ".editing.showing a.edit", {
-    display: "none"
-});
-dom.addCss(cssId + ".showing a.edit", {
-    display: "inline"
-});
-dom.addCss(cssId + " form.edit-controls", {
-    display: "none"
-});
-dom.addCss(cssId + ".editing form.edit-controls," +
-           cssId + " form.edit-controls input", {
-    display: "inline"
 });
 dom.addCss(cssId + " span", {
     display: "block",
     color: "red",
     fontWeight: "bold"
-});
-dom.addCss(cssId + " a", {
-    marginRight: "5px"
 });
 
 
