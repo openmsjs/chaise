@@ -35,7 +35,6 @@ var renderer = msjs(function(msj) {
         view.map = eval("(" + view.map + ")");
         if (view.reduce) view.reduce = eval("(" + view.reduce + ")"); 
         textarea.text(toPrettyJSON(view));
-        textarea.data("viewInfo", msj.type);
         el.css("display", "");
     } else { 
         el.css("display", "none");
@@ -191,6 +190,9 @@ var saveCssId = dom.getCssId(saveRenderer[0]);
 dom.addCss(saveCssId, {
     display: "none"
 });
-dom.addCss(".editing " + saveCssId, {
+dom.addCss(cssId + ".editing " + saveCssId, {
     display: "inline"
+});
+dom.addCss(cssId + " " + saveCssId, {
+    display: "none"
 });
