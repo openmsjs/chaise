@@ -8,7 +8,7 @@ var el = msjs.publish($(<div>
     <span/>
     <pre/>
 </div>));
-msjs.require("chaise.document.view.reduce.renderer").insertBefore(el.find("span"));
+// see end of file (before css) for save renderer insertion before span 
 
 var showLink = el.find("a.show");
 var form = el.find("form.edit-controls");
@@ -37,24 +37,28 @@ var startEdit = function(rollback) {
 };
 
 var renderer = msjs(function(msj) {
-    var doc = msj.info;
-//     if (doc && msj.updated && isSuccess(msj.updated)) {
-//         doc._id = msj.updated.result.id;
-//         doc._rev = msj.updated.result.rev;
-//     }
-    if (doc) {
-        doc.map = eval("(" + doc.map + ")");
-        if (doc.reduce) doc.reduce = eval("(" + doc.reduce + ")"); 
-        textarea.text(toPrettyJSON(doc));
+    var type = msj.type;
+    var view;
+    if (type.view) {
+        var viewName = type.view;
+        var designDoc = type.doc;
+        view = designDoc.views[viewName];
+    }
+
+    if (view) {
+        view.map = eval("(" + view.map + ")");
+        if (view.reduce) view.reduce = eval("(" + view.reduce + ")"); 
+        textarea.text(toPrettyJSON(view));
+        textarea.data("viewInfo", msj.type);
         el.css("display", "");
     } else { 
         el.css("display", "none");
         textarea.text("");
     }
 });
-renderer.push("chaise.document.view.info", "info");
+renderer.push("chaise.document.list.type.picker", "type");
 
-el.find("a.show").click(function(){
+showLink.click(function(){
     if (el.hasClass("showing")) {
         hide();
     } else {
@@ -144,6 +148,7 @@ textarea.keypress(function(event) {
     } 
 });
 
+
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId, {
@@ -177,7 +182,7 @@ dom.addCss(cssId + " form.edit-controls", {
     display: "none"
 });
 dom.addCss(cssId + ".editing form.edit-controls," +
-           cssId + " input", {
+           cssId + " form.edit-controls input", {
     display: "inline"
 });
 dom.addCss(cssId + " span", {
@@ -187,4 +192,17 @@ dom.addCss(cssId + " span", {
 });
 dom.addCss(cssId + " a", {
     marginRight: "5px"
+});
+
+
+// Do this after to avoid adding handlers to save renderer
+var saveRenderer = msjs.require("chaise.document.view.save.renderer");
+saveRenderer.insertBefore(el.find("span"));
+
+var saveCssId = dom.getCssId(saveRenderer[0]);
+dom.addCss(saveCssId, {
+    display: "none"
+});
+dom.addCss(".editing " + saveCssId, {
+    display: "inline"
 });

@@ -37,6 +37,7 @@ designDocs.push("chaise.document.list.type.designdocs", "docs");
 
 var selector = msjs(function(msj) {
     el.find(".selected").removeClass("selected");
+    if (!msj.selected) return;
     var selected = null;
     switch (msj.selected) {
         case "all": 
