@@ -83,5 +83,6 @@ dom.addCss(cssId + ".has-reduce .reduce", {
     display: "block"
 });
 dom.addCss(cssId + " label", {
-    marginRight: "10px"
+    marginRight: "10px",
+    cssFloat: "right"
 });
