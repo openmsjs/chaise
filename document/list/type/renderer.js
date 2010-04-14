@@ -1,6 +1,6 @@
 var el = msjs.publish($(<div>
-    <a name="all" href="#">All</a>
-    <a name="design" href="#">Design</a>
+    <a name="all" href="#">All documents</a>
+    <a name="design" href="#">Design documents</a>
     <div class="views"/>
 </div>));
 
@@ -62,11 +62,11 @@ selector.push(picker, "selected");
 
 var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId, {
-    padding: "10px 5px",
-    margin: "5px 0px",
-    backgroundColor: "#EFEFEF",
-    border: "1px solid #4A4A4A"
-
+//     padding: "10px 5px",
+//     margin: "5px 0px",
+//     backgroundColor: "#EFEFEF",
+//     border: "1px solid #4A4A4A"
+    lineHeight: "2.5em"
 })
 dom.addCss(cssId + " .views" , {
     display: "inline"

@@ -147,7 +147,7 @@ textarea.keypress(function(event) {
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId, {
-    margin: "20px 0px"
+    display: "inline"
 });
 dom.addCss(cssId + " pre", {
     border: "2px solid #CACACA",
