@@ -1,6 +1,5 @@
 var el = msjs.require("chaise.document.view.element");
-var submitter = msjs();
-
+var saveForm = el.find("form");
 var initializer = msjs(function(msj) {
     saveForm.find("[name=designName]").val(msj.type.design);
     saveForm.find("[name=viewName]").val(msj.type.view);
@@ -10,6 +9,7 @@ initializer.push("chaise.document.list.type.picker", "type");
 
 var cancelSave = msjs.require("chaise.document.view.cancelsave");
 var saveLink = el.find("a.save");
+var status = el.find("span.status");
 saveLink.click(function(){
     if (el.hasClass("saving")) {
         cancelSave();
@@ -21,10 +21,9 @@ saveLink.click(function(){
     return false;
 });
 
-var saveForm = el.find("form");
-var status = el.find("span.status");
 var textarea = el.find("pre");
 var validateCode = msjs.require("chaise.document.view.validatecode");
+var submitter = msjs();
 saveForm.submit(function() {
     var design = $.trim(saveForm.find("[name=designName]").val());
     var view = $.trim(saveForm.find("[name=viewName]").val());
