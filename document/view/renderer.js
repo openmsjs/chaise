@@ -1,11 +1,4 @@
-var el = msjs.publish($(<div>
-    <a href="#" class="show toggle">Show code</a>
-    <a href="#" class="edit toggle">Edit code</a>
-    <a href="#" class="run toggle">Run code</a>
-    <span/>
-    <pre/>
-</div>));
-// see end of file (before css) for save renderer insertion before span 
+var el = msjs.publish(msjs.require("chaise.document.view.element"));
 
 var showLink = el.find("a.show");
 var editLink = el.find("a.edit");
@@ -71,7 +64,7 @@ var stopEdit = function() {
     textarea.blur();
     status.text("");
     el.removeClass("editing");
-    editLink.text("Edit code");
+    editLink.text("Edit");
 };
 var reset = function() {
     var rollback = textarea.data("rollback");
@@ -79,55 +72,13 @@ var reset = function() {
     stopEdit();    
 };
 var submitter = msjs.require("chaise.document.view.submitter");
-var funcToStr = function(func, type) {
-    if (typeof(func) == "function") {
-        return func.toString();
-    }
-    var testFunc;
-    try {
-        testFunc = eval("(" + func + ")");
-    } catch (e) {}
-
-    if (typeof(testFunc) != "function") {
-        throw "bad function";
-    }
-
-    return func;
-};
-var strToFunc = function(func) {
-    if (typeof(func) == "function") {
-        return func;
-    }
-    try {
-        return eval("(" + func + ")");
-    } catch (e) {}
-
-    throw "bad function";
-}
+var validateCode = msjs.require("chaise.document.view.validatecode");
 runLink.click(function(){
-    var doc;
     try {
-        doc = eval("(" + textarea.text().split('\n').join(" ") + ")");
+        var validatedDoc = validateCode(textarea);
+        if (validatedDoc) submitter.update(validatedDoc);
     } catch (e) {
-        status.text("bad json");
-    }
-
-    if (doc.map) {
-        try {
-            var updateDoc = {};
-            updateDoc.map = funcToStr(doc.map, "map");
-            if (doc.reduce) updateDoc.reduce = funcToStr(doc.reduce, "reduce");   
-
-            submitter.update(updateDoc);
-
-            doc.map = strToFunc(doc.map);
-            if (doc.reduce) doc.reduce = strToFunc(doc.reduce);
-            textarea.text(toPrettyJSON(doc));
-        } catch (e) {
-            status.text(e);
-        }
-    } else {
-        status.text("view requires a map function");
+        status.text(e);
     }
     return false;
 });
@@ -179,20 +130,4 @@ dom.addCss(cssId + " span", {
     display: "block",
     color: "red",
     fontWeight: "bold"
-});
-
-
-// Do this after to avoid adding handlers to save renderer
-var saveRenderer = msjs.require("chaise.document.view.save.renderer");
-saveRenderer.insertBefore(el.find("span"));
-
-var saveCssId = dom.getCssId(saveRenderer[0]);
-dom.addCss(saveCssId, {
-    display: "none"
-});
-dom.addCss(cssId + ".editing " + saveCssId, {
-    display: "inline"
-});
-dom.addCss(cssId + " " + saveCssId, {
-    display: "none"
 });

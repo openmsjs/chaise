@@ -15,7 +15,6 @@ var el = msjs.publish($(<div>
 </div>));
 
 var saveLink = el.find("a.save");
-var cancelLink = el.find("canc.save");
 var form = el.find("form");
 saveLink.click(function(){
     if (el.hasClass("saving")) {
@@ -23,7 +22,7 @@ saveLink.click(function(){
         saveLink.text("Save as");
     } else {
         el.addClass("saving");
-        saveLink.text("Cancel save");
+        saveLink.text("Close save");
     }
     return false;
 });
@@ -35,6 +34,15 @@ var renderer = msjs(function(msj) {
     form.data("viewInfo", msj.type);
 });
 renderer.push("chaise.document.list.type.picker", "type");
+
+var submitter = msjs.require("chaise.document.view.save.submitter");
+form.submit(function() {
+    var design = $.trim(form.find("[name=designName]").val());
+    var view = $.trim(form.find("[name=viewName]").val());
+    if (design && view) {
+        submitter.update({design:design, view: view});
+    }
+});
 
 
 var dom = msjs.require("msjs.dom");
