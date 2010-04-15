@@ -33,8 +33,8 @@ var list = msjs.publish(msjs(function(msj) {
             response = couch.getAllDocuments(options);
             break;
         case "design":
-            options.startkey = "_design/";
-            options.endkey = "_design0";
+            options.startkey = options.descending ? "_design0" : "_design/";
+            options.endkey = options.descending ? "_design/" : "_design0";
             response = couch.getAllDocuments(options);
             break;
         default: // design object
