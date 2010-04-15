@@ -17,7 +17,7 @@ var saver = msjs.publish(msjs(function(msj) {
             }
         }
         if (!assigned) {
-            designDocs.views[msj.update.view] = msj.update.doc;
+            designDoc.views[msj.update.view] = msj.update.doc;
         }
     } else {
         var views = {};

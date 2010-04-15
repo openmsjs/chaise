@@ -53,5 +53,4 @@ list.pull(list.depends("chaise.document.list.descending"), "descending");
 list.pull("chaise.host.list.picker", "host");
 list.depends("chaise.document.detail.updater"); // refetch when document is updated
 list.depends("chaise.document.remove.remover"); // refetch when document is removed
-list.push("chaise.document.view.save.saver", "save");// refetch when design is saved
 list.packMe = false;
