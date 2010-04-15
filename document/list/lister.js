@@ -25,21 +25,25 @@ var list = msjs.publish(msjs(function(msj) {
     }
 
     var response;
-    switch (msj.type){
-    case "all":
-        response = couch.getAllDocuments(options);
-        break;
-    case "design":
-        options.startkey = "_design/";
-        options.endkey = "_design0";
-        response = couch.getAllDocuments(options);
-        break;
-    default: // design object
-        var design = msj.type.design;
-        var view = msj.type.view;
-        var doc = msj.type.doc;
-        response = couch.getView(design, view, options);
-        break;
+    if (msj.runView) {
+        response = couch.runTemporaryView(msj.runView, options);
+    } else {
+        switch (msj.type){
+        case "all":
+            response = couch.getAllDocuments(options);
+            break;
+        case "design":
+            options.startkey = "_design/";
+            options.endkey = "_design0";
+            response = couch.getAllDocuments(options);
+            break;
+        default: // design object
+            var design = msj.type.design;
+            var view = msj.type.view;
+            var doc = msj.type.doc;
+            response = couch.getView(design, view, options);
+            break;
+        }
     }
 
     return isSuccess(response) ? response.result : emptyMsj;
@@ -50,6 +54,7 @@ list.pull(list.depends("chaise.document.list.type.picker"), "type");
 list.pull(list.depends("chaise.document.list.pagesize.selector"), "pageSize");
 list.pull(list.depends("chaise.document.list.pager.selector"), "page");
 list.pull(list.depends("chaise.document.list.descending"), "descending");
+list.push("chaise.document.view.runner", "runView");
 list.pull("chaise.host.list.picker", "host");
 list.depends("chaise.document.detail.updater"); // refetch when document is updated
 list.depends("chaise.document.remove.remover"); // refetch when document is removed

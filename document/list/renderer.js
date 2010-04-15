@@ -16,7 +16,7 @@ var descending = msjs.require("chaise.document.list.descending");
 var renderer = msjs(function(msj) {
     thead.children().remove();
     tbody.children().remove();
-    var list = msj.list || msj.tempView;
+    var list = msj.list;
     if (list.rows.length) {
         el.removeClass("no-results");
         status.text("").css("color", "");
@@ -83,7 +83,6 @@ var renderer = msjs(function(msj) {
 
     return true;
 });
-renderer.push("chaise.document.view.run.runner", "tempView");
 renderer.push("chaise.document.list.lister", "list");
 renderer.pull("chaise.document.list.type.picker", "type");
 renderer.pull(descending, "descending");

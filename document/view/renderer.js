@@ -52,7 +52,7 @@ var startEdit = function(rollback) {
         } 
     });
 };
-var cancelSave = msjs.require("chaise.document.view.save.cancelsave");
+var cancelSave = msjs.require("chaise.document.view.cancelsave");
 var stopEdit = function() {
     textarea.unbind("keypress");
 
@@ -80,7 +80,7 @@ editLink.click(function(){
 });
 
 
-var saver = msjs.require("chaise.document.view.save.saver");
+var saver = msjs.require("chaise.document.view.saver");
 var saveHandler = msjs(function(msj) {
     status.text(msj.response.status);
 }); 
