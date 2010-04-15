@@ -9,6 +9,11 @@ var el = msjs.publish($(<div>
             </tr>
         </thead>
         <tbody/>
+        <tfoot>
+            <tr>
+                <th colspan="4"><a href="#">(Collapsed) Show all</a></th>
+            </tr>
+        </tfoot>
     </table>
     <div class="status"/>
 </div>));
@@ -46,6 +51,7 @@ var renderer = msjs(function(msj) {
             .appendTo(cell)
             .click(function() {
                 picker.update(info.db_name);
+                collapse(row);
                 return false;
             });
         $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">Delete</a>")
@@ -78,8 +84,56 @@ var selector = msjs(function(msj) {
 });
 selector.push(picker, "picked");
 
+var collapse = function(row){
+    var scrollTop = Math.max(0, (row.position().top + tbody.scrollTop() - 20));
+    tbody.animate({height : 60, 
+                   scrollTop : scrollTop
+                  }, "fast", function(){
+                    el.addClass("collapsed");
+                  });
+
+};
+
+var expand = function(){
+    tbody.css("height", "auto");
+    var height = tbody.height();
+    tbody.height(60);
+    tbody.animate({height : height, 
+                   scrollTop : "0px"
+                  }, "fast", function(){
+                    el.removeClass("collapsed");
+                    el.css("height", "auto");
+                  });
+}
+
+var tfoot = el.find("tfoot");
+tfoot.find("a").click(function(){
+    expand();
+});
+
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
+
+dom.addCss(tbody, {
+    display : "block",
+    overflow: "hidden !important",
+    position: "relative"
+
+});
+
+dom.addCss(cssId, "tfoot", {
+    display : "none"
+});
+
+dom.addCss(cssId + ".collapsed", "tfoot", {
+    display : "table-row-group",
+    backgroundColor : "gray"
+});
+
+dom.addCss(cssId + ".collapsed", "tfoot", "a", {
+    color : "white"
+});
+
 dom.addCss(cssId + ".no-results table", {
     display: "none"
 });
