@@ -16,6 +16,7 @@ saveLink.click(function(){
     } else {
         el.addClass("saving");
         saveLink.text("Cancel save");
+        status.text("");
     }
     return false;
 });
@@ -35,6 +36,7 @@ saveForm.submit(function() {
                                   view: view, 
                                   doc: validatedDoc});
             }
+            cancelSave();
         } catch (e) {
             status.text(e);
         }

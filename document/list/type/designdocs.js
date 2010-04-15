@@ -11,6 +11,7 @@ var docs = msjs.publish(msjs(function(msj) {
         });
     }
 }));
-docs.push("chaise.database.list.picker", "dbName");
-docs.pull("chaise.host.list.picker", "host");
 docs.packMe = false;
+docs.pull(docs.depends("chaise.database.list.picker"), "dbName");
+docs.pull("chaise.host.list.picker", "host");
+docs.depends("chaise.document.view.save.saver");

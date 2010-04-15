@@ -81,11 +81,10 @@ editLink.click(function(){
 
 
 var saver = msjs.require("chaise.document.view.save.saver");
-msjs.log('saver', saver)
 var saveHandler = msjs(function(msj) {
-    msjs.log('xxx', msj.savedResponse)    
+    status.text(msj.response.status);
 }); 
-saveHandler.push(saver, "savedResponse");
+saveHandler.push(saver, "response");
 
 
 var dom = msjs.require("msjs.dom");

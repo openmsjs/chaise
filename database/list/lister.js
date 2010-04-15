@@ -1,6 +1,7 @@
+var couchServer = msjs.require("chaise.couch.server");
 var isSuccess = msjs.require("chaise.couch.issuccess");
 var list = msjs.publish(msjs(function(msj) {
-    var couch = new (msjs.require("chaise.couch.server"))(msj.host);
+    var couch = new couchServer(msj.host);
     var response = couch.getDatabaseList();       
     var list = [];
     if (isSuccess(response)) {
