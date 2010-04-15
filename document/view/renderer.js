@@ -1,21 +1,21 @@
 var el = msjs.publish(msjs.require("chaise.document.view.element"));
 
 var showLink = el.find("a.show");
-var editLink = el.find("a.edit");
-var runLink = el.find("a.run");
-var textarea = el.find("pre");
-var isSuccess = msjs.require("chaise.couch.issuccess");
-var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
-var startEdit = function(rollback) {
-    textarea.data("rollback", rollback);
-    textarea.attr("contenteditable", "true");
-    setTimeout(function() { 
-        textarea.focus();
-    }, 500);
-    el.addClass("editing");
-};
+showLink.click(function(){
+    if (el.hasClass("showing")) {
+        el.removeClass("showing");
+        showLink.text("Show code");
+        stopEdit();
+    } else {
+        el.addClass("showing");
+        showLink.text("Hide code");    
+    }
+    return false;
+});
 
-var renderer = msjs(function(msj) {
+var textarea = el.find("pre");
+var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
+var initializer = msjs(function(msj) {
     var type = msj.type;
     var view;
     if (type.view) {
@@ -28,69 +28,64 @@ var renderer = msjs(function(msj) {
         view.map = eval("(" + view.map + ")");
         if (view.reduce) view.reduce = eval("(" + view.reduce + ")"); 
         textarea.text(toPrettyJSON(view));
-        el.css("display", "");
     } else { 
-        el.css("display", "none");
         textarea.text("");
     }
-});
-renderer.push("chaise.document.list.type.picker", "type");
 
-editLink.click(function(){
-    if (el.hasClass("editing")) {
-        reset();
-    } else {
-        el.addClass("editing");
-        editLink.text("Cancel edit");
-        startEdit(textarea.text());
-    }
-    return false;
+    el.css("display", view ? "" : "none");
 });
-showLink.click(function(){
-    if (el.hasClass("showing")) {
-        el.removeClass("showing");
-        showLink.text("Show code");
-        reset();
-    } else {
-        el.addClass("showing");
-        showLink.text("Hide code");    
-    }
-    return false;
-});
+initializer.push("chaise.document.list.type.picker", "type");
 
-var status = el.find("span");
+
+var startEdit = function(rollback) {
+    textarea.data("rollback", textarea.text());
+    textarea.attr("contenteditable", "true");
+    textarea.focus();
+
+    editLink.text("Cancel edit");
+    el.addClass("editing");
+
+    textarea.keypress(function(event) {
+        if (event.keyCode == "27") {
+            stopEdit();
+            return false;
+        } 
+    });
+};
+var cancelSave = msjs.require("chaise.document.view.save.cancelsave");
 var stopEdit = function() {
-    textarea.removeAttr("contenteditable");
-    textarea.blur();
-    status.text("");
+    textarea.unbind("keypress");
+
     el.removeClass("editing");
     editLink.text("Edit");
+
+    textarea.blur();
+    textarea.removeAttr("contenteditable");
+    textarea.text(textarea.data("rollback"));
+
+    cancelSave();
+    status.text("");
 };
-var reset = function() {
-    var rollback = textarea.data("rollback");
-    textarea.text(rollback);
-    stopEdit();    
-};
-var submitter = msjs.require("chaise.document.view.submitter");
-var validateCode = msjs.require("chaise.document.view.validatecode");
-runLink.click(function(){
-    try {
-        var validatedDoc = validateCode(textarea);
-        if (validatedDoc) submitter.update(validatedDoc);
-    } catch (e) {
-        status.text(e);
+
+
+var status = el.find("span.status");
+var editLink = el.find("a.edit");
+editLink.click(function(){
+    if (el.hasClass("editing")) {
+        stopEdit();
+    } else {
+        startEdit();
     }
     return false;
 });
-textarea.keypress(function(event) {
-    if (event.keyCode == "27") {
-        reset();
-        return false;
-    } else if (event.shiftKey && event.keyCode == "13") {
-        runLink.click();      
-        return false;
-    } 
-});
+
+
+var saver = msjs.require("chaise.document.view.save.saver");
+msjs.log('saver', saver)
+var saveHandler = msjs(function(msj) {
+    msjs.log('xxx', msj.savedResponse)    
+}); 
+saveHandler.push(saver, "savedResponse");
 
 
 var dom = msjs.require("msjs.dom");
@@ -98,6 +93,10 @@ var cssId = dom.getCssId(el[0]);
 dom.addCss(cssId, {
     display: "inline"
 });
+dom.addCss(cssId + " a", {
+    marginRight: "5px"
+});
+
 dom.addCss(cssId + " pre", {
     border: "2px solid #CACACA",
     padding: "2px",
@@ -107,15 +106,15 @@ dom.addCss(cssId + " pre", {
     display: "none",
     color: "#6A6A6A"
 });
-dom.addCss(cssId + " a", {
-    marginRight: "5px"
-});
+
 dom.addCss(cssId + " a.edit," +
-           cssId + " a.run", {
+           cssId + " a.run," +
+           cssId + " a.save", {
     display: "none"
 });
 dom.addCss(cssId + ".showing a.edit," +
-           cssId + ".showing a.run", {
+           cssId + ".showing a.run," + 
+           cssId + ".editing a.save", {
     display: "inline"
 });
 dom.addCss(cssId + ".showing pre", {
@@ -126,8 +125,28 @@ dom.addCss(cssId + ".editing pre", {
     borderColor: "#8A8279 #DED6CA #DED6CA #8A8279",
     color: "black"
 });
-dom.addCss(cssId + " span", {
+dom.addCss(cssId + " span.status", {
     display: "block",
     color: "red",
     fontWeight: "bold"
+});
+
+
+dom.addCss(cssId + " table", {
+    border: "none",
+    width: "400px",
+    padding: "10px 0px"
+});
+dom.addCss(cssId + " th", {
+    color: "#4A4A4A",
+    textAlign: "right"
+});
+dom.addCss(cssId + " form", {
+    display: "none",
+    backgroundColor: "#FAFAFA",
+    border: "1px solid #CACACA",
+    borderBottom: "0px"
+});
+dom.addCss(cssId + ".saving form", {
+    display: "block"
 });

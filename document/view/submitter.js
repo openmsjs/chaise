@@ -1,1 +1,0 @@
-msjs.publish(msjs());

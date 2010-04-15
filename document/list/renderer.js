@@ -83,7 +83,7 @@ var renderer = msjs(function(msj) {
 
     return true;
 });
-renderer.push("chaise.document.view.runner", "tempView");
+renderer.push("chaise.document.view.run.runner", "tempView");
 renderer.push("chaise.document.list.lister", "list");
 renderer.pull("chaise.document.list.type.picker", "type");
 renderer.pull(descending, "descending");
