@@ -1,6 +1,6 @@
+var couchServer = msjs.require("chaise.couch.server");
 var creator = msjs.publish(msjs(function(msj) {
-    var couch = new (msjs.require("chaise.couch.server"))(msj.host);
-    return couch.getDatabase(msj.dbName).create();
+    return new couchServer(msj.host).getDatabase(msj.dbName).create();
 }));
 creator.packMe = false;
 creator.push("chaise.database.create.submitter", "dbName");

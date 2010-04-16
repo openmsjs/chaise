@@ -1,5 +1,6 @@
+var couchServer = msjs.require("chaise.couch.server");
 var updater = msjs.publish(msjs(function(msj){
-    var couch = new (msjs.require("chaise.couch.server"))(msj.host);
+    var couch = new couchServer(msj.host);
     return couch.getDatabase(msj.dbName).writeDocument(msj.doc);
 }));
 updater.packMe = false;

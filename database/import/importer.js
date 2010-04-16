@@ -1,3 +1,4 @@
+var couchServer = msjs.require("chaise.couch.server");
 var isSuccess = msjs.require("chaise.couch.issuccess");
 var importer = msjs.publish(msjs(function(msj) {
     var dbParam = "_all"; // do all for now
@@ -14,7 +15,7 @@ var importer = msjs.publish(msjs(function(msj) {
     })();
 
     var reset = false; // only allow reload for now
-    var couch = new (msjs.require("chaise.couch.server"))(msj.host);
+    var couch = new couchServer(msj.host);
     jQuery.each(dbNames, function(i, dbName) {
         var db = couch.getDatabase(dbName);
 

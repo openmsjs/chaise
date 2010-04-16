@@ -17,7 +17,7 @@ request.get = function(url) {
         response = jsonRequest.get(url);
         response.url = url;
    } catch (e) {
-        msjs.log("[warn] couch get: " + handleException(e));
+        msjs.log("[warn] couch get: " + url + handleException(e));
    }
     return response;
 };

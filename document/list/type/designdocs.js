@@ -1,6 +1,8 @@
 var couchServer = msjs.require("chaise.couch.server");
 var isSuccess = msjs.require("chaise.couch.issuccess");
 var docs = msjs.publish(msjs(function(msj) {
+    if (!msj.host) return;
+
     var db = new couchServer(msj.host).getDatabase(msj.dbName);
     var response = db.getAllDocuments({startkey: "_design/",
                                       endkey: "_design0",

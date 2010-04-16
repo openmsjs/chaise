@@ -8,8 +8,8 @@ var el = msjs.publish($(<div>
 </div>));
 
 var form = el.find("form");
-var hostInput = form.find("input[name='host']"); 
-el.find("a").click(function() {
+var hostInput = form.find("input[name=host]"); 
+el.find("a.add").click(function() {
     el.addClass("adding");
     hostInput.focus();
     return false;                       

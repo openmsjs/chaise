@@ -64,11 +64,6 @@ var renderer = msjs(function(msj) {
                 return false;
             });
     });
-
-//     if (msj.list.length) {
-//         msjs.log(msj.list)
-//         picker.update("cart"); // erase me
-//     }
 });
 renderer.push("chaise.database.list.lister", "list");
 renderer.pull(picker, "picked");

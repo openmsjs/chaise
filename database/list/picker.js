@@ -1,4 +1,4 @@
-var picker = msjs.publish(msjs(function(msj){
+var picker = msjs.publish(msjs(function(){
     return null;
 }));
-picker.push("chaise.host.list.picker", "host");
+picker.depends("chaise.host.list.picker");

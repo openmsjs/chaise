@@ -1,5 +1,6 @@
+var couchServer = msjs.require("chaise.couch.server");
 var remover = msjs.publish(msjs(function(msj) {
-    var db = new (msjs.require("chaise.couch.server"))(msj.host).getDatabase(msj.database);
+    var db = new couchServer(msj.host).getDatabase(msj.database);
     return db.removeDocument(msj.doc);
 }));
 remover.packMe = false;
