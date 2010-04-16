@@ -4,7 +4,7 @@ var toPrettyJSON = msjs.publish(function(value, indent) {
 
     switch (typeof value) {
         case 'string':
-            return '"' + value + '"';
+            return '"' + value.split("\"").join("\\\"") + '"';
 
         case 'number':
             return (isFinite(value) ? String(value) : 'null');
