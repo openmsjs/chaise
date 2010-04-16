@@ -19,6 +19,7 @@ var initializer = msjs(function(msj) {
     var viewDoc = msj.picked.viewDoc;
     textarea.text("");
     if (viewDoc) {
+        if (!msj.picked.isTempView) stopEdit(true);
         viewDoc.map = eval("(" + viewDoc.map + ")");
         if (viewDoc.reduce) viewDoc.reduce = eval("(" + viewDoc.reduce + ")"); 
         
@@ -32,7 +33,7 @@ initializer.push("chaise.document.list.type.picker", "picked");
 
 
 var startEdit = function(rollback) {
-    textarea.data("rollback", textarea.contents());
+    textarea.data("rollback", textarea.contents().clone());
     textarea.attr("contenteditable", "true");
     textarea.focus();
 
@@ -46,8 +47,9 @@ var startEdit = function(rollback) {
         } 
     });
 };
+
 var cancelSave = msjs.require("chaise.document.view.cancelsave");
-var stopEdit = function() {
+var stopEdit = function(ignoreRollback) {
     textarea.unbind("keypress");
 
     el.removeClass("editing");
@@ -56,10 +58,12 @@ var stopEdit = function() {
     textarea.blur();
     textarea.removeAttr("contenteditable");
 
-    textarea.contents().remove();
-    $.each(textarea.data("rollback"), function(i, content) {
-        textarea.append(content);
-    });
+    textarea.text("");
+    if (!ignoreRollback && textarea.data("rollback")) {
+        $.each(textarea.data("rollback"), function(i, content) {
+            textarea.append(content);
+        });
+    }
 
     cancelSave();
     status.text("");
