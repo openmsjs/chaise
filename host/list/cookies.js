@@ -9,7 +9,7 @@ cookies.get = function(name) {
 	for(var i=0; i < ca.length; i++) {
 		var c = ca[i];
 		while (c.charAt(0)==" ") c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+		if (c.indexOf(nameEQ) == 0) return unescape(c.substring(nameEQ.length,c.length));
 	}
 	return null;
 };
@@ -26,6 +26,7 @@ cookies.set = function(name, value, seconds) {
         expires = "; expires=Thu, 01-Jan-1970 00:00:01 UTC";
     }
 
+    value = escape(value);
 	document.cookie = name+"="+value+expires+"; path=/;";
 
     // Clear cookies for those browser we set with no domain
