@@ -16,6 +16,6 @@ msjs.publish($(<div>
         </tbody></table>
     </form>
     <span class="status"/>
-    <pre/>
+    <pre class="editor"/>
 </div>));
 

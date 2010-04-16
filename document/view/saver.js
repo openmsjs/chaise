@@ -20,7 +20,7 @@ saveLink.click(function(){
     return false;
 });
 
-var textarea = el.find("pre");
+var textarea = el.find(".editor");
 var validateCode = msjs.require("chaise.document.view.validatecode");
 var submitter = msjs();
 saveForm.submit(function() {

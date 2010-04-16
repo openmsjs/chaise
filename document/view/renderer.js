@@ -13,16 +13,18 @@ showLink.click(function(){
     return false;
 });
 
-var textarea = el.find("pre");
+var textarea = el.find(".editor");
 var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
 var initializer = msjs(function(msj) {
     var viewDoc = msj.picked.viewDoc;
+    textarea.text("");
     if (viewDoc) {
         viewDoc.map = eval("(" + viewDoc.map + ")");
         if (viewDoc.reduce) viewDoc.reduce = eval("(" + viewDoc.reduce + ")"); 
-        textarea.text(toPrettyJSON(viewDoc));
-    } else { 
-        textarea.text("");
+        
+        $.each(toPrettyJSON(viewDoc).split("\n"), function(i, line) {
+            textarea.append(document.createTextNode(line)).append($("<br/>"));
+        });
     }
     el.css("display", viewDoc ? "" : "none");
 });
@@ -30,7 +32,7 @@ initializer.push("chaise.document.list.type.picker", "picked");
 
 
 var startEdit = function(rollback) {
-    textarea.data("rollback", textarea.text());
+    textarea.data("rollback", textarea.contents());
     textarea.attr("contenteditable", "true");
     textarea.focus();
 
@@ -53,7 +55,11 @@ var stopEdit = function() {
 
     textarea.blur();
     textarea.removeAttr("contenteditable");
-    textarea.text(textarea.data("rollback"));
+
+    textarea.contents().remove();
+    $.each(textarea.data("rollback"), function(i, content) {
+        textarea.append(content);
+    });
 
     cancelSave();
     status.text("");
@@ -88,7 +94,7 @@ dom.addCss(cssId + " a", {
     marginRight: "5px"
 });
 
-dom.addCss(cssId + " pre", {
+dom.addCss(cssId + " .editor", {
     border: "2px solid #CACACA",
     padding: "2px",
     outline: "none",
@@ -108,10 +114,10 @@ dom.addCss(cssId + ".showing a.edit," +
            cssId + ".editing a.save", {
     display: "inline"
 });
-dom.addCss(cssId + ".showing pre", {
+dom.addCss(cssId + ".showing .editor", {
     display: "block"
 });
-dom.addCss(cssId + ".editing pre", {
+dom.addCss(cssId + ".editing .editor", {
     display: "block",
     borderColor: "#8A8279 #DED6CA #DED6CA #8A8279",
     color: "black"
