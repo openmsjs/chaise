@@ -1,11 +1,10 @@
 var el = msjs.require("chaise.document.view.element");
 var saveForm = el.find("form");
 var initializer = msjs(function(msj) {
-    saveForm.find("[name=designName]").val(msj.type.design);
-    saveForm.find("[name=viewName]").val(msj.type.view);
-    saveForm.data("viewInfo", msj.type);
+    saveForm.find("[name=designName]").val(msj.picked.designName);
+    saveForm.find("[name=viewName]").val(msj.picked.viewName);
 });
-initializer.push("chaise.document.list.type.picker", "type");
+initializer.push("chaise.document.list.type.picker", "picked");
 
 var cancelSave = msjs.require("chaise.document.view.cancelsave");
 var saveLink = el.find("a.save");

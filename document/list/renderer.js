@@ -25,7 +25,9 @@ var renderer = msjs(function(msj) {
         status.text("No documents").css("color", "#FF0000");
     }
 
-    var isView = msj.type != "all" && msj.type != "design";
+    if (!msj.picked) return;
+
+    var isView = msj.picked.type == "view";
     var hasKeys = false;
     $.each(list.rows, function(i, doc) {
         var row = $("<tr/>").appendTo(tbody).data("doc", doc);
@@ -84,7 +86,7 @@ var renderer = msjs(function(msj) {
     return true;
 });
 renderer.push("chaise.document.list.lister", "list");
-renderer.pull("chaise.document.list.type.picker", "type");
+renderer.pull("chaise.document.list.type.picker", "picked");
 renderer.pull(descending, "descending");
 
 var selector = msjs(function(msj) {

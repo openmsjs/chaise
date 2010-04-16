@@ -16,25 +16,17 @@ showLink.click(function(){
 var textarea = el.find("pre");
 var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
 var initializer = msjs(function(msj) {
-    var type = msj.type;
-    var view;
-    if (type.view) {
-        var viewName = type.view;
-        var designDoc = type.doc;
-        view = designDoc.views[viewName];
-    }
-
-    if (view) {
-        view.map = eval("(" + view.map + ")");
-        if (view.reduce) view.reduce = eval("(" + view.reduce + ")"); 
-        textarea.text(toPrettyJSON(view));
+    var viewDoc = msj.picked.viewDoc;
+    if (viewDoc) {
+        viewDoc.map = eval("(" + viewDoc.map + ")");
+        if (viewDoc.reduce) viewDoc.reduce = eval("(" + viewDoc.reduce + ")"); 
+        textarea.text(toPrettyJSON(viewDoc));
     } else { 
         textarea.text("");
     }
-
-    el.css("display", view ? "" : "none");
+    el.css("display", viewDoc ? "" : "none");
 });
-initializer.push("chaise.document.list.type.picker", "type");
+initializer.push("chaise.document.list.type.picker", "picked");
 
 
 var startEdit = function(rollback) {
@@ -112,7 +104,7 @@ dom.addCss(cssId + " a.edit," +
     display: "none"
 });
 dom.addCss(cssId + ".showing a.edit," +
-           cssId + ".showing a.run," + 
+           cssId + ".editing a.run," + 
            cssId + ".editing a.save", {
     display: "inline"
 });

@@ -1,13 +1,13 @@
 var el = msjs.publish($(<div>
-    <a name="all" href="#">All documents</a>
-    <a name="design" href="#">Design documents</a>
+    <a name="allDocs" href="#">All documents</a>
+    <a name="allDesignDocs" href="#">Design documents</a>
     <div class="views"/>
 </div>));
 
 var picker = msjs.require("chaise.document.list.type.picker");
 var dom = msjs.require("msjs.dom");
 el.find("a[name]").addClass("button").click(function() {
-    picker.update(this.name);
+    picker.update({type: this.name});
     return false;
 });
 
@@ -27,7 +27,11 @@ var designDocs = msjs(function(msj) {
                 .appendTo(design)
                 .data("design", designName)
                 .click(function() {
-                    picker.update({design: designName, view: $(this).text(), doc: doc});
+                    var viewName = $(this).text();
+                    picker.update({type: "view",
+                                   designName: designName,
+                                   viewName: viewName,
+                                   viewDoc: doc.views[viewName]});
                     return false;
                 });
         }
@@ -37,19 +41,19 @@ designDocs.push("chaise.document.list.type.designdocs", "docs");
 
 var selector = msjs(function(msj) {
     el.find(".selected").removeClass("selected");
-    if (!msj.selected) return;
+    if (!msj.picked) return;
     var selected = null;
-    switch (msj.selected) {
-        case "all": 
-        case "design":
-            selected = el.find("[name='" + msj.selected + "']");
+    switch (msj.picked.type) {
+        case "allDocs": 
+        case "allDesignDocs":
+            selected = el.find("[name=" + msj.picked.type + "]");
             break;
-        default:
+        case "view":
             var views = el.find("a.view");
             $.each(views, function(i, view) {
-                var design = $(view).data("design");
-                if (msj.selected.design == design &&
-                    msj.selected.view == $(view).text()) {
+                var designName = $(view).data("design");
+                if (msj.picked.designName == designName &&
+                    msj.picked.viewName == $(view).text()) {
                     selected = $(view);
                     return false;
                 }
@@ -58,7 +62,7 @@ var selector = msjs(function(msj) {
     }
     if (selected) selected.addClass("selected");
 });
-selector.push(picker, "selected");
+selector.push(picker, "picked");
 
 
 var cssId = dom.getCssId(el[0]);

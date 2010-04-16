@@ -109,19 +109,16 @@ el.submit(function() {
 
 var shower = msjs(function(msj) {
     el.removeClass("send-reduce");
-    var isView = msj.type !== "all" && msj.type != "design";
-    if (isView) {
+    if (msj.picked == "view") {
         el.css("display", "");
-        var view = msj.type.view;
-        var doc = msj.type.doc;
-        if (doc.views[view].reduce) {
+        if (msj.picked.viewDoc.reduce) {
             el.addClass("send-reduce");
         }
     } else {
         el.css("display", "none");
     }
 });
-shower.push("chaise.document.list.type.picker", "type");
+shower.push("chaise.document.list.type.picker", "picked");
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);
