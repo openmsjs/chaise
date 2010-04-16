@@ -43,7 +43,6 @@ var grouping = el.find("select").change(function() {
 });
 
 var shower = msjs(function(msj) {
-msjs.log('shower')
     el.removeClass("has-reduce");
     el.removeClass("reduce-enabled");
     reduce[0].checked = false;

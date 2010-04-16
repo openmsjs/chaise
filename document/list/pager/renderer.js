@@ -17,6 +17,8 @@ var selector = msjs.require("chaise.document.list.pager.selector");
 var makePageLinks = function(el, list, pageSize) {
     el.children().remove();
 
+    if (!list.total_rows) return;
+
     var showCount = 8;
     var lastPage = Math.ceil(list.total_rows/pageSize);
     var currentPage = selector.getMsj();
