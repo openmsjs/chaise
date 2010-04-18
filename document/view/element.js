@@ -5,11 +5,11 @@ msjs.publish($(<div>
     <a href="#" class="run toggle">Run code</a>
     <form>
         <table><tbody>
-            <tr><th>Design document:</th><td>_design/<input name="designName"/></td></tr>
+            <tr><th>Design document:</th><td>_design/<input name="designName" autocomplete="off"/></td></tr>
             <tr>
                 <th>View name:</th>
                 <td>
-                    <input name="viewName"/>
+                    <input name="viewName" autocomplete="off"/>
                     <input type="submit" value="Save"/>
                 </td>
             </tr>

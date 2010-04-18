@@ -11,7 +11,6 @@ runLink.click(function(){
         if (validatedDoc) {
             runner.update(validatedDoc);
         }
-        textarea.focus();
     } catch (e) {
         status.text(e);
     }

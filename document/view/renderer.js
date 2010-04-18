@@ -13,33 +13,34 @@ showLink.click(function(){
     return false;
 });
 
-var textarea = el.find(".editor");
+var editor = el.find(".editor");
 var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
 var initializer = msjs(function(msj) {
     var viewDoc = msj.picked.viewDoc;
-    textarea.text("");
+    editor.text("");
     if (viewDoc) {
         if (!msj.picked.isTempView) stopEdit(true);
         viewDoc.map = eval("(" + viewDoc.map + ")");
         if (viewDoc.reduce) viewDoc.reduce = eval("(" + viewDoc.reduce + ")"); 
         
         $.each(toPrettyJSON(viewDoc).split("\n"), function(i, line) {
-            textarea.append(document.createTextNode(line)).append($("<br/>"));
+            editor.append(document.createTextNode(line)).append($("<br/>"));
         });
     }
+
     el.css("display", viewDoc ? "" : "none");
 });
 initializer.push("chaise.document.list.type.picker", "picked");
 
 
 var startEdit = function(rollback) {
-    textarea.data("rollback", textarea.contents().clone());
-    textarea.attr("contenteditable", "true");
-    textarea.focus();
+    editor.data("rollback", editor.contents().clone());
+    editor.attr("contenteditable", "true");
+    editor.focus();
 
     editLink.text("Cancel edit");
 
-    textarea.keypress(function(event) {
+    editor.keypress(function(event) {
         if (event.keyCode == "27") {
             stopEdit();
             return false;
@@ -55,19 +56,19 @@ var stopEdit = function(ignoreRollback) {
 
     el.removeClass("editing");
 
-    textarea.unbind("keypress");
+    editor.unbind("keypress");
 
-    if (!ignoreRollback && textarea.data("rollback")) {
-        textarea.text("");
-        $.each(textarea.data("rollback"), function(i, content) {
-            textarea.append(content);
+    if (!ignoreRollback && editor.data("rollback")) {
+        editor.text("");
+        $.each(editor.data("rollback"), function(i, content) {
+            editor.append(content);
         });
     }
 
     editLink.text("Edit");
 
-    textarea.blur();
-    textarea.removeAttr("contenteditable");
+    editor.blur();
+    editor.removeAttr("contenteditable");
 
     cancelSave();
     status.text("");

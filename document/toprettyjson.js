@@ -14,7 +14,7 @@ var toPrettyJSON = msjs.publish(function(value, indent) {
             return String(value);
 
         case 'function':
-            return value.toString().split("\n").join(" \n" + indent);
+            return value.toString().split("\n").join("\n" + indent);
 
         case 'object':
             if (!value) return 'null';

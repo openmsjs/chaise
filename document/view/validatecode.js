@@ -24,10 +24,19 @@ var strToFunc = function(func) {
 
     throw "bad function";
 }
-msjs.publish(function(textArea) {
+msjs.publish(function(editor) {
     var doc;
+    var text = "";
+    editor.contents().each(function(i, content) {
+        if (content.nodeName == "#text") {
+            text += content.data;
+        } else if (content.nodeName == "BR") {
+            text += "\n";
+        }
+    });
+
     try {
-        doc = eval("(" + textArea.text().split('\n').join(" ") + ")");
+        doc = eval("(" + text + ")");
     } catch (e) {
         throw "bad json";
     }
@@ -40,7 +49,8 @@ msjs.publish(function(textArea) {
             if (doc.reduce) updateDoc.reduce = funcToStr(doc.reduce, "reduce");   
             doc.map = strToFunc(doc.map);
             if (doc.reduce) doc.reduce = strToFunc(doc.reduce);
-            textArea.text(toPrettyJSON(doc));
+
+            editor.text(toPrettyJSON(doc));
 
             return updateDoc;
         } catch (e) {
