@@ -95,7 +95,7 @@ var selector = msjs(function(msj) {
         $.each(tbody.children(), function(i, row) {
             var doc = $(row).data("doc");
             if (msj.picked.id == doc.id &&
-                msj.picked.key == doc.key) {
+                msjs.toJSON(msj.picked.key) == msjs.toJSON(doc.key)) {
                 $(row).addClass("selected");
                 return false;
             }

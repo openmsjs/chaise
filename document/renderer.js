@@ -2,6 +2,7 @@ var header = $(<div/>)
     .append(msjs.require("chaise.document.list.pagesize.renderer"))
     .append(msjs.require("chaise.document.list.pager.jumperrenderer"))
     .append(msjs.require("chaise.document.list.jumper.renderer"))
+    .append(msjs.require("chaise.document.view.jumper.renderer"))
     .append(msjs.require("chaise.document.view.renderer"));
 
 var dom = msjs.require("msjs.dom");
