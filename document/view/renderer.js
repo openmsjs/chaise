@@ -38,7 +38,6 @@ var startEdit = function(rollback) {
     textarea.focus();
 
     editLink.text("Cancel edit");
-    el.addClass("editing");
 
     textarea.keypress(function(event) {
         if (event.keyCode == "27") {
@@ -46,24 +45,29 @@ var startEdit = function(rollback) {
             return false;
         } 
     });
+
+    el.addClass("editing");
 };
 
 var cancelSave = msjs.require("chaise.document.view.cancelsave");
 var stopEdit = function(ignoreRollback) {
-    textarea.unbind("keypress");
+    if (!el.hasClass("editing")) return;
 
     el.removeClass("editing");
-    editLink.text("Edit");
 
-    textarea.blur();
-    textarea.removeAttr("contenteditable");
+    textarea.unbind("keypress");
 
-    textarea.text("");
     if (!ignoreRollback && textarea.data("rollback")) {
+        textarea.text("");
         $.each(textarea.data("rollback"), function(i, content) {
             textarea.append(content);
         });
     }
+
+    editLink.text("Edit");
+
+    textarea.blur();
+    textarea.removeAttr("contenteditable");
 
     cancelSave();
     status.text("");
