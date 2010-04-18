@@ -102,7 +102,7 @@ var selector = msjs(function(msj) {
         });
     }
 });
-selector.push(picker, "picked");
+selector.pull(selector.depends(picker), "picked");
 selector.depends(renderer);
 
 var dom = msjs.require("msjs.dom");
