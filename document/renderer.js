@@ -20,7 +20,6 @@ var el = msjs.publish($(<div>
 var content = el.children("div")
     .append(msjs.require("chaise.document.create.renderer"))
     .append(msjs.require("chaise.document.list.type.renderer"))
-  //  .append(msjs.require("chaise.document.list.options.renderer"))
     .append(msjs.require("chaise.document.view.reduce.renderer"))
     .append(header)
     .append(msjs.require("chaise.document.list.pager.renderer").find(".top"))
@@ -31,15 +30,16 @@ el.append(msjs.require("chaise.document.detail.renderer")
           .css(msjs.require("chaise.sectioncss")))
           .css("display", "none");
 
-el.children("a.toggle").click(function() {
+var toggle = el.children("a.toggle").click(function() {
     var show = content.css("display") == "none";
-    content.animate({height: "toggle", marginTop: "toggle"}, 250);
-    $(this).text(show ? "Hide document list" : "Show document list");
+    content.animate({height: "toggle", marginTop: "toggle"}, "fast");
+    $(this).text(show ? "Hide documents" : "Show documents");
 });
 
 
 var shower = msjs(function(msj) {
     el.css("display", msj.database ? "block" : "none");
+    if (msj.database && content.css("display") == "none") toggle.click();
 });
 shower.push("chaise.database.list.picker", "database");
 

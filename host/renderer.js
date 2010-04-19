@@ -1,4 +1,3 @@
-var toggle = $();
 var el = msjs.publish($(<div>
     <a class="toggle" href="#">Hide hosts</a>
     <div/>

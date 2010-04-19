@@ -12,12 +12,13 @@ var content = el.children("div")
 
 var shower = msjs(function(msj) {
     el.css("display", msj.host ? "block" : "none");
+    if (msj.host && content.css("display") == "none") toggle.click();
 });
 shower.push("chaise.host.list.picker", "host");
 
-el.children("a.toggle").click(function() {
+var toggle = el.children("a.toggle").click(function() {
     var show = content.css("display") == "none";
-    content.animate({height: "toggle", marginTop: "toggle"}, 250);
+    content.animate({height: "toggle", marginTop: "toggle"}, "fast");
     $(this).text(show ? "Hide databases" : "Show databases");
 });
 
