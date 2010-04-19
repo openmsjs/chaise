@@ -2,7 +2,7 @@ var el = msjs.publish($(<div>
     <span/>
     <table>
         <thead>
-            <tr><th>Host</th></tr>
+            <tr><th>Host</th><th></th></tr>
         </thead>
         <tbody/>
     </table>
@@ -10,6 +10,7 @@ var el = msjs.publish($(<div>
 
 var status = el.find("span");
 var picker = msjs.require("chaise.host.list.picker");
+var defaultSelector = msjs.require("chaise.host.list.default");
 var remover = msjs.require("chaise.host.remove.submitter");
 var tbody = el.find("tbody");
 var renderer = msjs(function(msj) {
@@ -23,11 +24,12 @@ var renderer = msjs(function(msj) {
         status.text("No hosts").css("color", "#FF0000");
     }
 
+    var defaultHost = defaultSelector.getMsj();
     $.each(msj.list, function(i, host) {
-        var row = $("<tr><td></td></tr>").data("host", host).appendTo(tbody);
+        var row = $("<tr/>").data("host", host).appendTo(tbody);
         if (i % 2 == 0) row.addClass("odd");
 
-        var cell = row.find("td");
+        var cell = $("<td/>").appendTo(row);
         $("<a href=\"#\">" + host + "</a>")
             .appendTo(cell)
             .click(function() {
@@ -40,11 +42,25 @@ var renderer = msjs(function(msj) {
                 remover.update(host);
                 return false;
             });
+
+        var defaultCell = $("<td/>").appendTo(row);
+        
+        if (!defaultHost && i == 0 || defaultHost == host) {
+            $("<span>default</span>").appendTo(defaultCell);
+        } else {
+            $("<a href=\"#\">Set as default</a>")
+                .appendTo(defaultCell)
+                .click(function() {
+                    defaultSelector.update(host);
+                    return false;
+                });
+        }
     });
 
     return true;
 });
-renderer.push("chaise.host.list.lister", "list");
+renderer.pull(renderer.depends("chaise.host.list.lister"), "list");
+renderer.depends(defaultSelector);
 
 var selector = msjs(function(msj) {
     tbody.find(".selected").removeClass("selected");
