@@ -18,7 +18,7 @@ input.keydown(function(event) {
 });
 var selector = msjs.require("chaise.document.list.jumper.selector");
 el.submit(function() {
-    var docId = input.val();
+    var docId = $.trim(input.val());
     input.val("");
     selector.update({id: docId, key: docId});
     el.removeClass("jumping");
