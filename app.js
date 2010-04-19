@@ -4,6 +4,7 @@ $(<title>Chaise</title>).appendTo(document.head);
 msjs.require("chaise.header").appendTo("body");
 var css = msjs.require("chaise.sectioncss");
 var el = $(<div/>)
+    .append(msjs.require("chaise.crumb"))
     .append(msjs.require("chaise.host.renderer").css(css))
     .append(msjs.require("chaise.database.renderer").css(css))
     .append(msjs.require("chaise.document.renderer").css(css))
