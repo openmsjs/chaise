@@ -1,3 +1,3 @@
 msjs.publish(msjs(function() {
-    return 25;
+    return 10;
 }));
