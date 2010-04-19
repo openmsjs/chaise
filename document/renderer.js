@@ -13,8 +13,11 @@ dom.addCss(headerCssId, {
 });
 
 
-
-var el = msjs.publish($(<div/>)
+var el = msjs.publish($(<div>
+    <a class="toggle" href="#">Hide document list</a>
+    <div/>
+</div>));
+var content = el.children("div")
     .append(msjs.require("chaise.document.create.renderer"))
     .append(msjs.require("chaise.document.list.type.renderer"))
   //  .append(msjs.require("chaise.document.list.options.renderer"))
@@ -23,10 +26,17 @@ var el = msjs.publish($(<div/>)
     .append(msjs.require("chaise.document.list.pager.renderer").find(".top"))
     .append(msjs.require("chaise.document.list.renderer"))
     .append(msjs.require("chaise.document.list.pager.renderer").find(".bottom"))
-    .append(msjs.require("chaise.document.detail.renderer")
+    .css("marginTop", "5px");
+el.append(msjs.require("chaise.document.detail.renderer")
           .css(msjs.require("chaise.sectioncss")))
-          .css("display", "none")
-);
+          .css("display", "none");
+
+el.children("a.toggle").click(function() {
+    var show = content.css("display") == "none";
+    content.animate({height: "toggle", marginTop: "toggle"}, 250);
+    $(this).text(show ? "Hide document list" : "Show document list");
+});
+
 
 var shower = msjs(function(msj) {
     el.css("display", msj.database ? "block" : "none");

@@ -1,14 +1,26 @@
-var el = msjs.publish($(<div/>).css("display", "none"));
+var el = msjs.publish($(<div>
+    <a class="toggle" href="#">Hide databases</a>
+    <div/>
+</div>).css("display", "none"));
 var createRenderer = msjs.require("chaise.database.create.renderer");
 var loadRenderer = msjs.require("chaise.database.import.renderer");
-el.append(createRenderer)
-  .append(loadRenderer)
-  .append(msjs.require("chaise.database.list.renderer"));
+var content = el.children("div")
+    .append(createRenderer)
+    .append(loadRenderer)
+    .append(msjs.require("chaise.database.list.renderer"))
+    .css("marginTop", "5px");
 
 var shower = msjs(function(msj) {
     el.css("display", msj.host ? "block" : "none");
 });
 shower.push("chaise.host.list.picker", "host");
+
+el.children("a.toggle").click(function() {
+    var show = content.css("display") == "none";
+    content.animate({height: "toggle", marginTop: "toggle"}, 250);
+    $(this).text(show ? "Hide databases" : "Show databases");
+});
+
 
 var dom = msjs.require("msjs.dom");
 dom.addCss(dom.getCssId(createRenderer[0]) + "," +
