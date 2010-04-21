@@ -15,18 +15,20 @@ var el = msjs.publish($(<div>
 
 var tbody = el.find("tbody");
 var status = el.find(".status");
+var lister = msjs.require("chaise.database.list.lister");
 var picker = msjs.require("chaise.database.list.picker");
-var remover = msjs.require("chaise.database.remove.submitter");
-var renderer = msjs(function(msj) {
+var submitter = msjs.require("chaise.database.remove.submitter");
+var renderer = msjs(function() {
     tbody.children().remove();
-    if (msj.list.length) {
+    var list = lister();
+    if (list.length) {
         el.removeClass("no-results");
         status.text("").css("color", "");
     } else {
         el.addClass("no-results");
         status.text("No databases").css("color", "#FF0000");
     }
-    $.each(msj.list, function(i, info) {
+    $.each(list, function(i, info) {
         var row = $("<tr>" +
           "<td></td>" +
           "<td>" + info.disk_size + "</td>" +
@@ -38,7 +40,7 @@ var renderer = msjs(function(msj) {
 
         var cell = row.find("td:first-child");
 
-        if (msj.picked == info.db_name) {
+        if (picker() == info.db_name) {
             row.addClass("selected");
         }
 
@@ -51,27 +53,24 @@ var renderer = msjs(function(msj) {
         $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">Delete</a>")
             .appendTo(cell)
             .click(function() {
-                remover.update(info.db_name);
+                submitter.update(info.db_name);
                 if (row.hasClass("selected")) {
                     picker.update(null);
                 }
                 return false;
             });
     });
-});
-renderer.push("chaise.database.list.lister", "list");
-renderer.pull(picker, "picked");
+}).depends(lister);
 
-var selector = msjs(function(msj) {
+var selector = msjs(function() {
     tbody.find(".selected").removeClass("selected");
     $.each(tbody.children(), function(i, row) {
-        if (msj.picked == $(row).data("database")) {
+        if (picker() == $(row).data("database")) {
             $(row).addClass("selected");
             return false;
         }
     });
-});
-selector.push(picker, "picked");
+}).depends(picker);
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);

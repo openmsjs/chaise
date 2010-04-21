@@ -1,5 +1,4 @@
-var descending = msjs.publish(msjs(function() {
+msjs.publish(msjs(function() {
     return false;
-}));
-descending.depends("chaise.database.list.picker");
+}).depends("chaise.database.list.picker"));
 

@@ -5,15 +5,16 @@ var el = msjs.publish($(<div>
 
 var topEl = el.find(".top");
 var bottomEl = el.find(".bottom");
-var renderer = msjs(function(msj) {
-    makePageLinks(topEl, msj.list, msj.pageSize);
-    makePageLinks(bottomEl, msj.list, msj.pageSize);
-});
-renderer.push("chaise.document.list.lister", "list");
-renderer.pull("chaise.document.list.pagesize.selector", "pageSize");
-renderer.pull("chaise.document.list.pager.selector", "currentPage");
+var lister = msjs.require("chaise.document.list.lister");
+var sizeSelector = msjs.require("chaise.document.list.pagesize.selector");
+msjs(function(msj) {
+    var list = lister();
+    var pageSize = sizeSelector();
+    makePageLinks(topEl, list, pageSize);
+    makePageLinks(bottomEl, list, pageSize);
+}).depends(lister);
 
-var selector = msjs.require("chaise.document.list.pager.selector");
+var pageSelector = msjs.require("chaise.document.list.pager.selector");
 var makePageLinks = function(el, list, pageSize) {
     el.children().remove();
 
@@ -21,7 +22,7 @@ var makePageLinks = function(el, list, pageSize) {
 
     var showCount = 8;
     var lastPage = Math.ceil(list.total_rows/pageSize);
-    var currentPage = selector.getMsj();
+    var currentPage = pageSelector();
     var startPage = currentPage - showCount;
     if (startPage < 1) startPage = 1;
     var endPage   = currentPage + showCount - 1;
@@ -34,7 +35,7 @@ var makePageLinks = function(el, list, pageSize) {
         previous = $("<a href=\"#\">Previous</a>")
             .appendTo(el)
             .click(function() {
-                selector.update(currentPage-1);
+                pageSelector.update(currentPage-1);
                 return false;
             });
     } else {
@@ -46,7 +47,7 @@ var makePageLinks = function(el, list, pageSize) {
         next = $("<a href=\"#\">Next</a>")
             .appendTo(el)
             .click(function() {
-                selector.update(currentPage+1);
+                pageSelector.update(currentPage+1);
                 return false;
             });
     } else {
@@ -63,7 +64,7 @@ var makePageLinks = function(el, list, pageSize) {
             .addClass("button")
             .click(function() {
                  if (!$(this).hasClass("selected")) {
-                     selector.update(Number($(this).text()));
+                     pageSelector.update(Number($(this).text()));
                      return false;
                  }
              });

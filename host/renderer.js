@@ -12,5 +12,6 @@ el.children("a.toggle").click(function() {
     var show = content.css("display") == "none";
     content.animate({height: "toggle", marginTop: "toggle"}, 250);
     $(this).text(show ? "Hide hosts" : "Show hosts");
+    return false;
 });
 

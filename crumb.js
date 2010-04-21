@@ -11,22 +11,19 @@ var documentPicker = msjs.require("chaise.document.list.picker");
 var shower = msjs(function() {
     var url = "";
 
-    var host = hostPicker.getMsj();
+    var host = hostPicker();
     if (host) url += "http://" + host;
 
-    var database = databasePicker.getMsj();
+    var database = databasePicker();
     if (database) url += "/" + database;
 
 
-    var document = documentPicker.getMsj();
+    var document = documentPicker();
     if (document) url += "/" + document.id;
 
     span.text(url + " ");
     link.attr("href", url);
-});
-shower.depends(hostPicker);
-shower.depends(databasePicker);
-shower.depends(documentPicker);
+}).depends(hostPicker, databasePicker, documentPicker);
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);

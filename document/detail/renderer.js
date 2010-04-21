@@ -17,13 +17,10 @@ var startEdit = function(rollback) {
     }, 500);
     form.addClass("editing");
 };
-var renderer = msjs(function(msj) {
-    var doc = msj.info;
+var info = msjs.require("chaise.document.detail.info");
+var renderer = msjs(function() {
+    var doc = info();
     if (doc != (void 0)) {
-        if (doc && msj.updated && isSuccess(msj.updated)) {
-            doc._id = msj.updated.result.id;
-            doc._rev = msj.updated.result.rev;
-        }
         if (doc) {
             textarea.text(toPrettyJSON(doc));
             if (!doc._id) startEdit("");
@@ -31,13 +28,12 @@ var renderer = msjs(function(msj) {
             textarea.text("");
         }
     }
-});
-renderer.push("chaise.document.detail.info", "info");
+}).depends(info);
 
-var shower = msjs(function(msj) {
-    form.css("display", msj.picked ? "" : "none");
-});
-shower.push("chaise.document.list.picker", "picked");
+var picker = msjs.require("chaise.document.list.picker");
+var shower = msjs(function() {
+    form.css("display", picker() ? "" : "none");
+}).depends(picker);
 
 
 form.find("a").click(function(){

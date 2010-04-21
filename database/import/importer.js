@@ -1,8 +1,10 @@
-var couchServer = msjs.require("chaise.couch.server");
+var server = msjs.require("chaise.couch.server");
+var submitter = msjs.require("chaise.database.import.submitter");
+var picker = msjs.require("chaise.host.list.picker");
 var isSuccess = msjs.require("chaise.couch.issuccess");
-var importer = msjs.publish(msjs(function(msj) {
+var importer = msjs.publish(msjs(function() {
     var dbParam = "_all"; // do all for now
-    var couchData = msjs.require(msj.packageName);
+    var couchData = msjs.require(submitter());
     var dbNames = (function() {
         var dbNames = null;
         if (dbParam == "_all") {
@@ -15,7 +17,7 @@ var importer = msjs.publish(msjs(function(msj) {
     })();
 
     var reset = false; // only allow reload for now
-    var couch = new couchServer(msj.host);
+    var couch = new server(picker());
     jQuery.each(dbNames, function(i, dbName) {
         var db = couch.getDatabase(dbName);
 
@@ -47,7 +49,4 @@ var importer = msjs.publish(msjs(function(msj) {
     });
 
     return true;
-}));
-importer.packMe = false;
-importer.push("chaise.database.import.submitter", "packageName");
-importer.pull("chaise.host.list.picker", "host");
+}).setPack(false).depends(submitter));

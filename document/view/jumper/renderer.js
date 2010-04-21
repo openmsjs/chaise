@@ -28,11 +28,11 @@ el.submit(function() {
 var picker = msjs.require("chaise.document.list.type.picker");
 var reduce = msjs.require("chaise.document.view.reduce.submitter");
 var shower = msjs(function() {
-    var isReduced = reduce.getMsj() != null && reduce.getMsj().reduce;
-    el.css("display", picker.getMsj().type == "view" && !isReduced ? "" : "none");
-});
-shower.depends(picker);
-shower.depends(reduce);
+    var reduced = reduce();
+    var isReduced = reduced != null && reduced.reduce;
+    el.css("display", picker().type == "view" && !isReduced ? "" : "none");
+}).depends(picker, reduce);
+
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);

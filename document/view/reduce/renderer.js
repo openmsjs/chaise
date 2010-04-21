@@ -42,21 +42,22 @@ var grouping = el.find("select").change(function() {
     submitter.update(options);
 });
 
-var shower = msjs(function(msj) {
+var shower = msjs(function() {
     el.removeClass("has-reduce");
     el.removeClass("reduce-enabled");
     reduce[0].checked = false;
-    if (msj.options) {
+    var options = submitter();
+    if (options) {
         el.css("display", "");
-        if (msj.options.reduce) {
+        if (options.reduce) {
             reduce[0].checked = true;
             el.addClass("has-reduce");
             el.addClass("reduce-enabled");
 
-            if (msj.options.group) {
+            if (options.group) {
                grouping.find("[value=exact]")[0].selected = true;
-            } else if (msj.options.group_level) {
-               grouping.find("[value=" +msj.options.group_level + "]")[0].selected = true;
+            } else if (options.group_level) {
+               grouping.find("[value=" +options.group_level + "]")[0].selected = true;
             } else {
                grouping.find("[value=none]")[0].selected = true;
             }
@@ -65,8 +66,7 @@ var shower = msjs(function(msj) {
         el.css("display", "none");
     }
 
-});
-shower.push(submitter, "options");
+}).depends(submitter);
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);

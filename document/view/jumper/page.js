@@ -1,6 +1,5 @@
-var pageSizeSelector = msjs.require("chaise.document.list.pagesize.selector");
-var page = msjs.publish(msjs(function(msj) {
-    var pageSize = pageSizeSelector.getMsj();
-    return Math.floor(msj.viewInfo.offset / pageSize) + 1;
-}));
-page.push("chaise.document.view.jumper.viewinfo", "viewInfo");
+var pageSize = msjs.require("chaise.document.list.pagesize.selector");
+var viewInfo = msjs.require("chaise.document.view.jumper.viewinfo");
+msjs.publish(msjs(function() {
+    return Math.floor(viewInfo().offset / pageSize()) + 1;
+}).depends(viewInfo));

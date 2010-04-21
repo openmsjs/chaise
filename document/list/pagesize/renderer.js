@@ -6,7 +6,6 @@ var el = msjs.publish($(<div>
     <a name="100" class="button" href="#">100</a>
 </div>));
 
-var selector = msjs.require("chaise.document.list.pagesize.selector");
 el.find("a.toggle").click(function() {
     if (el.hasClass("editing")) {
         el.removeClass("editing");
@@ -15,17 +14,20 @@ el.find("a.toggle").click(function() {
     }
     return false;
 });
+
+var sizeSelector = msjs.require("chaise.document.list.pagesize.selector");
 el.find("a.button").click(function() {
-    selector.update(Number(this.name));
+    sizeSelector.update(Number(this.name));
     el.removeClass("editing");
     return false;
 });
-var renderer = msjs(function(msj) {
+msjs(function(msj) {
+    var pageSize = sizeSelector();
     el.find(".selected").removeClass("selected");
-    el.find("a[name=" + msj.pageSize + "]").addClass("selected");
-    el.find("a.toggle").text("Rows: " + msj.pageSize);
-});
-renderer.push(selector, "pageSize");
+    el.find("a[name=" + pageSize + "]").addClass("selected");
+    el.find("a.toggle").text("Rows: " + pageSize);
+}).depends(sizeSelector);
+
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);

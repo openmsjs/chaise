@@ -1,5 +1,5 @@
-var submitter = msjs.publish(msjs(function(msj) {
-    return msj.picked.viewDoc && msj.picked.viewDoc.reduce ? {} : null;
-}));
-submitter.depends("chaise.database.list.picker");
-submitter.pull(submitter.depends("chaise.document.list.type.picker"), "picked");
+var typePicker = msjs.require("chaise.document.list.type.picker");
+msjs.publish(msjs(function(msj) {
+    var picked = typePicker();
+    return picked.viewDoc && picked.viewDoc.reduce ? {} : null;
+}).depends(typePicker, "chaise.database.list.picker"));

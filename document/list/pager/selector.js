@@ -1,10 +1,10 @@
-var selector = msjs.publish(msjs(function(msj) {
-    if (msj.documentPage) return msj.documentPage;
-    if (msj.viewPage) return msj.viewPage;
+var documentPage = msjs.require("chaise.document.list.jumper.page");
+var viewPage = msjs.require("chaise.document.view.jumper.page");
+msjs.publish(msjs(function() {
+    if (documentPage.isUpdated()) return documentPage();
+    if (viewPage.isUpdated()) return viewPage();
     return 1;
-}));
-selector.depends("chaise.database.list.picker");
-selector.depends("chaise.document.list.pagesize.selector");
-selector.depends("chaise.document.list.type.picker");
-selector.push("chaise.document.list.jumper.page", "documentPage");
-selector.push("chaise.document.view.jumper.page", "viewPage");
+}).depends(documentPage, viewPage,
+    "chaise.database.list.picker", 
+    "chaise.document.list.pagesize.selector",
+    "chaise.document.list.type.picker"));

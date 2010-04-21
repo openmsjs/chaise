@@ -13,10 +13,12 @@ var picker = msjs.require("chaise.host.list.picker");
 var defaultSelector = msjs.require("chaise.host.list.default");
 var remover = msjs.require("chaise.host.remove.submitter");
 var tbody = el.find("tbody");
+var lister = msjs.require("chaise.host.list.lister");
 var renderer = msjs(function(msj) {
     tbody.children().remove();
 
-    if (msj.list.length) {
+    var list = lister();
+    if (list.length) {
         el.removeClass("no-results");
         status.text("").css("color", "");
     } else {
@@ -25,7 +27,7 @@ var renderer = msjs(function(msj) {
     }
 
     var defaultHost = defaultSelector.getMsj();
-    $.each(msj.list, function(i, host) {
+    $.each(list, function(i, host) {
         var row = $("<tr/>").data("host", host).appendTo(tbody);
         if (i % 2 == 0) row.addClass("odd");
 
@@ -58,21 +60,19 @@ var renderer = msjs(function(msj) {
     });
 
     return true;
-});
-renderer.pull(renderer.depends("chaise.host.list.lister"), "list");
-renderer.depends(defaultSelector);
+}).depends(lister, defaultSelector);
 
-var selector = msjs(function(msj) {
+
+var selector = msjs(function() {
     tbody.find(".selected").removeClass("selected");
+    var picked = picker();
     $.each(tbody.children(), function(i, row) {
-        if (msj.picked == $(row).data("host")) {
+        if (picked == $(row).data("host")) {
             $(row).addClass("selected");
             return false;
         }
     });
-});
-selector.push(picker, "picked");
-selector.depends(renderer);
+}).depends(picker, renderer);
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);

@@ -1,9 +1,8 @@
-var picker = msjs.publish(msjs(function(msj) {
-    if (msj.jumpDoc) return msj.jumpDoc;
-    if (msj.jumpView) return msj.jumpView;
+var jumpDoc = msjs.require("chaise.document.list.jumper.selector");
+var jumpView = msjs.require("chaise.document.view.jumper.view");
+msjs.publish(msjs(function(msj) {
+    if (jumpDoc.isUpdated()) return jumpDoc();
+    if (jumpView.isUpdated()) return jumpView();
     return null;
-}));
-picker.push("chaise.document.list.jumper.selector", "jumpDoc");
-picker.push("chaise.document.view.jumper.view", "jumpView");
-picker.depends("chaise.database.list.picker");
-picker.depends("chaise.document.list.type.picker");
+}).depends(jumpDoc, jumpView, "chaise.database.list.picker",
+     "chaise.document.list.type.picker"));

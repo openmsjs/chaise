@@ -9,14 +9,18 @@ var el = msjs.publish($(<div>
 var thead = el.find("thead");
 var tbody = el.find("tbody.list");
 var status = el.find(".status");
-var picker = msjs.require("chaise.document.list.picker");
-var remover = msjs.require("chaise.document.remove.submitter");
 var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
+var listPicker = msjs.require("chaise.document.list.picker");
 var descending = msjs.require("chaise.document.list.descending");
-var renderer = msjs(function(msj) {
+var submitter = msjs.require("chaise.document.remove.submitter");
+var lister = msjs.require("chaise.document.list.lister");
+var typePicker = msjs.require("chaise.document.list.type.picker");
+var emptyList = {rows:[]};
+var renderer = msjs(function() {
     thead.children().remove();
     tbody.children().remove();
-    var list = msj.list;
+
+    var list = lister.isUpdated() ? lister() : emptyList;
     if (list.rows.length) {
         el.removeClass("no-results");
         status.text("").css("color", "");
@@ -25,9 +29,10 @@ var renderer = msjs(function(msj) {
         status.text("No documents").css("color", "#FF0000");
     }
 
-    if (!msj.picked) return;
+    var picked = typePicker();
+    if (!picked) return;
 
-    var isView = msj.picked.type == "view";
+    var isView = picked.type == "view";
     var hasKeys = false;
     $.each(list.rows, function(i, doc) {
         var row = $("<tr/>").appendTo(tbody).data("doc", doc);
@@ -37,7 +42,7 @@ var renderer = msjs(function(msj) {
 
         if (!isView) {
             var num = i+list.offset+1;
-            if (msj.descending) num = list.total_rows - num + 1;
+            if (descending()) num = list.total_rows - num + 1;
             row.append("<td class=\"count\">" + num + "</td>");
         }
 
@@ -46,7 +51,7 @@ var renderer = msjs(function(msj) {
             $("<a href=\"#\">" + (isView ? toPrettyJSON(doc.key) : doc.id) + "<a>")
                 .appendTo(cell)
                 .click(function() {
-                    picker.update(doc);
+                    listPicker.update(doc);
                     return false;
                 });
         }
@@ -55,7 +60,7 @@ var renderer = msjs(function(msj) {
             $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">Delete</a>")
                 .appendTo(cell)
                 .click(function() {
-                    remover.update({_id: doc.id, _rev: doc.value.rev});
+                    submitter.update({_id: doc.id, _rev: doc.value.rev});
                     return false;
                 });
             if (isView) {
@@ -68,7 +73,7 @@ var renderer = msjs(function(msj) {
         row.append("<td>" + (isView ? toPrettyJSON(doc.value) : doc.value.rev) + "</td>");
     });
 
-    var arrow = msj.descending ? "&darr;" : "&uarr;";
+    var arrow = descending() ? "&darr;" : "&uarr;";
     if (isView) {
         if (hasKeys) {
             $("<tr><th>key <span class=\"arrow\">" + arrow + "<span></th><th>value</th></tr>").appendTo(thead);
@@ -80,30 +85,28 @@ var renderer = msjs(function(msj) {
     }
 
     thead.unbind("click").click(function() {
-        descending.update(!msj.descending);
+        descending.update(!descending());
     });
 
     return true;
-});
-renderer.push("chaise.document.list.lister", "list");
-renderer.pull("chaise.document.list.type.picker", "picked");
-renderer.pull(descending, "descending");
+}).depends(lister);
 
-var selector = msjs(function(msj) {
+
+//selector
+msjs(function() {
     tbody.find(".selected").removeClass("selected");
-    if (msj.picked) {
+    var picked = listPicker();
+    if (picked) {
         $.each(tbody.children(), function(i, row) {
             var doc = $(row).data("doc");
-            if (msj.picked.id == doc.id &&
-                msjs.toJSON(msj.picked.key) == msjs.toJSON(doc.key)) {
+            if (picked.id == doc.id &&
+                msjs.toJSON(picked.key) == msjs.toJSON(doc.key)) {
                 $(row).addClass("selected");
                 return false;
             }
         });
     }
-});
-selector.pull(selector.depends(picker), "picked");
-selector.depends(renderer);
+}).depends(renderer, listPicker);
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);

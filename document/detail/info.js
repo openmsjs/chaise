@@ -1,16 +1,24 @@
+var server = msjs.require("chaise.couch.server");
+var dbPicker = msjs.require("chaise.database.list.picker");
+var hostPicker = msjs.require("chaise.host.list.picker");
 var isSuccess = msjs.require("chaise.couch.issuccess");
-var couchServer = msjs.require("chaise.couch.server");
-var list = msjs.publish(msjs(function(msj) {
-    if (!msj.host) return;
-    if (!msj.dbName) return;
+var docPicker = msjs.require("chaise.document.list.picker");
+var docUpdater = msjs.require("chaise.document.detail.updater");
+msjs.publish(msjs(function() {
+    var host = hostPicker();
+    var dbName = dbPicker();
+    if (!host) return;
+    if (!dbName) return;
 
-    var db = new couchServer(msj.host).getDatabase(msj.dbName);
+    var db = new server(host).getDatabase(dbName);
     var docId = null;
-    if (msj.picked) {
-        docId = msj.picked.id;
-    } else if (msj.updated) {
-        if (isSuccess(msj.updated)) {
-            docId = msj.updated.result.id;
+    var info = docPicker.isUpdated() && docPicker();
+    var updated = docUpdater.isUpdated() && docUpdater();
+    if (info) {
+        docId = info.id;
+    } else if (updated) {
+        if (isSuccess(updated)) {
+            docId = updated.result.id;
         }
         // TODO: send update error to client
     } else {
@@ -24,9 +32,5 @@ var list = msjs.publish(msjs(function(msj) {
     } else {
         return {};
     }
-}));
-list.packMe = false;
-list.push("chaise.document.list.picker", "picked");
-list.push("chaise.document.detail.updater", "updated");
-list.pull("chaise.database.list.picker", "dbName");
-list.pull("chaise.host.list.picker", "host");
+}).setPack(false).depends(docPicker, docUpdater));
+

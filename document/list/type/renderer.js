@@ -12,9 +12,10 @@ el.find("a[name]").addClass("button").click(function() {
 });
 
 var views = el.find(".views");
-var designDocs = msjs(function(msj) {
+var docs = msjs.require("chaise.document.list.type.designdocs");
+msjs(function() {
     views.find(".design").remove();
-    $.each(msj.docs, function(i, doc){
+    $.each(docs(), function(i, doc){
         var designName = doc._id.substring(8);
         var design = $("<div><span>" + designName + "</span>: <span/></div>")
                          .addClass("design")
@@ -36,24 +37,25 @@ var designDocs = msjs(function(msj) {
                 });
         }
     });
-});
-designDocs.push("chaise.document.list.type.designdocs", "docs");
+}).depends(docs);
 
-var selector = msjs(function(msj) {
+
+msjs(function(msj) {
     el.find(".selected").removeClass("selected");
-    if (!msj.picked) return;
+    var picked = picker();
+    if (!picked) return;
     var selected = null;
-    switch (msj.picked.type) {
+    switch (picked.type) {
         case "allDocs": 
         case "allDesignDocs":
-            selected = el.find("[name=" + msj.picked.type + "]");
+            selected = el.find("[name=" + picked.type + "]");
             break;
         case "view":
             var views = el.find("a.view");
             $.each(views, function(i, view) {
                 var designName = $(view).data("design");
-                if (msj.picked.designName == designName &&
-                    msj.picked.viewName == $(view).text()) {
+                if (picked.designName == designName &&
+                    picked.viewName == $(view).text()) {
                     selected = $(view);
                     return false;
                 }
@@ -61,8 +63,7 @@ var selector = msjs(function(msj) {
             break;
     }
     if (selected) selected.addClass("selected");
-});
-selector.push(picker, "picked");
+}).depends(picker);
 
 
 var cssId = dom.getCssId(el[0]);

@@ -26,10 +26,9 @@ el.submit(function() {
 });
 
 var picker = msjs.require("chaise.document.list.type.picker");
-var shower = msjs(function() {
-    el.css("display", picker.getMsj().type == "view" ? "none" : "");
-});
-shower.depends(picker);
+msjs(function() {
+    el.css("display", picker().type == "view" ? "none" : "");
+}).depends(picker);
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);

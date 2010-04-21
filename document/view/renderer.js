@@ -15,11 +15,13 @@ showLink.click(function(){
 
 var editor = el.find(".editor");
 var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
-var initializer = msjs(function(msj) {
-    var viewDoc = msj.picked.viewDoc;
+var picker = msjs.require("chaise.document.list.type.picker");
+var initializer = msjs(function() {
+    var picked = picker();
+    var viewDoc = picked.viewDoc;
     editor.text("");
     if (viewDoc) {
-        if (!msj.picked.isTempView) stopEdit(true);
+        if (!picked.isTempView) stopEdit(true);
         viewDoc.map = eval("(" + viewDoc.map + ")");
         if (viewDoc.reduce) viewDoc.reduce = eval("(" + viewDoc.reduce + ")"); 
         
@@ -29,8 +31,7 @@ var initializer = msjs(function(msj) {
     }
 
     el.css("display", viewDoc ? "" : "none");
-});
-initializer.push("chaise.document.list.type.picker", "picked");
+}).depends(picker);
 
 
 var startEdit = function(rollback) {
@@ -88,10 +89,9 @@ editLink.click(function(){
 
 
 var saver = msjs.require("chaise.document.view.saver");
-var saveHandler = msjs(function(msj) {
-    status.text(msj.response.status);
-}); 
-saveHandler.push(saver, "response");
+msjs(function(msj) {
+    status.text(saver().status);
+}).depends(saver); 
 
 
 var dom = msjs.require("msjs.dom");

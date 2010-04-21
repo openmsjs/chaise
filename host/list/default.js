@@ -1,10 +1,9 @@
 var cookies = msjs.require("chaise.host.list.cookies");
+var list = msjs.require("chaise.host.list.lister");
 var selector = msjs.publish(msjs(function(msj) {
-    return cookies.get("defaultHost") || msj.list[0] || null;
-}));
-selector.pull(selector.depends("chaise.host.list.lister"), "list");
+    return cookies.get("defaultHost") || list()[0] || null;
+}).depends(list));
 
-var setter = msjs(function(msj) {
-    cookies.set("defaultHost", msj.selected, -1);
-});
-setter.push(selector, "selected");
+msjs(function(msj) {
+    cookies.set("defaultHost", selector(), -1);
+}).depends(selector);

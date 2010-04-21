@@ -1,12 +1,12 @@
-var couchServer = msjs.require("chaise.couch.server");
+var server = msjs.require("chaise.couch.server");
+var picker = msjs.require("chaise.host.list.picker");
 var isSuccess = msjs.require("chaise.couch.issuccess");
-var hostPicker = msjs.require("chaise.host.list.picker");
-var list = msjs.publish(msjs(function() {
-    var host = hostPicker.getMsj();
+msjs.publish(msjs(function() {
+    var host = picker();
     if (!host) return [];
 
     var list = [];
-    var couch = new couchServer(host);
+    var couch = new server(host);
     var response = couch.getDatabaseList();       
     if (isSuccess(response)) {
         $.each(response.result, function(i, dbName) {
@@ -18,9 +18,8 @@ var list = msjs.publish(msjs(function() {
         });
     }
     return list;
-}));
-list.depends(hostPicker);
-list.depends("chaise.database.create.creator");
-list.depends("chaise.database.remove.remover");
-list.depends("chaise.database.import.importer");
-list.packMe = false;
+}).setPack(false)
+.depends(picker,
+         "chaise.database.create.creator", 
+         "chaise.database.remove.remover",
+         "chaise.database.import.importer"));

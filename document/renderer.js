@@ -34,12 +34,13 @@ var toggle = el.children("a.toggle").click(function() {
     var show = content.css("display") == "none";
     content.animate({height: "toggle", marginTop: "toggle"}, "fast");
     $(this).text(show ? "Hide documents" : "Show documents");
+    return false;
 });
 
 
-var shower = msjs(function(msj) {
-    el.css("display", msj.database ? "block" : "none");
-    if (msj.database && content.css("display") == "none") toggle.click();
-});
-shower.push("chaise.database.list.picker", "database");
-
+var picker = msjs.require("chaise.database.list.picker");
+msjs(function() {
+    var database = picker();
+    el.css("display", database ? "block" : "none");
+    if (database && content.css("display") == "none") toggle.click();
+}).depends(picker);

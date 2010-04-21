@@ -1,7 +1,6 @@
 var el = msjs.publish($(<form>
     <label><a href="#" class="toggle">Jump to page</a> <input name="page" autocomplete="off"/></label>
 </form>));
-var selector = msjs.require("chaise.document.list.pager.selector");
 
 var input = el.find("input");
 var toggle = el.find(".toggle");
@@ -17,6 +16,8 @@ toggle.click(function() {
 input.keydown(function(event) {
     if (event.keyCode == 27) toggle.click();
 });
+
+var page = msjs.require("chaise.document.list.pager.selector");
 el.submit(function() {
     var page = Number(input.val());
     if (isNaN(page)) {
@@ -30,15 +31,17 @@ el.submit(function() {
         page = lastPage;
     }
     input.val("");
-    selector.update(page);
+    page.update(page);
     el.removeClass("jumping");
     return false;
 });
 
-var renderer = msjs(function(msj) {
+var list = msjs.require("chaise.document.list.lister");
+var pageSize = msjs.require("chaise.document.list.pagesize.selector");
+var renderer = msjs(function() {
     var showCount = 8;
-    var lastPage = Math.ceil(msj.list.total_rows/msj.pageSize);
-    var currentPage = selector.getMsj();
+    var lastPage = Math.ceil(list().total_rows/pageSize());
+    var currentPage = page();
     var startPage = currentPage - showCount;
     if (startPage < 1) startPage = 1;
     var endPage   = currentPage + showCount - 1;
@@ -46,9 +49,7 @@ var renderer = msjs(function(msj) {
     el.data("lastPage", lastPage);
 
     el.css("display", startPage == endPage ? "none" : "");
-});
-renderer.push("chaise.document.list.lister", "list");
-renderer.pull("chaise.document.list.pagesize.selector", "pageSize");
+}).depends(list);
 
 var dom = msjs.require("msjs.dom");
 var cssId = dom.getCssId(el[0]);

@@ -10,16 +10,18 @@ var content = el.children("div")
     .append(msjs.require("chaise.database.list.renderer"))
     .css("marginTop", "5px");
 
-var shower = msjs(function(msj) {
-    el.css("display", msj.host ? "block" : "none");
-    if (msj.host && content.css("display") == "none") toggle.click();
-});
-shower.push("chaise.host.list.picker", "host");
+var hostPicker = msjs.require("chaise.host.list.picker");
+var shower = msjs(function() {
+    var host = hostPicker();
+    el.css("display", host ? "block" : "none");
+    if (host && content.css("display") == "none") toggle.click();
+}).depends(hostPicker);
 
 var toggle = el.children("a.toggle").click(function() {
     var show = content.css("display") == "none";
     content.animate({height: "toggle", marginTop: "toggle"}, "fast");
     $(this).text(show ? "Hide databases" : "Show databases");
+    return false;
 });
 
 

@@ -11,18 +11,19 @@ var getHosts = function() {
     }
     return hosts;
 };
-var list = msjs.publish(msjs(function(msj) {
+var add = msjs.require("chaise.host.add.submitter");
+var remove = ("chaise.host.remove.submitter");
+var lister = msjs.publish(msjs(function() {
     var hosts = getHosts();
-    if (msj.add) {
-        hosts.push(msj.add);
-    } else if (msj.remove) {
-        hosts.splice(hosts.indexOf(msj.remove), 1);
+    if (add.isUpdated()) {
+        hosts.push(add());
+    } else if (remove.isUpdated()) {
+        hosts.splice(hosts.indexOf(remove()), 1);
     }
     cookies.set("hosts", msjs.toJSON(hosts), -1);
     return hosts;
-}));
-list.push("chaise.host.add.submitter", "add");
-list.push("chaise.host.remove.submitter", "remove");
-list.onLoad = function() {
+}).depends(add, remove));
+
+lister.onLoad = function() {
     this.update(getHosts());
 };

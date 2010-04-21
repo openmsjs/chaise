@@ -1,8 +1,6 @@
-var couchServer = msjs.require("chaise.couch.server");
-var creator = msjs.publish(msjs(function(msj) {
-    var couch = new couchServer(msj.host);
-    return couch.getDatabase(msj.dbName).remove();
-}));
-creator.packMe = false;
-creator.push("chaise.database.remove.submitter", "dbName");
-creator.pull("chaise.host.list.picker", "host");
+var server = msjs.require("chaise.couch.server");
+var picker = msjs.require("chaise.host.list.picker");
+var submitter = msjs.require("chaise.database.remove.submitter");
+msjs.publish(msjs(function() {
+    (new server(picker())).getDatabase(submitter()).remove();
+}).setPack(false).depends(submitter));

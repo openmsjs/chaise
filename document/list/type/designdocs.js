@@ -1,9 +1,12 @@
 var couchServer = msjs.require("chaise.couch.server");
 var isSuccess = msjs.require("chaise.couch.issuccess");
-var docs = msjs.publish(msjs(function(msj) {
-    if (!msj.host) return;
+var dbName = msjs.require("chaise.database.list.picker");
+var hostPicker = msjs.require("chaise.host.list.picker");
+msjs.publish(msjs(function(msj) {
+    var host = hostPicker();
+    if (!host) return;
 
-    var db = new couchServer(msj.host).getDatabase(msj.dbName);
+    var db = new couchServer(host).getDatabase(dbName());
     var response = db.getAllDocuments({startkey: "_design/",
                                       endkey: "_design0",
                                       include_docs: true});
@@ -12,8 +15,4 @@ var docs = msjs.publish(msjs(function(msj) {
             return row.doc;
         });
     }
-}));
-docs.packMe = false;
-docs.pull(docs.depends("chaise.database.list.picker"), "dbName");
-docs.pull("chaise.host.list.picker", "host");
-docs.depends("chaise.document.view.saver"); // check to see if view's reduce has changed
+}).setPack(false).depends(dbName, "chaise.document.view.saver"));

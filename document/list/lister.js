@@ -1,23 +1,32 @@
+var server = msjs.require("chaise.couch.server");
+var dbPicker = msjs.require("chaise.database.list.picker");
+var reduceOpts = msjs.require("chaise.document.view.reduce.submitter");
+var picked = msjs.require("chaise.document.list.type.picker");
+var pageSize = msjs.require("chaise.document.list.pagesize.selector");
+var page = msjs.require("chaise.document.list.pager.selector");
+var descending = msjs.require("chaise.document.list.descending");
+var host = msjs.require("chaise.host.list.picker");
 var isSuccess = msjs.require("chaise.couch.issuccess");
-var couchServer = msjs.require("chaise.couch.server");
 var emptyMsj = {offset: 0, rows: []};
-var list = msjs.publish(msjs(function(msj) {
-    if (!msj.dbName) return emptyMsj;
+msjs.publish(msjs(function() {
+    var dbName = dbPicker();
+    if (!dbName) return emptyMsj;
 
-    var couch = new couchServer(msj.host).getDatabase(msj.dbName);
+    var couch = new server(host()).getDatabase(dbName);
     var options = {
-        skip: (msj.page-1) * msj.pageSize,
-        limit: msj.pageSize,
-        descending: msj.descending
+        skip: (page()-1) * pageSize(),
+        limit: pageSize(),
+        descending: descending()
     };
 
-    if (msj.reduceOpts) {
-        if (msj.reduceOpts.reduce) {
+    var opts = reduceOpts();
+    if (opts) {
+        if (opts.reduce) {
             options.reduce = true;
-            if (msj.reduceOpts.group) {
+            if (opts.group) {
                 options.group = true;
-            } else if (msj.reduceOpts.group_level) {
-                options.group_level = msj.reduceOpts.group_level;
+            } else if (opts.group_level) {
+                options.group_level = opts.group_level;
             }
         } else {
             options.reduce = false;
@@ -25,7 +34,8 @@ var list = msjs.publish(msjs(function(msj) {
     }
 
     var response;
-    switch (msj.picked.type){
+    var listType = picked();
+    switch (listType.type){
         case "allDocs":
             response = couch.getAllDocuments(options);
             break;
@@ -35,23 +45,17 @@ var list = msjs.publish(msjs(function(msj) {
             response = couch.getAllDocuments(options);
             break;
         case "view":
-            if (msj.picked.isTempView) {
-                response = couch.runTemporaryView(msj.picked.viewDoc, options);
+            if (listType.isTempView) {
+                response = couch.runTemporaryView(listType.viewDoc, options);
             } else {
-                response = couch.getView(msj.picked.designName, msj.picked.viewName, options);
+                response = couch.getView(listType.designName, listType.viewName, options);
             }
             break;
     }
 
     return isSuccess(response) ? response.result : emptyMsj;
-}));
-list.pull(list.depends("chaise.database.list.picker"), "dbName");
-list.pull(list.depends("chaise.document.view.reduce.submitter"), "reduceOpts");
-list.pull(list.depends("chaise.document.list.type.picker"), "picked");
-list.pull(list.depends("chaise.document.list.pagesize.selector"), "pageSize");
-list.pull(list.depends("chaise.document.list.pager.selector"), "page");
-list.pull(list.depends("chaise.document.list.descending"), "descending");
-list.pull("chaise.host.list.picker", "host");
-list.depends("chaise.document.detail.updater"); // refetch when document is updated
-list.depends("chaise.document.remove.remover"); // refetch when document is removed
-list.packMe = false;
+}).setPack(false).depends(
+    dbPicker, reduceOpts, picked, pageSize, page, descending,
+    "chaise.document.detail.updater", // refetch when document is updated
+    "chaise.document.remove.remover"  // refetch when document is removed
+));
