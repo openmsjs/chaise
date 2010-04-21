@@ -5,6 +5,6 @@ var database = msjs.require("chaise.database.list.picker");
 var remover = msjs.publish(msjs(function() {
     return (new couchServer(host()))
            .getDatabase(database())
-           .removeDocument(doc);
+           .removeDocument(doc());
 }).setPack(false).depends(doc));
 

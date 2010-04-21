@@ -40,27 +40,29 @@ var renderer = msjs(function() {
 
         if (doc.key) hasKeys = true;
 
+        if (doc.id) {
+msjs.log('id', doc.id);
+            $("<a href=\"#\" tabindex=\"-1\">Delete</a>")
+                .appendTo($("<td class=\"remover\"/>").appendTo(row))
+                .click(function() {
+                    submitter({_id: doc.id, _rev: doc.value.rev});
+                    return false;
+                });
+        }
+
         if (!isView) {
             var num = i+list.offset+1;
             if (descending()) num = list.total_rows - num + 1;
             row.append("<td class=\"count\">" + num + "</td>");
         }
 
-        if (doc.key) {
+        if (doc.id) {
             var cell = $("<td/>").appendTo(row);
-            $("<a href=\"#\">" + (isView ? toPrettyJSON(doc.key) : doc.id) + "<a>")
+            var key  = (isView ? (doc.key ? toPrettyJSON(doc.key) : "undefined") : doc.id);
+            $("<a href=\"#\">" + key + "<a>")
                 .appendTo(cell)
                 .click(function() {
                     listPicker(doc);
-                    return false;
-                });
-        }
-
-        if (doc.id) {
-            $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">Delete</a>")
-                .appendTo(cell)
-                .click(function() {
-                    submitter({_id: doc.id, _rev: doc.value.rev});
                     return false;
                 });
             if (isView) {
@@ -69,19 +71,18 @@ var renderer = msjs(function() {
                     .css({color: "#8A8A8A"});
             }
         }
-
         row.append("<td>" + (isView ? toPrettyJSON(doc.value) : doc.value.rev) + "</td>");
     });
 
     var arrow = descending() ? "&darr;" : "&uarr;";
     if (isView) {
         if (hasKeys) {
-            $("<tr><th>key <span class=\"arrow\">" + arrow + "<span></th><th>value</th></tr>").appendTo(thead);
+            $("<tr><th class=\"remover\">Delete?</th><th>key <span class=\"arrow\">" + arrow + "<span></th><th>value</th></tr>").appendTo(thead);
         } else {
             $("<tr><th>value</th></tr>").appendTo(thead);
         }
     } else {
-        $("<tr><th class=\"count\">#/" + list.total_rows + "</th><th>_id <span class=\"arrow\">" + arrow + "</span></th><th>_rev</th></tr>").appendTo(thead);
+        $("<tr><th class=\"remover\">Delete?</th><th class=\"count\">#/" + list.total_rows + "</th><th>_id <span class=\"arrow\">" + arrow + "</span></th><th>_rev</th></tr>").appendTo(thead);
     }
 
     thead.unbind("click").click(function() {

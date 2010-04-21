@@ -2,7 +2,7 @@ var el = msjs.publish($(<div>
     <span/>
     <table>
         <thead>
-            <tr><th>Host</th><th></th></tr>
+            <tr><th class="remover">Delete?</th><th>Host</th><th></th></tr>
         </thead>
         <tbody/>
     </table>
@@ -31,22 +31,21 @@ var renderer = msjs(function(msj) {
         var row = $("<tr/>").data("host", host).appendTo(tbody);
         if (i % 2 == 0) row.addClass("odd");
 
-        var cell = $("<td/>").appendTo(row);
-        $("<a href=\"#\">" + host + "</a>")
-            .appendTo(cell)
-            .click(function() {
-                picker(host);
-                return false;
-            });
-        $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">Delete</a>")
-            .appendTo(cell)
+        $("<a href=\"#\" tabindex=\"-1\">Delete</a>")
             .click(function() {
                 remover(host);
                 return false;
-            });
+            }).appendTo($("<td/>").addClass("remover").appendTo(row));
+
+
+        $("<a href=\"#\">" + host + "</a>")
+            .click(function() {
+                picker(host);
+                return false;
+            }).appendTo($("<td/>").appendTo(row));
+
 
         var defaultCell = $("<td/>").appendTo(row);
-        
         if (!defaultHost && i == 0 || defaultHost == host) {
             $("<span>default</span>").appendTo(defaultCell);
         } else {

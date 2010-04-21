@@ -50,9 +50,9 @@ dom.addCss(cssId + " .control", {
 dom.addCss(cssId + " .control a", {
     color: "white"
 });
-dom.addCss("a.remover", {
+dom.addCss(".remover", {
     display: "none"
 });
-dom.addCss(".unlocked a.remover", {
+dom.addCss(".unlocked .remover", {
     display: "inline"
 });

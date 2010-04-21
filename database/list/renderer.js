@@ -2,7 +2,8 @@ var el = msjs.publish($(<div>
     <table>
         <thead>
             <tr>
-                <th>Name</th>
+                <th class="remover">Delete?</th>
+                <th class="name">Name</th>
                 <th>Size</th>
                 <th>Document count</th>
                 <th>Update seq</th>
@@ -30,7 +31,8 @@ var renderer = msjs(function() {
     }
     $.each(list, function(i, info) {
         var row = $("<tr>" +
-          "<td></td>" +
+          "<td class=\"remover\"/>" +
+          "<td class=\"name\"/>" +
           "<td>" + info.disk_size + "</td>" +
           "<td>" + info.doc_count + "</td>" +
           "<td>" + info.update_seq + "</td>" +
@@ -38,25 +40,24 @@ var renderer = msjs(function() {
 
         if (i % 2 == 0) row.addClass("odd");
 
-        var cell = row.find("td:first-child");
-
         if (picker() == info.db_name) {
             row.addClass("selected");
         }
 
-        $("<a href=\"\">" + info.db_name + "</a>")
-            .appendTo(cell)
-            .click(function() {
-                picker(info.db_name);
-                return false;
-            });
-        $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">Delete</a>")
-            .appendTo(cell)
+        $("<a href=\"#\" tabindex=\"-1\">Delete</a>")
+            .appendTo(row.find("td.remover"))
             .click(function() {
                 submitter(info.db_name);
                 if (row.hasClass("selected")) {
                     picker(null);
                 }
+                return false;
+            });
+
+        $("<a href=\"\">" + info.db_name + "</a>")
+            .appendTo(row.find("td.name"))
+            .click(function() {
+                picker(info.db_name);
                 return false;
             });
     });
@@ -81,8 +82,8 @@ dom.addCss(cssId + " th," +
            cssId + " td", {
     textAlign: "right"
 });
-dom.addCss(cssId + " th:first-child," + 
-           cssId + " td:first-child", {
+dom.addCss(cssId + " .remover," + 
+           cssId + " .name", {
     textAlign: "left"
 });
 dom.addCss(cssId + " a.remover", {
