@@ -22,7 +22,7 @@ var reset = function() {
 form.bind("reset", reset);
 var submitter = msjs.require("chaise.database.import.submitter");
 form.submit(function() {
-    submitter.update(packageName[0].value);
+    submitter(packageName[0].value);
     return reset();                
 });
 packageName.keypress(function(event) {

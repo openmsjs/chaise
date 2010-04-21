@@ -58,7 +58,7 @@ form.bind("reset", reset);
 form.submit(function(){
     try {
         var doc = eval("(" + textarea.text().split('\n').join(" ") + ")");
-        submitter.update(doc);
+        submitter(doc);
         textarea.text(toPrettyJSON(doc));
         stopEdit();
     } catch (e) {

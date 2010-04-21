@@ -25,5 +25,5 @@ var lister = msjs.publish(msjs(function() {
 }).depends(add, remove));
 
 lister.onLoad = function() {
-    this.update(getHosts());
+    this(getHosts());
 };

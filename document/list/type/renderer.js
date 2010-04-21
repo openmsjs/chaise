@@ -7,7 +7,7 @@ var el = msjs.publish($(<div>
 var picker = msjs.require("chaise.document.list.type.picker");
 var dom = msjs.require("msjs.dom");
 el.find("a[name]").addClass("button").click(function() {
-    picker.update({type: this.name});
+    picker({type: this.name});
     return false;
 });
 
@@ -29,10 +29,10 @@ msjs(function() {
                 .data("design", designName)
                 .click(function() {
                     var viewName = $(this).text();
-                    picker.update({type: "view",
-                                   designName: designName,
-                                   viewName: viewName,
-                                   viewDoc: doc.views[viewName]});
+                    picker({type: "view",
+                            designName: designName,
+                            viewName: viewName,
+                            viewDoc: doc.views[viewName]});
                     return false;
                 });
         }

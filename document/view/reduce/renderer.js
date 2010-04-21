@@ -22,10 +22,10 @@ var submitter = msjs.require("chaise.document.view.reduce.submitter");
 var reduce = el.find("input").click(function() {
     if (this.checked) {
         el.addClass("reduce-enabled");
-        submitter.update({reduce: true});
+        submitter({reduce: true});
     } else {
         el.removeClass("reduce-enabled");
-        submitter.update({});
+        submitter({});
     }
 });
 
@@ -39,7 +39,7 @@ var grouping = el.find("select").change(function() {
             options.group_level = Number(val);
         }
     }
-    submitter.update(options);
+    submitter(options);
 });
 
 var shower = msjs(function() {

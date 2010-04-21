@@ -32,9 +32,9 @@ saveForm.submit(function() {
         try {
             var validatedDoc = validateCode(textarea);
             if (validatedDoc) {
-                submitter.update({design: design,
-                                  view: view, 
-                                  doc: validatedDoc});
+                submitter({design: design,
+                           view: view, 
+                           doc: validatedDoc});
             }
             cancelSave();
         } catch (e) {

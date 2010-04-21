@@ -31,7 +31,7 @@ el.submit(function() {
         page = lastPage;
     }
     input.val("");
-    page.update(page);
+    page(page);
     el.removeClass("jumping");
     return false;
 });

@@ -35,13 +35,13 @@ var renderer = msjs(function(msj) {
         $("<a href=\"#\">" + host + "</a>")
             .appendTo(cell)
             .click(function() {
-                picker.update(host);
+                picker(host);
                 return false;
             });
         $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">Delete</a>")
             .appendTo(cell)
             .click(function() {
-                remover.update(host);
+                remover(host);
                 return false;
             });
 
@@ -53,7 +53,7 @@ var renderer = msjs(function(msj) {
             $("<a href=\"#\">Set as default</a>")
                 .appendTo(defaultCell)
                 .click(function() {
-                    defaultSelector.update(host);
+                    defaultSelector(host);
                     return false;
                 });
         }

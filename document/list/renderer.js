@@ -51,7 +51,7 @@ var renderer = msjs(function() {
             $("<a href=\"#\">" + (isView ? toPrettyJSON(doc.key) : doc.id) + "<a>")
                 .appendTo(cell)
                 .click(function() {
-                    listPicker.update(doc);
+                    listPicker(doc);
                     return false;
                 });
         }
@@ -60,7 +60,7 @@ var renderer = msjs(function() {
             $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">Delete</a>")
                 .appendTo(cell)
                 .click(function() {
-                    submitter.update({_id: doc.id, _rev: doc.value.rev});
+                    submitter({_id: doc.id, _rev: doc.value.rev});
                     return false;
                 });
             if (isView) {
@@ -85,7 +85,7 @@ var renderer = msjs(function() {
     }
 
     thead.unbind("click").click(function() {
-        descending.update(!descending());
+        descending(!descending());
     });
 
     return true;

@@ -35,7 +35,7 @@ var makePageLinks = function(el, list, pageSize) {
         previous = $("<a href=\"#\">Previous</a>")
             .appendTo(el)
             .click(function() {
-                pageSelector.update(currentPage-1);
+                pageSelector(currentPage-1);
                 return false;
             });
     } else {
@@ -47,7 +47,7 @@ var makePageLinks = function(el, list, pageSize) {
         next = $("<a href=\"#\">Next</a>")
             .appendTo(el)
             .click(function() {
-                pageSelector.update(currentPage+1);
+                pageSelector(currentPage+1);
                 return false;
             });
     } else {
@@ -64,7 +64,7 @@ var makePageLinks = function(el, list, pageSize) {
             .addClass("button")
             .click(function() {
                  if (!$(this).hasClass("selected")) {
-                     pageSelector.update(Number($(this).text()));
+                     pageSelector(Number($(this).text()));
                      return false;
                  }
              });

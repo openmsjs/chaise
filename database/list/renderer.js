@@ -47,15 +47,15 @@ var renderer = msjs(function() {
         $("<a href=\"\">" + info.db_name + "</a>")
             .appendTo(cell)
             .click(function() {
-                picker.update(info.db_name);
+                picker(info.db_name);
                 return false;
             });
         $("<a href=\"#\" class=\"remover\" tabindex=\"-1\">Delete</a>")
             .appendTo(cell)
             .click(function() {
-                submitter.update(info.db_name);
+                submitter(info.db_name);
                 if (row.hasClass("selected")) {
-                    picker.update(null);
+                    picker(null);
                 }
                 return false;
             });

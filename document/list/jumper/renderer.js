@@ -20,7 +20,7 @@ var selector = msjs.require("chaise.document.list.jumper.selector");
 el.submit(function() {
     var docId = $.trim(input.val());
     input.val("");
-    selector.update({id: docId, key: docId});
+    selector({id: docId, key: docId});
     el.removeClass("jumping");
     return false;
 });

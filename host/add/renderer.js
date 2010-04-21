@@ -22,7 +22,7 @@ var reset = function() {
 form.bind("reset", reset);
 var adder = msjs.require("chaise.host.add.submitter");
 form.submit(function() {
-    adder.update(hostInput[0].value);
+    adder(hostInput[0].value);
     return reset();                
 });
 hostInput.keypress(function(event) {

@@ -8,9 +8,7 @@ var validateCode = msjs.require("chaise.document.view.validatecode");
 runLink.click(function(){
     try {
         var validatedDoc = validateCode(textarea);
-        if (validatedDoc) {
-            runner.update(validatedDoc);
-        }
+        if (validatedDoc) runner(validatedDoc);
     } catch (e) {
         status.text(e);
     }

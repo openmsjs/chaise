@@ -17,7 +17,7 @@ el.find("a.toggle").click(function() {
 
 var sizeSelector = msjs.require("chaise.document.list.pagesize.selector");
 el.find("a.button").click(function() {
-    sizeSelector.update(Number(this.name));
+    sizeSelector(Number(this.name));
     el.removeClass("editing");
     return false;
 });

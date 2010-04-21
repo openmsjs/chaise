@@ -22,7 +22,7 @@ var reset = function() {
 form.bind("reset", reset);
 var submitter = msjs.require("chaise.database.create.submitter");
 form.submit(function() {
-    submitter.update(dbInput[0].value);
+    submitter(dbInput[0].value);
     return reset();                
 });
 dbInput.keypress(function(event) {
