@@ -21,7 +21,7 @@ var renderer = msjs(function() {
     thead.children().remove();
     tbody.children().remove();
 
-    var list = lister.isUpdated() ? lister() : emptyList;
+    var list = lister.ifUpdated() || emptyList;
     if (list.rows.length) {
         el.removeClass("no-results");
         status.text("").css("color", "");

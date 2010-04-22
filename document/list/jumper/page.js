@@ -9,7 +9,8 @@ msjs.publish(msjs(function(msj) {
     var host = hostPicker.getMsj();
     var dbName = dbPicker.getMsj();
     var db = new couchServer(host).getDatabase(dbName);
-    var options = {key: updatedDoc.isUpdated() ? updatedDoc().id : doc().id};
+    var updated = updatedDoc.ifUpdated();
+    var options = {key: updated ? updated.id : doc().id};
     var response = db.getAllDocuments(options);
     if (isSuccess(response)) {
         var pageSize = pageSizeSelector.getMsj();

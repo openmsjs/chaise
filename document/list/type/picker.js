@@ -1,8 +1,9 @@
 var tempView = msjs.require("chaise.document.view.runner");
 msjs.publish(msjs(function() {
-    if (tempView.isUpdated()) {
+    var temp = tempView.ifUpdated();
+    if (temp) {
         var view = this();
-        view.viewDoc = tempView();
+        view.viewDoc = temp;
         view.isTempView = true;
         return view;
     }

@@ -15,9 +15,10 @@ var add = msjs.require("chaise.host.add.submitter");
 var remove = ("chaise.host.remove.submitter");
 var lister = msjs.publish(msjs(function() {
     var hosts = getHosts();
-    if (add.isUpdated()) {
-        hosts.push(add());
-    } else if (remove.isUpdated()) {
+    var addedHost = add.ifUpdated();
+    if (addedHost) {
+        hosts.push(addedHost);
+    } else {
         hosts.splice(hosts.indexOf(remove()), 1);
     }
     cookies.set("hosts", msjs.toJSON(hosts), -1);

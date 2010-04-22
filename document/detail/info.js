@@ -12,8 +12,8 @@ msjs.publish(msjs(function() {
 
     var db = new server(host).getDatabase(dbName);
     var docId = null;
-    var info = docPicker.isUpdated() && docPicker();
-    var updated = docUpdater.isUpdated() && docUpdater();
+    var info = docPicker.ifUpdated();
+    var updated = docUpdater.ifUpdated();
     if (info) {
         docId = info.id;
     } else if (updated) {

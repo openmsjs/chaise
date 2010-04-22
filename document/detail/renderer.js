@@ -23,8 +23,8 @@ var renderer = msjs(function() {
     var doc = info();
     if (doc != (void 0)) {
 
-        if (updater.isUpdated()) {
-            var response = updater();
+        var response = updater.ifUpdated();
+        if (response) {
             if (isSuccess(response)) {
                 var updatedDoc = response.result;
                 msjs.log(updatedDoc);

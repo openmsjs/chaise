@@ -22,7 +22,7 @@ var initializer = msjs(function() {
     editor.text("");
     if (viewDoc) {
         if (!picked.isTempView) stopEdit(true);
-        viewDoc.map = eval("(" + viewDoc.map + ")");
+        if (viewDoc.map)    viewDoc.map = eval("(" + viewDoc.map + ")");
         if (viewDoc.reduce) viewDoc.reduce = eval("(" + viewDoc.reduce + ")"); 
         
         $.each(toPrettyJSON(viewDoc).split("\n"), function(i, line) {
