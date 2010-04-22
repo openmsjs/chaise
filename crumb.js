@@ -19,7 +19,7 @@ var shower = msjs(function() {
 
 
     var document = documentPicker();
-    if (document) url += "/" + document.id;
+    if (document) url += "/" + (document.id || "(new document)");
 
     span.text(url + " ");
     link.attr("href", url);

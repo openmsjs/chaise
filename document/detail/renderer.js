@@ -7,7 +7,6 @@ var form = msjs.publish($(<form>
 </form>));
 
 var textarea = form.find("pre");
-var isSuccess = msjs.require("chaise.couch.issuccess");
 var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
 var startEdit = function(rollback) {
     textarea.data("rollback", rollback);
@@ -18,9 +17,32 @@ var startEdit = function(rollback) {
     form.addClass("editing");
 };
 var info = msjs.require("chaise.document.detail.info");
+var updater = msjs.require("chaise.document.detail.updater");
+var isSuccess = msjs.require("chaise.couch.issuccess");
 var renderer = msjs(function() {
     var doc = info();
     if (doc != (void 0)) {
+
+        if (updater.isUpdated()) {
+            var response = updater();
+            if (isSuccess(response)) {
+                var updatedDoc = response.result;
+                msjs.log(updatedDoc);
+                if (doc._id) {
+                    if (doc._id == updatedDoc.id)  {
+                        doc._rev = updatedDoc.rev;
+                    }
+                } else if (updatedDoc.rev.indexOf("1-") == 0) {
+                    doc._id = updatedDoc.id;
+                    doc._rev = updatedDoc.rev;
+                }
+            } else {
+                alert(doc._id
+                      ? "Problems updating doc " + doc._id
+                      : "Problems creating new doc");
+            }
+        }
+
         if (doc) {
             textarea.text(toPrettyJSON(doc));
             if (!doc._id) startEdit("");
@@ -28,7 +50,7 @@ var renderer = msjs(function() {
             textarea.text("");
         }
     }
-}).depends(info);
+}).depends(info, updater);
 
 var picker = msjs.require("chaise.document.list.picker");
 var shower = msjs(function() {

@@ -3,7 +3,7 @@ var dbPicker = msjs.require("chaise.database.list.picker");
 var hostPicker = msjs.require("chaise.host.list.picker");
 var isSuccess = msjs.require("chaise.couch.issuccess");
 var docPicker = msjs.require("chaise.document.list.picker");
-var docUpdater = msjs.require("chaise.document.detail.updater");
+var docUpdater = msjs.require("chaise.document.detail.updateddoc");
 msjs.publish(msjs(function() {
     var host = hostPicker();
     var dbName = dbPicker();
@@ -17,10 +17,7 @@ msjs.publish(msjs(function() {
     if (info) {
         docId = info.id;
     } else if (updated) {
-        if (isSuccess(updated)) {
-            docId = updated.result.id;
-        }
-        // TODO: send update error to client
+        docId = updated.id;
     } else {
         return;
     }
