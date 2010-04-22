@@ -6,7 +6,7 @@ var createRenderer = msjs.require("chaise.database.create.renderer");
 var loadRenderer = msjs.require("chaise.database.import.renderer");
 var content = el.children("div")
     .append(createRenderer)
-    .append(loadRenderer)
+//    .append(loadRenderer)
     .append(msjs.require("chaise.database.list.renderer"))
     .css("marginTop", "5px");
 
