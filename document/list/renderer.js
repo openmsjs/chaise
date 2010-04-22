@@ -16,6 +16,7 @@ var submitter = msjs.require("chaise.document.remove.submitter");
 var lister = msjs.require("chaise.document.list.lister");
 var typePicker = msjs.require("chaise.document.list.type.picker");
 var emptyList = {rows:[]};
+var reduceOpts = msjs.require("chaise.document.view.reduce.submitter");
 var renderer = msjs(function() {
     thead.children().remove();
     tbody.children().remove();
@@ -33,15 +34,13 @@ var renderer = msjs(function() {
     if (!picked) return;
 
     var isView = picked.type == "view";
-    var hasKeys = false;
+    var ropts = reduceOpts();
+    var hasKeys = !ropts || !ropts.reduce || ropts.group || !!ropts.group_level;
     $.each(list.rows, function(i, doc) {
         var row = $("<tr/>").appendTo(tbody).data("doc", doc);
         if (i % 2 == 0) row.addClass("odd");
 
-        if (doc.key) hasKeys = true;
-
         if (doc.id) {
-msjs.log('id', doc.id);
             $("<a href=\"#\" tabindex=\"-1\">Delete</a>")
                 .appendTo($("<td class=\"remover\"/>").appendTo(row))
                 .click(function() {
@@ -70,6 +69,14 @@ msjs.log('id', doc.id);
                     .appendTo(cell)
                     .css({color: "#8A8A8A"});
             }
+        } else if (hasKeys) { // reduce with group level
+            var key  = doc.key ? toPrettyJSON(doc.key) : "undefined";
+            $("<a href=\"#\">" + key + "<a>")
+                .appendTo($("<td/>").appendTo(row))
+                .click(function() {
+                    listPicker(doc);
+                    return false;
+                });
         }
         row.append("<td>" + (isView ? toPrettyJSON(doc.value) : doc.value.rev) + "</td>");
     });
