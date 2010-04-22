@@ -75,6 +75,7 @@ var reset = function() {
     textarea.text(rollback);
     if (!rollback) form.css("display", "none");
     stopEdit();    
+    if (!picker().id) picker(null);
 };
 form.bind("reset", reset);
 form.submit(function(){
