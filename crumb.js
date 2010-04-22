@@ -23,6 +23,9 @@ var shower = msjs(function() {
 
     span.text(url + " ");
     link.attr("href", url);
+
+    el.css("visibility", url ? "visible" : "hidden");
+
 }).depends(hostPicker, databasePicker, documentPicker);
 
 var dom = msjs.require("msjs.dom");

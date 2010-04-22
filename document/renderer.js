@@ -14,7 +14,7 @@ dom.addCss(headerCssId, {
 
 
 var el = msjs.publish($(<div>
-    <a class="toggle" href="#">Hide document list</a>
+    <a class="toggle" href="#">Hide documents</a>
     <div/>
 </div>));
 var content = el.children("div")

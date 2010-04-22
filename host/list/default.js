@@ -5,5 +5,6 @@ var selector = msjs.publish(msjs(function(msj) {
 }).depends(list));
 
 msjs(function(msj) {
-    cookies.set("defaultHost", selector(), -1);
+    var defaultHost = selector();
+    if (defaultHost) cookies.set("defaultHost", defaultHost, -1);
 }).depends(selector);
