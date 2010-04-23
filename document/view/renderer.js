@@ -14,7 +14,7 @@ showLink.click(function(){
 });
 
 var editor = el.find(".editor");
-var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
+var setDocText = msjs.require("chaise.document.setdoctext");
 var picker = msjs.require("chaise.document.list.type.picker");
 var initializer = msjs(function() {
     var picked = picker();
@@ -22,12 +22,11 @@ var initializer = msjs(function() {
     editor.text("");
     if (viewDoc) {
         if (!picked.isTempView) stopEdit(true);
+
         if (viewDoc.map)    viewDoc.map = eval("(" + viewDoc.map + ")");
         if (viewDoc.reduce) viewDoc.reduce = eval("(" + viewDoc.reduce + ")"); 
-        
-        $.each(toPrettyJSON(viewDoc).split("\n"), function(i, line) {
-            editor.append(document.createTextNode(line)).append($("<br/>"));
-        });
+
+        setDocText(viewDoc, editor);
     }
 
     el.css("display", viewDoc ? "" : "none");

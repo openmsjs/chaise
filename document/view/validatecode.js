@@ -1,19 +1,5 @@
-var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
-var funcToStr = function(func, type) {
-    if (typeof(func) == "function") {
-        return func.toString();
-    }
-    var testFunc;
-    try {
-        testFunc = eval("(" + func + ")");
-    } catch (e) {}
-
-    if (typeof(testFunc) != "function") {
-        throw "bad function";
-    }
-
-    return func;
-};
+var beautify = msjs.require("chaise.document.beautify");
+var funcToStr = msjs.require("chaise.document.functostr");
 var strToFunc = function(func) {
     if (typeof(func) == "function") {
         return func;
@@ -50,7 +36,7 @@ msjs.publish(function(editor) {
             doc.map = strToFunc(doc.map);
             if (doc.reduce) doc.reduce = strToFunc(doc.reduce);
 
-            editor.text(toPrettyJSON(doc));
+            editor.text(beautify(doc));
 
             return updateDoc;
         } catch (e) {

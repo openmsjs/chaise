@@ -5,7 +5,6 @@ msjs.publish(msjs(function() {
     if (isSuccess(updatedResponse)) {
         var updatedResult = updatedResponse.result;
         updatedResult.key = updatedResult.id;
-msjs.log('xxx', updatedResult)
         return updatedResult;
     }
 }).depends(updater));

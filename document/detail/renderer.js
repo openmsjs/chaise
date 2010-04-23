@@ -6,19 +6,17 @@ var form = msjs.publish($(<form>
     <pre/>
 </form>));
 
-var textarea = form.find("pre");
-var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
+var editor = form.find("pre");
 var startEdit = function(rollback) {
-    textarea.data("rollback", rollback);
-    textarea.attr("contenteditable", "true");
-    setTimeout(function() { 
-        textarea.focus();
-    }, 500);
+    editor.data("rollback", editor.contents().clone());
+    editor.attr("contenteditable", "true");
+    editor.focus();
     form.addClass("editing");
 };
 var info = msjs.require("chaise.document.detail.info");
 var updater = msjs.require("chaise.document.detail.updater");
 var isSuccess = msjs.require("chaise.couch.issuccess");
+var setDocText = msjs.require("chaise.document.setdoctext");
 var renderer = msjs(function() {
     var doc = info();
     if (doc != (void 0)) {
@@ -27,7 +25,6 @@ var renderer = msjs(function() {
         if (response) {
             if (isSuccess(response)) {
                 var updatedDoc = response.result;
-                msjs.log(updatedDoc);
                 if (doc._id) {
                     if (doc._id == updatedDoc.id)  {
                         doc._rev = updatedDoc.rev;
@@ -43,11 +40,10 @@ var renderer = msjs(function() {
             }
         }
 
+        editor.text("");
         if (doc) {
-            textarea.text(toPrettyJSON(doc));
+            setDocText(doc, editor);
             if (!doc._id) startEdit("");
-        } else { 
-            textarea.text("");
         }
     }
 }).depends(info, updater);
@@ -59,37 +55,65 @@ var shower = msjs(function() {
 
 
 form.find("a").click(function(){
-    startEdit(textarea.text());
+    startEdit(editor.text());
     return false;
 });
 var submitter = msjs.require("chaise.document.detail.submitter");
 var status = form.find("span");
+var rollback = function() {
+    if (editor.data("rollback")) {
+        editor.text("");
+        $.each(editor.data("rollback"), function(i, content) {
+            editor.append(content);
+        });
+        return true;
+    }
+    return false;
+};
 var stopEdit = function() {
-    textarea.removeAttr("contenteditable");
-    status.text("");
+    if (!form.hasClass("editing")) return;
     form.removeClass("editing");
-    textarea.blur();
+
+    rollback();
+
+    editor.blur();
+    editor.removeAttr("contenteditable");
+
+    status.text("");
 };
 var reset = function() {
-    var rollback = textarea.data("rollback");
-    textarea.text(rollback);
-    if (!rollback) form.css("display", "none");
+    if (!rollback()) form.css("display", "none");
     stopEdit();    
     if (!picker().id) picker(null);
 };
 form.bind("reset", reset);
+var beautify = msjs.require("chaise.document.beautify");
+var funcToStr = msjs.require("chaise.document.functostr");
 form.submit(function(){
     try {
-        var doc = eval("(" + textarea.text().split('\n').join(" ") + ")");
+        var doc = eval("(" + editor.text().split('\n').join(" ") + ")");
+        if (doc._id && doc._id.indexOf("_design/") == 0 && doc.views)  {
+            for (var k in doc.views) {
+                var view = doc.views[k];
+                if (view.map) view.map = funcToStr(view.map);
+                if (view.reduce) view.reduce = funcToStr(view.reduce);
+            }
+        }
+
         submitter(doc);
-        textarea.text(toPrettyJSON(doc));
+
+        editor.text("");
+        $.each(beautify(doc).split("\n"), function(i, line) {
+            editor.append(document.createTextNode(line)).append($("<br/>"));
+        });
         stopEdit();
     } catch (e) {
         status.text("bad json");
+        msjs.log("bad json:", e);
     }
     return false;
 });
-textarea.keypress(function(event) {
+editor.keypress(function(event) {
     if (event.keyCode == "27") {
         form[0].reset();
         return false;
