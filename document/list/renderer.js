@@ -9,7 +9,7 @@ var el = msjs.publish($(<div>
 var thead = el.find("thead");
 var tbody = el.find("tbody.list");
 var status = el.find(".status");
-var toPrettyJSON = msjs.require("chaise.document.toprettyjson");
+var beautify = msjs.require("chaise.document.beautify");
 var listPicker = msjs.require("chaise.document.list.picker");
 var descending = msjs.require("chaise.document.list.descending");
 var submitter = msjs.require("chaise.document.remove.submitter");
@@ -57,7 +57,7 @@ var renderer = msjs(function() {
 
         if (doc.id) {
             var cell = $("<td/>").appendTo(row);
-            var key  = (isView ? (doc.key ? toPrettyJSON(doc.key) : "undefined") : doc.id);
+            var key  = (isView ? (doc.key ? beautify(doc.key) : "undefined") : doc.id);
             $("<a href=\"#\">" + key + "<a>")
                 .appendTo(cell)
                 .click(function() {
@@ -70,7 +70,7 @@ var renderer = msjs(function() {
                     .css({color: "#8A8A8A"});
             }
         } else if (hasKeys) { // reduce with group level
-            var key  = doc.key ? toPrettyJSON(doc.key) : "undefined";
+            var key  = doc.key ? beautify(doc.key) : "undefined";
             $("<a href=\"#\">" + key + "<a>")
                 .appendTo($("<td/>").appendTo(row))
                 .click(function() {
@@ -78,7 +78,7 @@ var renderer = msjs(function() {
                     return false;
                 });
         }
-        row.append("<td>" + (isView ? toPrettyJSON(doc.value) : doc.value.rev) + "</td>");
+        row.append("<td>" + (isView ? beautify(doc.value) : doc.value.rev) + "</td>");
     });
 
     var arrow = descending() ? "&darr;" : "&uarr;";
