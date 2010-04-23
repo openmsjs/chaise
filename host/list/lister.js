@@ -12,7 +12,7 @@ var getHosts = function() {
     return hosts;
 };
 var add = msjs.require("chaise.host.add.submitter");
-var remove = ("chaise.host.remove.submitter");
+var remove = msjs.require("chaise.host.remove.submitter");
 var lister = msjs.publish(msjs(function() {
     var hosts = getHosts();
     var addedHost = add.ifUpdated();
