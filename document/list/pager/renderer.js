@@ -14,11 +14,18 @@ msjs(function(msj) {
     makePageLinks(bottomEl, list, pageSize);
 }).depends(lister);
 
+var typePicker = msjs.require("chaise.document.list.type.picker");
 var pageSelector = msjs.require("chaise.document.list.pager.selector");
 var makePageLinks = function(el, list, pageSize) {
     el.children().remove();
 
     if (!list.total_rows) return;
+
+    if (typePicker().type == "allDesignDocs") {
+        // TODO: don't render pages for now
+        // think of a different to display design documents
+        return; 
+    }
 
     var showCount = 8;
     var lastPage = Math.ceil(list.total_rows/pageSize);

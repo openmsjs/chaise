@@ -49,7 +49,7 @@ var renderer = msjs(function() {
                 });
         }
 
-        if (!isView) {
+        if (picked.type == "allDocs") {
             var num = i+list.offset+1;
             if (descending()) num = list.total_rows - num + 1;
             row.append("<td class=\"count\">" + num + "</td>");
@@ -82,14 +82,29 @@ var renderer = msjs(function() {
     });
 
     var arrow = descending() ? "&darr;" : "&uarr;";
+    var headRow = $("<tr/>").appendTo(thead);
     if (isView) {
         if (hasKeys) {
-            $("<tr><th class=\"remover\">Delete?</th><th>key <span class=\"arrow\">" + arrow + "<span></th><th>value</th></tr>").appendTo(thead);
+            headRow
+                .append($("<th class=\"remover\">Delete?</th>"))
+                .append($("<th>key <span class=\"arrow\">" + arrow + "<span></th>"))
+                .append($("<th>value</th>"));
         } else {
-            $("<tr><th>value</th></tr>").appendTo(thead);
+            headRow.append($("<th>value</th>"));
         }
     } else {
-        $("<tr><th class=\"remover\">Delete?</th><th class=\"count\">#/" + list.total_rows + "</th><th>_id <span class=\"arrow\">" + arrow + "</span></th><th>_rev</th></tr>").appendTo(thead);
+        if (picked.type == "allDocs") {
+            headRow
+                .append($("<th class=\"remover\">Delete?</th>"))
+                .append($("<th class=\"count\">#/" + list.total_rows + "</th>"))
+                .append($("<th>_id <span class=\"arrow\">" + arrow + "<span></th>"))
+                .append($("<th>_rev</th>"));
+        } else  {
+            headRow
+                .append($("<th class=\"remover\">Delete?</th>"))
+                .append($("<th>_id <span class=\"arrow\">" + arrow + "<span></th>"))
+                .append($("<th>_rev</th>"));
+        }
     }
 
     thead.unbind("click").click(function() {
