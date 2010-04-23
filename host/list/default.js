@@ -1,8 +1,10 @@
 var cookies = msjs.require("chaise.host.list.cookies");
 var list = msjs.require("chaise.host.list.lister");
 var selector = msjs.publish(msjs(function(msj) {
-    return cookies.get("defaultHost") || list()[0] || null;
-}).depends(list));
+    var defaultHost = cookies.get("defaultHost");
+    var hostList = list();
+    return hostList.indexOf(defaultHost) != -1 ? defaultHost : hostList[0];
+}).depends(list, "chaise.host.remove.submitter"));
 
 msjs(function(msj) {
     var defaultHost = selector();

@@ -26,17 +26,21 @@ var renderer = msjs(function(msj) {
         status.text("No hosts").css("color", "#FF0000");
     }
 
+    var onlyOne = list.length == 1;
     var defaultHost = defaultSelector.getMsj();
     $.each(list, function(i, host) {
         var row = $("<tr/>").data("host", host).appendTo(tbody);
         if (i % 2 == 0) row.addClass("odd");
 
-        $("<a href=\"#\" tabindex=\"-1\">Delete</a>")
-            .click(function() {
-                remover(host);
-                return false;
-            }).appendTo($("<td/>").addClass("remover").appendTo(row));
-
+        if (onlyOne) {
+            $("<td/>").addClass("remover").appendTo(row);
+        } else {
+            $("<a href=\"#\" tabindex=\"-1\">Delete</a>")
+                .click(function() {
+                    remover(host);
+                    return false;
+                }).appendTo($("<td/>").addClass("remover").appendTo(row));
+        }
 
         $("<a href=\"#\">" + host + "</a>")
             .click(function() {

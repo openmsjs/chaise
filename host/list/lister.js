@@ -1,7 +1,7 @@
 var cookies = msjs.require("chaise.host.list.cookies");
 var getHosts = function() {
     var cookie = cookies.get("hosts");
-    var hosts = [];
+    var hosts = null;
     if (cookie) {
         try {
             var hostsEval = eval("(" + cookie + ")");
@@ -9,7 +9,7 @@ var getHosts = function() {
         } catch (e) {
         }
     }
-    return hosts;
+    return hosts && hosts.length ? hosts : ["localhost:5984"];
 };
 var add = msjs.require("chaise.host.add.submitter");
 var remove = msjs.require("chaise.host.remove.submitter");
